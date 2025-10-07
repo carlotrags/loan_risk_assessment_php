@@ -1,0 +1,41 @@
+<?php
+// htdocs/preview.php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Sanitize and store POST data
+    $name = htmlspecialchars($_POST['name']);
+    $income = htmlspecialchars($_POST['income']);
+    $credit_score = htmlspecialchars($_POST['credit_score']);
+    $loan_amount = htmlspecialchars($_POST['loan_amount']);
+    $loan_term = htmlspecialchars($_POST['loan_term']);
+    $previous_defaults = htmlspecialchars($_POST['previous_defaults']);
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Preview Loan Application</title>
+</head>
+<body>
+    <h2>Preview Loan Details</h2>
+    <ul>
+        <li><strong>Name:</strong> <?= $name ?></li>
+        <li><strong>Income:</strong> <?= $income ?></li>
+        <li><strong>Credit Score:</strong> <?= $credit_score ?></li>
+        <li><strong>Loan Amount:</strong> <?= $loan_amount ?></li>
+        <li><strong>Loan Term:</strong> <?= $loan_term ?> months</li>
+        <li><strong>Previous Defaults:</strong> <?= $previous_defaults ?></li>
+    </ul>
+
+    <form action="submit.php" method="post">
+        <input type="hidden" name="name" value="<?= $name ?>">
+        <input type="hidden" name="income" value="<?= $income ?>">
+        <input type="hidden" name="credit_score" value="<?= $credit_score ?>">
+        <input type="hidden" name="loan_amount" value="<?= $loan_amount ?>">
+        <input type="hidden" name="loan_term" value="<?= $loan_term ?>">
+        <input type="hidden" name="previous_defaults" value="<?= $previous_defaults ?>">
+        
+        <button type="submit">Start Assessment</button>
+    </form>
+</body>
+</html>
