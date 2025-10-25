@@ -1,12 +1,58 @@
 /* Reset & Base */
 body {
   margin: 0;
+  padding: 0;
   font-family: 'Inter', 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #eef1f5, #f7f9fb);
   color: #2d2d2d;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-/* Layout */
+.container{
+  flex: 1;
+}
+
+/* Navigation Bar & Header */
+.header-navbar{
+  background-color: yellow;
+  text-align: center;
+  padding: 5px;
+  box-shadow: 1px 1px 10px black;
+}
+
+.header-navbar h1{
+  color: #1e3d58;
+}
+
+.navbar{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 45px;
+  list-style: none;
+}
+
+.navbar a{
+  display: inline-block;
+  padding: 8px 16px;
+  text-decoration: none;
+  background-color: transparent;
+  border-radius: 10px;
+  font-weight: bold;
+  color: black;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar a:hover{
+  color: rgb(255, 255, 255);
+  background-color: rgb(68, 0, 255);
+}
+
+/* Home page  */
+
+/* Loan Risk Assessment Forms */
 .form-wrapper {
   min-height: 90vh;
   display: flex;
@@ -26,11 +72,11 @@ body {
 
 .form-card {
 	background-color: #f9efc8;
-    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.15);
-    padding: 11px 45px;
-    max-width: 480px;
-    width: 100%;
-    box-sizing: border-box;
+  box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.15);
+  padding: 11px 45px;
+  max-width: 480px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .card h1 {
@@ -57,9 +103,7 @@ label {
   font-size: 14px;
 }
 
-input[type="text"],
-input[type="number"],
-select {
+input[type="text"], input[type="number"], select {
   width: 90%;
   padding: 12px 14px;
   font-size: 15px;
@@ -68,11 +112,31 @@ select {
   background: #f8fafc;
 }
 
-input:focus,
-select:focus {
+input:focus, select:focus {
   outline: none;
   border-color: #2a6cff;
   box-shadow: 0 0 0 3px rgba(42, 108, 255, 0.1);
+}
+
+/* Preview */
+.preview-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.preview-card {
+	background-color: #f9efc8;
+  box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.15);
+  padding: 11px 45px;
+  max-width: 480px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.preview-card li{
+  list-style: none;
 }
 
 /* Button */
@@ -98,6 +162,50 @@ button:hover {
   box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.2);
 }
 
+#confirmAssessmentBtn{
+  display: inline-flex;
+  align-items: center;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  background: gray;
+  color: white;
+  cursor: not-allowed;
+  opacity: 0.9;
+  transition: background 0.4s ease, opacity 0.3s ease;
+}
+
+#confirmAssessmentBtn.active{
+  background: linear-gradient(to right, #2a6cff, #005bea);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#confirmAssessmentBtn.active:hover{
+  background: linear-gradient(to right, #1f4acc, #0043b5);
+}
+
+#backBtn{
+  align-items: center;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(to right, #2a6cff, #005bea);
+  color: white;
+  cursor: not-allowed;
+  opacity: 0.9;
+  transition: background 0.4s ease, opacity 0.3s ease;
+}
+
+#backBtn:hover{
+  background: linear-gradient(to right, #1f4acc, #0043b5);
+}
+
 /* Animation */
 @keyframes fadeInUp {
   from {
@@ -108,6 +216,14 @@ button:hover {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Footer */
+footer{
+  background: #222222;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
 }
 
 /* Responsive */
@@ -127,17 +243,17 @@ button:hover {
     background-color: #121212;
   }
 
-  .form-card {
+  .form-card, .header-navbar, .preview-card {
     background-color: #1e1e1e;
     color: #f5f5f5;
     box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.6);
   }
 
-  h1 {
+  h1, .header-navbar a {
     color: #ffffff;
   }
 
-.card h1 {
+.card h1, .header-navbar h1 {
     font-size: 28px;
     margin-bottom: 10px;
     color: #4e9de1;
@@ -170,3 +286,4 @@ button:hover {
     box-shadow: 0 0 0 2px rgba(239, 83, 80, 0.3);
   }
 }
+

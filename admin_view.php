@@ -1,20 +1,19 @@
 <?php
-// config
-$host = '127.0.0.1';
-$db = 'loan_system';
-$user = 'root';
-$pass = '';
-$port = 3307;
+session_start();
 
-// Connect using PDO
-try {
-    $dsn = "mysql:host=$host;dbname=$db;port=$port;charset=utf8mb4";
-    $pdo = new PDO($dsn, $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ]);
-} catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+if (!isset($_SESSION['user_id'])) {
+    header("Location: static/login.php");
+    exit;
 }
+
+$username = $_SESSION['username'];
+$first_name = $_SESSION['first_name'];
+$last_name = $_SESSION['last_name'];
+$role = $_SESSION['role'];
+?>
+
+<?php
+include 'static/config.php';
 
 // Fetch records
 $stmt = $pdo->prepare("SELECT * FROM loan_applications ORDER BY submitted_at DESC");
@@ -127,4 +126,4 @@ foreach ($rows as $row) {
 
 </body>
 </html>
-//this is drafts
+<!-- this is drafts -->
