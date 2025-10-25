@@ -68,8 +68,11 @@ foreach ($rows as $row) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <section class="header-navbar">
+        <?php include "static/navbar.php"?>
+    </section>
 
-<h2>Loan Application Records</h2>
+    <h2>Loan Application Records</h2>
 
 <?php if (count($rows) > 0): ?>
     <table>

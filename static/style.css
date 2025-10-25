@@ -51,6 +51,63 @@ body {
 }
 
 /* Home page  */
+.welcome-message{
+  text-align: center;
+  font-size: 30px;
+  margin: 10rem;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.welcome-message span{
+  font-weight: bold;
+  color: #2d6cdf;
+}
+
+.tutorial-body{
+  text-align: left;
+  background-color: #aeb1fc;
+  padding: 20px;
+  margin: 20px 0;
+  animation: fadeInUp 0.8s ease-out;
+  box-shadow: 0px 0px 10px #ccc;
+}
+
+.tutorial-body h3{
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #2d6cdf;
+}
+
+.tutorial-body ol{
+  margin-left: 20px;
+  line-height: 1.6;
+}
+
+.tutorial-body p{
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.tutorial-body button{
+  display: flex;
+  margin: 10px auto;
+}
+
+.tutorial-body a button{
+  background-color: #2d6cdf;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.system-details-body{
+  animation: fadeInUp 0.8s ease-out;
+}
 
 /* Loan Risk Assessment Forms */
 .form-wrapper {
@@ -286,4 +343,3 @@ footer{
     box-shadow: 0 0 0 2px rgba(239, 83, 80, 0.3);
   }
 }
-

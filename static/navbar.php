@@ -6,7 +6,7 @@ $role = $_SESSION['role'] ?? '';
     <ul class="navbar">
         <li><a href="index.php">Home</a></li>
         <li><a href="form.php">Assessment</a></li>
-        <li><a href="#">History</a></li>
+        <li><a href="history.php">History</a></li>
         <li><a href="#">Account</a></li>
         <?php if ($role === 'Manager') : ?>
             <li><a href="settings.php">Settings</a></li>

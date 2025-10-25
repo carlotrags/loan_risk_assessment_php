@@ -26,16 +26,16 @@ $role = $_SESSION['role'];
 
     <section class="container">
         <div class="header-body">
-            <h3>Welcome to the Loan Risk Assessment Website, <?= htmlspecialchars($last_name) ?></h3>
-            <div class="tutorial-body">
-                <h3>How does the assessment work?</h3>
-                <ol>
-                    <li>Go to the assessment tab</li>
-                    <li>Fill up the form according to the client's required details</li>
-                    <li>Submit assessment and let the system compute the results</li>
-                    <li>The results will appear after the system calculates, showing if the client is eligible or ineligible for a loan</li>
-                </ol>
-            </div>
+            <h3 class="welcome-message">Welcome to the Loan Risk Assessment Website, <span><?= htmlspecialchars($_SESSION['first_name'] . ' ' . $_SESSION['last_name']) ?></span>!</h3>
+        </div>
+        <div class="tutorial-body">
+            <h3>How does the assessment work?</h3>
+            <ol>
+                <li>Go to the <strong>assessment tab</strong></li>
+                <li>Fill up the form according to the <strong>client's required details</strong>.</li>
+                <li>Submit assessment and let the system compute the results.</li>
+                <li>The results will appear after the system calculates, showing if the client is <strong>eligible</strong> or <strong>ineligible</strong> for a loan.</li>
+            </ol>
             <p>Click the button below to start Risk Assessment.</p>
             <a href="form.php"><button>Start Assessment</button></a>
         </div>
@@ -44,6 +44,7 @@ $role = $_SESSION['role'];
         <br>
         <div class="system-details-body">
             <p>This website is created using -----. The system utilizes Logistic Regression for its assessment.</p>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laborum exercitationem excepturi, dolorum veniam et corporis iure reiciendis expedita earum modi repellat sapiente, numquam ab quas alias dignissimos animi explicabo maxime, consequatur adipisci distinctio at! Porro nisi velit provident laboriosam, harum earum sapiente. Commodi porro blanditiis dolorum eaque velit a optio.</p>
         </div>
     </section>
     <?php include "static/footer.php"?>
