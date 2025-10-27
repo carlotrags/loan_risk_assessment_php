@@ -1,11 +1,17 @@
 <?php
-$host = "localhost";
+$host = "127.0.0.1"; // or "localhost"
 $user = "root";
 $pass = "";
-$db = "loan_system";
-$port = "3306";
+$db   = "loan_system";
+$port = 3307; // just the port number, not host:port
 
-$conn = new mysqli($host, $user, $pass, $db);
+// MySQLi connection
+$conn = new mysqli($host, $user, $pass, $db, $port);
+
+// Check for connection errors
+if ($conn->connect_error) {
+    die("MySQLi connection failed: " . $conn->connect_error);
+}
 
 try {
     $dsn = "mysql:host=$host;dbname=$db;port=$port;charset=utf8mb4";
@@ -13,6 +19,6 @@ try {
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 } catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+    die("PDO connection failed: " . $e->getMessage());
 }
 ?>

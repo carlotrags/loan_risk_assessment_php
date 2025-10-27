@@ -39,9 +39,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $prediction = $result['prediction'];
         $explanation = $result['explanation'] ?? [];
         $message = $prediction == 1 ? "Loan Approved" : "Loan Denied";
+        $statusClass = $prediction == 1 ? "approved" : "denied";
 
         // Save to MySQL
-        $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3306);
+        $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3307);
         if ($conn->connect_error) {
             die("MySQL Connection failed: " . $conn->connect_error);
         }
@@ -63,18 +64,80 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $conn->close();
     } else {
         $message = "Error: " . ($result['error'] ?? 'Unknown error from API');
-    }
-
-    // Display result safely
-    echo "<h2>Assessment Result for " . htmlspecialchars($name) . ":</h2>";
-    echo "<p><strong>Status:</strong> " . htmlspecialchars($message) . "</p>";
-
-    if (!empty($explanation) && $prediction == 0) {
-        echo "<h4>Reason(s) for Denial:</h4><ul>";
-        foreach ($explanation as $reason) {
-            echo "<li>" . htmlspecialchars($reason) . "</li>";
-        }
-        echo "</ul>";
+        $statusClass = "error";
+        $explanation = [];
     }
 }
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel='stylesheet' href='static/result.css'>
+    <title>Loan Assessment Result</title>
+</head>
+<body>
+    <div class="result-container">
+        <header class="system-header">
+            <div class="logo">
+                <img src="static/images/transfers.png" alt="Bank Logo" class="bank-logo">
+            </div>
+            <div class="user-info">
+                Logged in as <?= htmlspecialchars($first_name) ?> (<?= htmlspecialchars($username) ?>)
+            </div>
+        </header>
+
+        <div class="result-card">
+            <div class="card-header">
+                <h2>Loan Assessment Result</h2>
+                <p class="applicant-info">Applicant: <?= htmlspecialchars($name ?? '') ?></p>
+            </div>
+
+            <div class="assessment-status <?= htmlspecialchars($statusClass ?? 'info') ?>">
+                <?php if (isset($prediction)): ?>
+                    <i class="icon">
+                        <?= $prediction == 1 ? '&#10003;' : '&#10007;' ?> </i>
+                <?php endif; ?>
+                <div class="status-message">
+                    <h3><?= htmlspecialchars($message ?? 'No result available') ?></h3>
+                </div>
+            </div>
+            
+            <?php if (isset($data)): ?>
+            <div class="section application-summary">
+                <h4>Application Details Submitted</h4>
+                <div class="data-grid">
+                    <div><span class="label">Loan Amount:</span> <span class="value">₱<?= number_format($data['loan_amount'] ?? 0, 2) ?></span></div>
+                    <div><span class="label">Loan Term:</span> <span class="value"><?= htmlspecialchars($data['loan_term'] ?? 0) ?> months</span></div>
+                    <div><span class="label">Monthly Income:</span> <span class="value">₱<?= number_format($data['income'] ?? 0, 2) ?></span></div>
+                    <div><span class="label">Credit Score:</span> <span class="value"><?= number_format($data['credit_score'] ?? 0, 0) ?></span></div>
+                    <div><span class="label">Previous Defaults:</span> <span class="value"><?= ($data['previous_defaults'] == 1 ? 'Yes' : 'No') ?></span></div>
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <?php if (!empty($explanation) && isset($prediction) && $prediction == 0): ?>
+                <div class="section denial-reasons">
+                    <h4>Reason(s) for Denial</h4>
+                    <ul class="reason-list">
+                        <?php foreach ($explanation as $reason): ?>
+                            <li><i class="icon-reason">&#x25CF;</i> <?= htmlspecialchars($reason) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+
+            <div class="action-buttons">
+                <a href="index.php" class="btn-primary">Submit New Assessment</a> 
+            </div>
+
+            <div class="footer">
+                <p>Results are preliminary and subject to final verification.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
