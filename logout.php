@@ -15,4 +15,5 @@ session_destroy();
 
 header("Location: static/login.php");
 exit;
+// hi
 ?>
