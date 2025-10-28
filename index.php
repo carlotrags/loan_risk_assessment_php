@@ -18,6 +18,7 @@ $role = $_SESSION['role'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/style.css?v=<?= time() ?>">
     <title>Loan Risk Assessment</title>
+    <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
 </head>
 <body>
     <section class="header-navbar">
@@ -43,7 +44,7 @@ $role = $_SESSION['role'];
         
         <br>
         <div class="system-details-body">
-            <p>This website is created using -----. The system utilizes Logistic Regression for its assessment.</p>
+            <p>This website is created using HTML, CSS, PHP, and JavaScript. The system utilizes Logistic Regression for its assessment.</p>
             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laborum exercitationem excepturi, dolorum veniam et corporis iure reiciendis expedita earum modi repellat sapiente, numquam ab quas alias dignissimos animi explicabo maxime, consequatur adipisci distinctio at! Porro nisi velit provident laboriosam, harum earum sapiente. Commodi porro blanditiis dolorum eaque velit a optio.</p>
         </div>
     </section>

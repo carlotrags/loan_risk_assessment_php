@@ -2,7 +2,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-family: 'Roboto', sans-serif;
   background: linear-gradient(135deg, #eef1f5, #f7f9fb);
   color: #2d2d2d;
   display: flex;
@@ -16,14 +16,18 @@ body {
 
 /* Navigation Bar & Header */
 .header-navbar{
-  background-color: yellow;
+  background-color: #575366;
   text-align: center;
   padding: 5px;
-  box-shadow: 1px 1px 10px black;
 }
 
 .header-navbar h1{
-  color: #1e3d58;
+  color: #f7f7f7;
+}
+
+.navbar, .logout{
+  display: inline;
+  font-weight: 100;
 }
 
 .navbar{
@@ -41,7 +45,7 @@ body {
   background-color: transparent;
   border-radius: 10px;
   font-weight: bold;
-  color: black;
+  color: rgb(235, 235, 235);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -50,6 +54,18 @@ body {
   background-color: rgb(68, 0, 255);
 }
 
+.navbar .logout{
+  background-color: #cc0000;
+  color: white;
+}
+
+.logged-user strong{
+  color: #D1E3DD;
+}
+
+.logged-user p {
+  color: white;
+}
 /* Home page  */
 .welcome-message{
   text-align: center;
@@ -65,11 +81,11 @@ body {
 
 .tutorial-body{
   text-align: left;
-  background-color: #aeb1fc;
+  background-color: #ece7ff;
   padding: 20px;
   margin: 20px 0;
   animation: fadeInUp 0.8s ease-out;
-  box-shadow: 0px 0px 10px #ccc;
+  box-shadow: 0px 0px 10px #6b6b6b;
 }
 
 .tutorial-body h3{
@@ -106,6 +122,9 @@ body {
 }
 
 .system-details-body{
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 30px;
   animation: fadeInUp 0.8s ease-out;
 }
 
@@ -343,3 +362,5 @@ footer{
     box-shadow: 0 0 0 2px rgba(239, 83, 80, 0.3);
   }
 }
+
+

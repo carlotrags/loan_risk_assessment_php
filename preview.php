@@ -30,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <title>Preview Loan Application</title>
     <link rel="stylesheet" href="static/style.css">
+    <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
 </head>
 <body>
     <section class="header-navbar">

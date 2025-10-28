@@ -75,3 +75,21 @@ body {
     font-weight: bold;
     margin-bottom: 10px;
 }
+
+/* Logo system */
+
+.login-header .logo {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.login-header .bank-logo {
+    max-height: 80px; 
+    width: auto;    
+    vertical-align: middle; 
+}
+
+.login-header .logo {
+    padding-top: 15px; 
+}

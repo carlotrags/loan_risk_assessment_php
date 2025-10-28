@@ -34,6 +34,7 @@ foreach ($rows as $row) {
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="static/style.css">
+    <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
     <title>Loan Applications - Admin View</title>
     <style>
         .history-container{

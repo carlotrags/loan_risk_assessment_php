@@ -1,9 +1,9 @@
 <?php
-$host = "127.0.0.1"; // or "localhost"
+$host = "127.0.0.1";
 $user = "root";
 $pass = "";
 $db   = "loan_system";
-$port = 3307; // just the port number, not host:port
+$port = 3306;
 
 // MySQLi connection
 $conn = new mysqli($host, $user, $pass, $db, $port);

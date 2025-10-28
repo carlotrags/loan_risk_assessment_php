@@ -33,6 +33,7 @@ foreach ($rows as $row) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
     <title>Loan Applications - Admin View</title>
     <style>
         body {
