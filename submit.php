@@ -75,21 +75,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="static/navbarstyle.css">
     <link rel='stylesheet' href='static/result.css'>
+
     <title>Loan Assessment Result</title>
 </head>
 <body>
-    <div class="result-container">
-        <header class="system-header">
-            <div class="logo">
-                <img src="static/images/transfers.png" alt="Bank Logo" class="bank-logo">
-            </div>
-            <div class="user-info">
-                Logged in as <?= htmlspecialchars($first_name) ?> (<?= htmlspecialchars($username) ?>)
-            </div>
-        </header>
+    <section class="header-navbar">
+        <?php include "static/navbar.php"?>
+    </section>
 
+    <div class="result-container">
         <div class="result-card">
             <div class="card-header">
                 <h2>Loan Assessment Result</h2>

@@ -4,7 +4,6 @@ body {
   padding: 0;
   font-family: 'Roboto', sans-serif;
   background: linear-gradient(135deg, #eef1f5, #f7f9fb);
-  color: #2d2d2d;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -14,58 +13,6 @@ body {
   flex: 1;
 }
 
-/* Navigation Bar & Header */
-.header-navbar{
-  background-color: #575366;
-  text-align: center;
-  padding: 5px;
-}
-
-.header-navbar h1{
-  color: #f7f7f7;
-}
-
-.navbar, .logout{
-  display: inline;
-  font-weight: 100;
-}
-
-.navbar{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 45px;
-  list-style: none;
-}
-
-.navbar a{
-  display: inline-block;
-  padding: 8px 16px;
-  text-decoration: none;
-  background-color: transparent;
-  border-radius: 10px;
-  font-weight: bold;
-  color: rgb(235, 235, 235);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.navbar a:hover{
-  color: rgb(255, 255, 255);
-  background-color: rgb(68, 0, 255);
-}
-
-.navbar .logout{
-  background-color: #cc0000;
-  color: white;
-}
-
-.logged-user strong{
-  color: #D1E3DD;
-}
-
-.logged-user p {
-  color: white;
-}
 /* Home page  */
 .welcome-message{
   text-align: center;
@@ -229,7 +176,7 @@ button[type="submit"] {
   transition: background 0.3s ease;
 }
 
-button:hover {
+button[type="submit"]:hover {
   background: linear-gradient(to right, #1f4acc, #0043b5);
 }
 
@@ -282,6 +229,35 @@ button:hover {
   background: linear-gradient(to right, #1f4acc, #0043b5);
 }
 
+/* History CSS */
+.history-container{
+  margin: 20px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.history-container h2 {
+  color: #333;
+}
+
+.history-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 40px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.history-container th, td {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.history-container th {
+  background-color: #263238;
+  color: #fff;
+}
+
 /* Animation */
 @keyframes fadeInUp {
   from {
@@ -313,7 +289,7 @@ footer{
   }
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   body,
   .form-container {
     background-color: #121212;
@@ -361,6 +337,4 @@ footer{
     border-color: #ef5350 !important;
     box-shadow: 0 0 0 2px rgba(239, 83, 80, 0.3);
   }
-}
-
-
+} */

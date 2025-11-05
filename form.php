@@ -17,9 +17,12 @@ $role = $_SESSION['role'];
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Loan Risk Assessment</title>
   <link rel="stylesheet" href="static/style.css?v=<?= time() ?>">
+  <link rel="stylesheet" href="static/navbarstyle.css">
   <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+  <title>Loan Risk Assessment</title>
 </head>
 <body>
   <section class="header-navbar">

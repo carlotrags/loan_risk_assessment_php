@@ -11,6 +11,7 @@ unset($_SESSION['login_error']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="loginstyle.css">
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <title>Login</title>
 </head>
 <body>
@@ -28,13 +29,25 @@ unset($_SESSION['login_error']);
 
         <form action="login_process.php" method="POST">
             <label>Username</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="username" name="username" placeholder="Input username">
 
-            <label>Password</label>
-            <input type="password" id="password" name="password" required>
+            <label class="password-label">Password</label>
+            <div class="password-container">
+                <input type="password" id="password" name="password" placeholder="Input password">
+                <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
+            </div>
 
             <button type="submit">Sign in</button>
         </form>
     </div>
+    <script>
+        document.getElementById("togglePassword").addEventListener("click", function() {
+            const password = document.getElementById("password");
+            const type = password.getAttribute("type") === "password" ? "text" : "password";
+            password.setAttribute("type", type);
+            this.classList.toggle("fa-eye");
+            this.classList.toggle("fa-eye-slash");
+        });
+    </script>
 </body>
 </html>

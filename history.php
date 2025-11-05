@@ -34,36 +34,11 @@ foreach ($rows as $row) {
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="static/navbarstyle.css">
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
-    <title>Loan Applications - Admin View</title>
-    <style>
-        .history-container{
-            margin: 20px;
-        }
-        h2 {
-            color: #333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 40px;
-            background: #fff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-        }
-        th, td {
-            padding: 12px;
-            border: 1px solid #e0e0e0;
-            text-align: left;
-        }
-        th {
-            background-color: #263238;
-            color: #fff;
-        }
-        canvas {
-            max-width: 500px;
-        }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <title>History</title>
 </head>
 <body>
     <section class="header-navbar">
@@ -84,6 +59,7 @@ foreach ($rows as $row) {
                             <th>Loan Amount</th>
                             <th>Prediction</th>
                             <th>Submitted At</th>
+                            <th>Assessment By</th>
                         </tr>
                     </thead>
                     <tbody>

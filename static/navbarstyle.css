@@ -1,0 +1,112 @@
+/* Navigation Bar & Header */
+.nav-container{
+    border-top: 12px solid darkblue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3700ff;
+    padding: 10px 40px;
+}
+
+.nav-container h1{
+    color: rgb(255, 255, 255);
+}
+
+.main-navbar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    list-style: none;
+}
+
+.main-navbar a{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    text-decoration: none;
+    background-color: transparent;
+    border-radius: 10px;
+    font-weight: bold;
+    color: rgb(235, 235, 235);
+    transition: background-color 0.3s ease;
+}
+
+.main-navbar a:hover{
+    background-color: rgb(0, 4, 125);
+}
+
+/* Navbar User Drop Down */
+.user-menu{
+    position: relative;
+}
+
+.user-btn{
+    display: flex;
+    background-color: none;
+    border: none;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    cursor: pointer;
+    align-items: center;
+    gap: 6px;
+    background-color: rgb(0, 178, 0);
+    padding: 10px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.user-btn:hover{
+    background-color: darkgreen;
+}
+
+.user-dropdown{
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: rgb(255, 255, 255);
+    color: #003c82;
+    border: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    min-width: 150px;
+    z-index: 10;
+    flex-direction: column;
+}
+
+.user-dropdown a{
+    color: #003c82;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.user-dropdown.show{
+    display: flex;
+}
+
+.user-dropdown.show .user-account{
+    color: black;
+    background-color: white;
+    transition: background-color 0.2s ease;
+}
+
+.user-dropdown.show .user-account:hover{
+    background-color: #c0c0c0;
+}
+
+.user-dropdown.show .logout{
+    background-color: red;
+    color: white;
+    transition: background-color 0.2s ease;
+}
+
+.user-dropdown.show .logout:hover{
+    background-color: rgb(153, 0, 0);
+}
+
+/* Responsiveness */
