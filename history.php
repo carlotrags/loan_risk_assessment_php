@@ -33,8 +33,8 @@ foreach ($rows as $row) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="static/style.css">
-    <link rel="stylesheet" href="static/navbarstyle.css">
+    <link rel="stylesheet" href="static/style.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="static/navbarstyle.css?v=<?= time() ?>">
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 

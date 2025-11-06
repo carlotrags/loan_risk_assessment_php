@@ -18,7 +18,7 @@ $role = $_SESSION['role'];
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="static/style.css?v=<?= time() ?>">
-  <link rel="stylesheet" href="static/navbarstyle.css">
+  <link rel="stylesheet" href="static/navbarstyle.css?v=<?= time() ?>">
   <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
@@ -29,7 +29,7 @@ $role = $_SESSION['role'];
     <?php include "static/navbar.php"?>
   </section>
 
-  <div class="container">
+  <section class="container">
     <div class="form-wrapper">
       <div class="card">
         <div class="form-card">
@@ -67,8 +67,8 @@ $role = $_SESSION['role'];
         </form>
       </div>
     </div>
-  </div>
-  <?php include "static/footer.php"?>
+  </section>
   <script src="static/form.js" defer></script>
+  <?php include "static/footer.php"?>
 </body>
 </html>
