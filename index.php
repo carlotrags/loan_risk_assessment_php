@@ -68,7 +68,7 @@
                     <p>0</p>
                 </div>
                 <div class="summary-item">
-                    <h3>Monthly Assessments</h3>
+                    <h3>This Month's Assessments</h3>
                     <p>0</p>
                 </div>
             </div>
