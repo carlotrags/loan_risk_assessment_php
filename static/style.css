@@ -8,9 +8,23 @@ body {
   min-height: 100vh;
 }
 
-.container{
+.header-navbar,
+footer {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+
+.container {
   flex: 1;
-  margin: 35px;
+  margin: 35px auto; 
+  padding: 0 15px;
+  max-width: 95%; 
+}
+
+.form-control-plaintext {
+  white-space: normal; 
+  word-wrap: break-word; 
 }
 
 /* Loan Risk Assessment Forms */

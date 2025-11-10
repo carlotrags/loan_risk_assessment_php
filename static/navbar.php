@@ -1,10 +1,9 @@
 <?php
 $role = $_SESSION['role'] ?? '';
 ?>
-<div class="nav-container">
-    <h1>Loan Risk Assessment System</h1>
-
-    <ul class="main-navbar">
+<div class="nav-container flex items-center justify-between bg-indigo-700 px-10 py-3 border-t-8 border-blue-900">
+    <div class='logo text-indigo-100 font-bold text-xl'>Loan Risk Assessment</div>
+    <ul class="main-navbar mx-auto flex items-center gap-5 list-none m-0 p-0">
         <li><a href="index.php"><i class="fa-solid fa-house"></i>Home</a></li>
 
         <li><a href="form.php"><i class="fa-solid fa-clipboard-check"></i>Assessment</a></li>
@@ -17,14 +16,14 @@ $role = $_SESSION['role'] ?? '';
     </ul>
 
     <div class="user-menu">
-        <button class="user-btn" id="user-dropdown-btn">
+        <button class="user-btn bg-green-600 text-white font-bold px-3 py-2 rounded-md flex items-center gap-2" id="user-dropdown-btn">
             <i class="fa-solid fa-user"></i><?= htmlspecialchars($_SESSION['username']) ?><i class="fa-solid fa-caret-down"></i>
         </button>
-        <div class="user-dropdown" id="user-dropdown">
-            <a href="account.php" class="user-account"><i class="fa-solid fa-user"></i>Account</a>
-            <a href="logout.php" class="logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+            <div class="user-dropdown" id="user-dropdown">
+                <a href="account.php" class="user-account"><i class="fa-solid fa-user"></i>Account</a>
+                <a href="logout.php" class="logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+            </div>
         </div>
-    <div>
 </div>
 
 <script>
