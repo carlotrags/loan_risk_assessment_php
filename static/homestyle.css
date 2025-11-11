@@ -194,6 +194,10 @@
     line-height: 1.6;
 }
 
+.tutorial-body ol li {
+    margin-left: 20px;
+}
+
 .tutorial-body p{
     text-align: center;
     font-weight: bold;
