@@ -191,7 +191,7 @@
                 <li>The results will appear after the system calculates, showing if the client is <strong>eligible</strong> or <strong>ineligible</strong> for a loan.</li>
             </ol>
             <p>Click the button below to start Risk Assessment.</p>
-            <a href="form.php"><button class="btn btn-primary">Start Assessment</button></a>
+            <a href="assessment.php"><button class="btn btn-primary">Start Assessment</button></a>
         </div>
         <br>
         

@@ -36,11 +36,6 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* .summary-container:hover{
-    transform: scale(1.01);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-} */
-
 .summary-container h3{
     font-size: 20px;
     color: #333;
@@ -121,11 +116,6 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* .recent-assessments:hover{
-    transform: scale(1.01);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-} */
-
 .recent-assessments h3{
     margin-bottom: 15px;
     font-size: 20px;
@@ -192,6 +182,7 @@
 .tutorial-body ol{
     margin-right: 10px;
     line-height: 1.6;
+    padding: 20px;
 }
 
 .tutorial-body p{

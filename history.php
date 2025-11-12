@@ -62,50 +62,52 @@ foreach ($rows as $row) {
         <?php include "static/navbar.php"?>
     </section>
 
-    <div class="container-fluid px-4">
-        <div class="history-container w-auto">
-            <h2>Loan Application Records</h2>
+    <section class="container">
+        <div class="container-fluid px-4">
+            <div class="history-container w-auto">
+                <h2>Loan Application Records</h2>
 
-            <?php if (count($rows) > 0): ?>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Income</th>
-                            <th>Credit Score</th>
-                            <th>Loan Amount</th>
-                            <th>Prediction</th>
-                            <th>Submitted At</th>
-                            <th>Assessment By</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($rows as $row): ?>
+                <?php if (count($rows) > 0): ?>
+                    <table>
+                        <thead>
                             <tr>
-                                <td><?= htmlspecialchars($row['name']) ?></td>
-                                <td><?= htmlspecialchars($row['income']) ?></td>
-                                <td><?= htmlspecialchars($row['credit_score']) ?></td>
-                                <td><?= htmlspecialchars($row['loan_amount']) ?></td>
-                                <td><?= $row['prediction'] == 0 ? 'Low Risk' : 'High Risk' ?></td>
-                                <td><?= htmlspecialchars($row['submitted_at']) ?></td>
-                                <td>
-                                    <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?> 
-                                    <span class="badge align-items-center p-1 pe-2 ms-2 <?= $row['role'] === 'Manager' ? 
-                                        'text-danger-emphasis bg-danger-subtle border border-danger-subtle' : 
-                                        'text-primary-emphasis bg-primary-subtle border border-primary-subtle' ?> rounded-pill">
-                                        <img src="https://ui-avatars.com/api/?name=<?= urlencode($row['first_name'] . '+' . $row['last_name']) ?>&size=16" class="rounded-circle me-1" width="24" height="24"  alt="profile">
-                                        <?= htmlspecialchars($row['role']) ?>
-                                    </span>
-                                </td>
+                                <th>Name</th>
+                                <th>Income</th>
+                                <th>Credit Score</th>
+                                <th>Loan Amount</th>
+                                <th>Prediction</th>
+                                <th>Submitted At</th>
+                                <th>Assessment By</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php else: ?>
-                <p>No loan applications found.</p>
-            <?php endif; ?>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($rows as $row): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($row['name']) ?></td>
+                                    <td><?= htmlspecialchars($row['income']) ?></td>
+                                    <td><?= htmlspecialchars($row['credit_score']) ?></td>
+                                    <td><?= htmlspecialchars($row['loan_amount']) ?></td>
+                                    <td><?= $row['prediction'] == 0 ? 'Low Risk' : 'High Risk' ?></td>
+                                    <td><?= htmlspecialchars($row['submitted_at']) ?></td>
+                                    <td>
+                                        <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?> 
+                                        <span class="badge align-items-center p-1 pe-2 ms-2 <?= $row['role'] === 'Manager' ? 
+                                            'text-danger-emphasis bg-danger-subtle border border-danger-subtle' : 
+                                            'text-primary-emphasis bg-primary-subtle border border-primary-subtle' ?> rounded-pill">
+                                            <img src="https://ui-avatars.com/api/?name=<?= urlencode($row['first_name'] . '+' . $row['last_name']) ?>&size=16" class="rounded-circle me-1" width="24" height="24"  alt="profile">
+                                            <?= htmlspecialchars($row['role']) ?>
+                                        </span>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <p>No loan applications found.</p>
+                <?php endif; ?>
+            </div>
         </div>
-    </div>
+    </section>
     <?php include "static/footer.php"?>
 </body>
 </html>
