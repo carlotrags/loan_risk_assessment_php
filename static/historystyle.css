@@ -1,0 +1,65 @@
+/* History Search & Filter */
+.filter-bar{
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+}
+
+/* History Table */
+.history-container{
+    margin: 20px;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.history-container h2{
+    color: #333;
+}
+
+.history-container table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.history-container th, td{
+    padding: 12px;    
+    border: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+.history-container th{
+    background-color: #263238;
+    color: #fff;
+}
+
+td.prediction.low{
+    background: #11ff00;
+    color: rgb(255, 255, 255);
+    font-weight: 600;
+}
+
+td.prediction.high{
+    background: #ff0015;
+    color: rgb(255, 255, 255);
+    font-weight: 600;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

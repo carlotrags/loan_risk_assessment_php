@@ -43,10 +43,6 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
 
     <!-- Account content styles below keep changes local to this page -->
     <style>
-        /* Neutralize navbar-specific right margin only on this page so container centers correctly */
-        .header-navbar .main-navbar { margin-right: 555px !important; 
-            gap: 20px !important;}
-
         /*Overrides to avoid touching global CSS files so don't touch thisss*/
         .account-page .container { max-width: 980px; margin: 3rem auto !important; }
         .account-page .card { padding: .5rem; max-width: none; }

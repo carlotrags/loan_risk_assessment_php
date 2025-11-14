@@ -27,6 +27,38 @@ footer {
   word-wrap: break-word; 
 }
 
+/* For assessment.php */
+.assessment-type-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.assessment-type-container h1{
+  font-size: 25px;
+}
+
+.assessment-type-container a{
+  text-decoration: none;
+}
+
+.assessment-type{
+  width: 550px;
+  max-width: 100%;
+  background: #fff;
+  margin-top: 18px;
+  box-shadow: 0 8px 20px rgba(16,24,40,0.06);
+  border-radius: 10px;
+  padding: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.assessment-type:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(16,24,40,0.12);
+}
+
 /* Loan Risk Assessment Forms */
 .form-wrapper {
   min-height: 90vh;
@@ -187,11 +219,11 @@ button[type="submit"]:hover {
   animation: fadeInUp 0.8s ease-out;
 }
 
-.history-container h2 {
+.history-container h2{
   color: #333;
 }
 
-.history-container table {
+.history-container table{
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 40px;
@@ -199,47 +231,27 @@ button[type="submit"]:hover {
   box-shadow: 0 0 10px rgba(0,0,0,0.05);
 }
 
-.history-container th, td {
+.history-container th, td{
   padding: 12px;
   border: 1px solid #e0e0e0;
   text-align: left;
 }
 
-.history-container th {
+.history-container th{
   background-color: #263238;
   color: #fff;
 }
 
-/* For assessment.php */
-.assessment-type-container{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  animation: fadeInUp 0.8s ease-out;
+td.prediction.low{
+  background: #11ff00;
+  color: rgb(255, 255, 255);
+  font-weight: 600;
 }
 
-.assessment-type-container h1{
-  font-size: 25px;
-}
-
-.assessment-type-container a{
-  text-decoration: none;
-}
-
-.assessment-type{
-  width: 550px;
-  max-width: 100%;
-  background: #fff;
-  margin-top: 18px;
-  box-shadow: 0 8px 20px rgba(16,24,40,0.06);
-  border-radius: 10px;
-  padding: 20px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.assessment-type:hover{
-  transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(16,24,40,0.12);
+td.prediction.high{
+  background: #ff0015;
+  color: rgb(255, 255, 255);
+  font-weight: 600;
 }
 
 /* Animation */
