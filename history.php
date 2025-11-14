@@ -86,7 +86,6 @@ foreach ($rows as $row) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
