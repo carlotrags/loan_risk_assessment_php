@@ -139,6 +139,12 @@ foreach ($rows as $row) {
                             <input type="date" name="dateTo" class="form-control" value="<?= htmlspecialchars($_GET['dateTo'] ?? '') ?>">
                                 
                             <button type="submit" class="btn btn-primary">Filter</button>
+                            <?php 
+                            // Rebuild the current query string to pass filters to the PDF script 
+                            $queryString = http_build_query($_GET);?>
+                            <a href="generatepdf.php?<?= htmlspecialchars($queryString) ?>" class="btn btn-success btn-pdf-narrow"">
+                                <i class="fas fa-file-pdf"></i> Download PDF
+                            </a>
                         </div>
                     </div>
                 </form>
