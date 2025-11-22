@@ -22,7 +22,7 @@ $role = $_SESSION['role'];
   <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-  <title>Loan Risk Assessment</title>
+  <title>Personal Loan Risk Assessment</title>
 </head>
 <body>
   <section class="header-navbar">

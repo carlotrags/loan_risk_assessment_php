@@ -6,8 +6,13 @@ $role = $_SESSION['role'] ?? '';
     <ul class="main-navbar mx-auto flex items-center gap-5 list-none m-0 p-0">
         <li><a href="index.php"><i class="fa-solid fa-house"></i>Home</a></li>
 
-        <li><a href="form.php"><i class="fa-solid fa-clipboard-check"></i>Assessment</a></li>
-
+        <li class="assessment-dropdown">
+            <a href="assessment.php"><i class="fa-solid fa-clipboard-check"></i>Assessment <i class="fa-solid fa-caret-down"></i></a>
+            <div class="assessment-dropdown-menu">
+                <a href="form.php"><i class="fa-solid fa-user"></i>Personal Loan</a>
+                <a href="business-form.php"><i class="fa-solid fa-briefcase"></i>Business Loan</a>
+            </div>
+        </li>
         <li><a href="history.php"><i class="fa-solid fa-clock-rotate-left"></i>History</a></li>
 
         <?php if ($role === 'Manager') : ?>

@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $statusClass = $prediction == 1 ? "approved" : "denied";
 
         // Save to MySQL
-        $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3307);
+        $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3306);
         if ($conn->connect_error) {
             die("MySQL Connection failed: " . $conn->connect_error);
         }
