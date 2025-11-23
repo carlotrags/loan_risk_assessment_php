@@ -78,9 +78,9 @@
     <!-- Bootstrap Icons and stuff-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-    <link rel="stylesheet" href="static/style.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="static/navbarstyle.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="static/homestyle.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="static/css/style.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="static/css/navbarstyle.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="static/css/homestyle.css?v=<?= time() ?>">
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 

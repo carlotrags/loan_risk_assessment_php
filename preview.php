@@ -29,8 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html>
 <head>
     <title>Preview Loan Application</title>
-    <link rel="stylesheet" href="static/style.css">
-    <link rel="stylesheet" href="static/navbarstyle.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/navbarstyle.css?v=<?= time() ?>">
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
 </head>
 <body>

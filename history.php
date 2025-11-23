@@ -91,9 +91,9 @@ foreach ($rows as $row) {
 <head>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="static/style.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="static/historystyle.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="static/navbarstyle.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="static/css/style.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="static/css/historystyle.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="static/css/navbarstyle.css?v=<?= time() ?>">
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
