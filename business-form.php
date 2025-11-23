@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- 5 - Highly Satisfactory, 4 - Satisfactory, 3 - Neutral, 2 - Unsatisfactory, 1 - Highly Unsatisfactory -->
 
     <section class="container">
+        <h1 style="text-align: center; padding-bottom:20px;">Business Loan Risk Assessment</h1>
         <div class="step-container">
             <a href="business-form.php?step=1"><div class="step <?= $currentStep === 1 ? 'active' : '' ?>">A. Financial Condition</div></a>
             <a href="business-form.php?step=2"><div class="step <?= $currentStep === 2 ? 'active' : '' ?>">B. Industry/Market Analysis</div></a>
