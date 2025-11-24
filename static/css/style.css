@@ -147,7 +147,7 @@ input:focus, select:focus {
 }
 
 /* Button */
-button[type="submit"] {
+.submitAssessmentBtn {
   width: 100%;
   padding: 14px;
   font-size: 16px;
@@ -160,7 +160,7 @@ button[type="submit"] {
   transition: background 0.3s ease;
 }
 
-button[type="submit"]:hover {
+.submitAssessmentBtn:hover {
   background: linear-gradient(to right, #1f4acc, #0043b5);
 }
 

@@ -63,7 +63,7 @@ $role = $_SESSION['role'];
               <option value="1">Yes</option>
             </select>
           </div>
-          <button type="submit" id="submitAssessmentBtn">Submit Application</button>
+          <button type="submit" id="submitAssessmentBtn" class="submitAssessmentBtn">Submit Application</button>
         </form>
       </div>
     </div>

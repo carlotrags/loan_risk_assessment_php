@@ -37,7 +37,7 @@
     }
 
     // Ineligible:prediction = 0 (denied)
-    $res = $conn->query("SELECT COUNT(*) AS ineligible FROM loan_applications WHERE prediction = 0");
+    $res = $conn->query("SELECT COUNT(*) AS ineligible FROM loan_applications WHERE prediction = '0'");
     if ($res) {
         $r = $res->fetch_assoc();
         $totals['ineligible'] = (int)$r['ineligible'];
