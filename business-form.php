@@ -217,7 +217,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                     <!-- C. Industry/Market Analysis -->
                     <?php if ($currentStep == 3): ?>
                     <h3>Step 3 – Industry/Market Analysis</h3>
-                        <table class="business-form-table">
+                        <table class="business-form-table"> 
                             <thead>
                                 <tr>
                                     <th>Variable</th>
