@@ -56,7 +56,14 @@ td.prediction.high{
     /* This ensures the button only takes up the space it needs */
     display: inline-block !important; 
     /* Optional: If you want it smaller than the content: */
-     width: 240px; 
+    width: 240px; 
+}
+
+.btn-pdf-narrow {
+    /* This ensures the button only takes up the space it needs */
+    display: inline-block !important; 
+    /* Optional: If you want it smaller than the content: */
+    width: 240px; 
 }
 
 /* Animation */

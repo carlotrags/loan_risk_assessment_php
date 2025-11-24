@@ -79,7 +79,9 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                             <input type="number" id="loan_term" name="loan_term" value="12" required value="<?= $_SESSION['business_form']['loan_term'] ?? '' ?>">
                         </div>
                         <br>
-                        <button type="submit" class="next-button">Next <i class="fa-solid fa-caret-right"></i></button>
+                        <div class="button-container">
+                            <button type="submit" name="step" value="2" class="next-button">Next <i class="fa-solid fa-caret-right"></i></button>
+                        </div>
                     </div>
                 <?php endif; ?>
 
@@ -209,8 +211,10 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                         </tbody>
                     </table>
 
-                    <button type="submit" name="step" value="1" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</button>
-                    <button type="submit" name="step" value="3" class="next-button">Next <i class="fa-solid fa-caret-right"></i></button>
+                    <div class="button-container">
+                        <button type="submit" name="step" value="1" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</button>
+                        <button type="submit" name="step" value="3" class="next-button">Next <i class="fa-solid fa-caret-right"></i></button>
+                    </div>
                     <?php endif; ?>
 
                     
@@ -221,11 +225,11 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                             <thead>
                                 <tr>
                                     <th>Variable</th>
-                                    <th>5 - Highly Satisfactory</th>
-                                    <th>4 - Satisfactory</th>
-                                    <th>3 - Neutral</th>
-                                    <th>2 - Unsatisfactory</th>
                                     <th>1 - Highly Unsatisfactory</th>
+                                    <th>2 - Unsatisfactory</th>
+                                    <th>3 - Neutral</th>
+                                    <th>4 - Satisfactory</th>
+                                    <th>5 - Highly Satisfactory</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -286,8 +290,10 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                                     <td><input type="radio" name="market_position" value="5" <?= (isset($_SESSION['business_form']['market_position']) && $_SESSION['business_form']['market_position']=='5') ? 'checked' : '' ?>>5 - Highly Satisfactory</td>
                                 </tr>
                         </table>
-                        <a href="business-form.php?step=2" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</a>
-                        <a href="business-form.php?step=4"class="next-button">Next <i class="fa-solid fa-caret-right"></i></a>
+                        <div class="button-container">
+                            <button type="submit" name="step" value="2" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</button>
+                            <button type="submit" name="step" value="4" class="next-button">Next <i class="fa-solid fa-caret-right"></i></button>
+                        </div>
                     <?php endif; ?>
 
                     <!-- D. Management quality -->
@@ -297,11 +303,11 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                             <thead>
                                 <tr>
                                     <th>Variable</th>
-                                    <th>5 - Highly Satisfactory</th>
-                                    <th>4 - Satisfactory</th>
-                                    <th>3 - Neutral</th>
-                                    <th>2 - Unsatisfactory</th>
                                     <th>1 - Highly Unsatisfactory</th>
+                                    <th>2 - Unsatisfactory</th>
+                                    <th>3 - Neutral</th>
+                                    <th>4 - Satisfactory</th>
+                                    <th>5 - Highly Satisfactory</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -378,15 +384,20 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                                     <td><input type="radio" name="long_term_management_strategy" value="5" <?= (isset($_SESSION['business_form']['long_term_management_strategy']) && $_SESSION['business_form']['long_term_management_strategy']=='5') ? 'checked' : '' ?>>5 - Highly Satisfactory</td>
                                 </tr>
                             </table>
-                            <a href="business-form.php?step=3" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</a>
-                            <a href="business-form.php?step=5" class="next-button">Next <i class="fa-solid fa-caret-right"></i></a>
+
+                            <div class="button-container">
+                                <button type="submit" name="step" value="3" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</button>
+                                <button type="submit" name="step" value="5" class="next-button">Next <i class="fa-solid fa-caret-right"></i></button>
+                            </div>
                         <?php endif; ?>
 
                     <?php if ($currentStep == 5): ?>
                     <?php include "business-form-preview.php"?>
-                    <a href="business-form.php?step=4" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</a>
-                    <br><br>
-                    <button type="submit" class="submit-btn">Submit</button>
+                    <div class="button-container">
+                        <a href="business-form.php?step=4" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</a>
+                        <br><br>
+                        <button type="submit" class="submit-btn">Submit</button>
+                    </div>
                     <?php endif; ?>
             </form>
         </div>

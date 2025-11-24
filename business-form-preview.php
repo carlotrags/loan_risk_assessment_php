@@ -29,7 +29,7 @@ $form = $_SESSION['business_form'] ?? [];
     <!-- B. Financial Condition -->
     <table class="preview-table">
         <tr class="section-header">
-            <td colspan="3">B. Financial Condition</td>
+            <td colspan="10">B. Financial Condition</td>
         </tr>
         <tr class="variable-row">
             <td>Capital to Risk Assets Ratio</td>
@@ -48,11 +48,12 @@ $form = $_SESSION['business_form'] ?? [];
             <td><?= $form['debt_to_equity_ratio'] ?? '-' ?></td>
             <td><?= $form['npl_ratio'] ?? '-' ?></td>
             <td><?= $form['npa_ratio'] ?? '-' ?></td>
-            <td><?= $form['npa_coverage_ratio'] ?? '-' ?></td>
+            <td><?= $form['roae'] ?? '-' ?></td>
+            <td><?= $form['roaa'] ?? '-' ?></td>
+            <td><?= $form['cost_to_income_ratio'] ?? '-' ?></td>
             <td><?= $form['liquid_assets_to_borrowed_funds'] ?? '-' ?></td>
             <td><?= $form['debt_service_cover'] ?? '-' ?></td>
-        </tr>
-        
+        </tr>    
     </table>
 
     <br><br>
@@ -60,7 +61,7 @@ $form = $_SESSION['business_form'] ?? [];
     <!-- C. Industry/Market Analysis -->
     <table class="preview-table">
         <tr class="section-header">
-            <td colspan="3">C. Industry/Market Analysis</td>
+            <td colspan="7">C. Industry/Market Analysis</td>
         </tr>
         <tr class="variable-row">
             <td>Threat of Entry</td>
@@ -87,7 +88,7 @@ $form = $_SESSION['business_form'] ?? [];
     <!-- D. Management Quality -->
     <table class="preview-table">
         <tr class="section-header">
-            <td colspan="3">D. Management Quality</td>
+            <td colspan="9">D. Management Quality</td>
         </tr>
         <tr class="variable-row">
             <td>Character of Management</td>
@@ -112,5 +113,4 @@ $form = $_SESSION['business_form'] ?? [];
             <td><?= $form['long_term_management_strategy'] ?? '-' ?></td>
         </tr>
     </table>
-    <br><br>
 </section>

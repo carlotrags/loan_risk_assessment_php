@@ -56,8 +56,6 @@ if ($conditions) {
 // Fetch Records
 $sql = "SELECT 
         la.name, 
-        la.income, 
-        la.credit_score, 
         la.loan_amount, 
         la.prediction, 
         la.submitted_at,
@@ -154,10 +152,9 @@ foreach ($rows as $row) {
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Income</th>
-                                <th>Credit Score</th>
                                 <th>Loan Amount</th>
                                 <th>Prediction</th>
+                                <th>Loan Type</th>
                                 <th>Submitted At</th>
                                 <th>Assessment By</th>
                             </tr>
@@ -166,11 +163,10 @@ foreach ($rows as $row) {
                             <?php foreach ($rows as $row): ?>
                                 <tr>
                                     <td><?= htmlspecialchars($row['name']) ?></td>
-                                    <td><?= htmlspecialchars($row['income']) ?></td>
-                                    <td><?= htmlspecialchars($row['credit_score']) ?></td>
                                     <td><?= htmlspecialchars($row['loan_amount']) ?></td>
                                     <td class="prediction <?= $row['prediction'] == 0 ? 'low' : 'high' ?>">
                                     <?= $row['prediction'] == 0 ? 'Low Risk' : 'High Risk' ?></td>
+                                    <td><?= htmlspecialchars($row['loan_type']) ?></td>
                                     <td><?= htmlspecialchars($row['submitted_at']) ?></td>
                                     <td>
                                         <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?> 

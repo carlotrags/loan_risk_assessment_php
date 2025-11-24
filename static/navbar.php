@@ -17,8 +17,8 @@ $role = $_SESSION['role'] ?? '';
         <li class="history-dropdown">
             <a href="history.php"><i class="fa-solid fa-clock-rotate-left"></i>History</a>
             <div class="history-dropdown-menu">
-                <a href="personal-assessment-history.php"><i class="fa-solid fa-user"></i>Personal Loan</a>
-                <a href="business-assessment-history.php"><i class="fa-solid fa-briefcase"></i>Business Loan</a>
+                <a href="personal-history.php"><i class="fa-solid fa-user"></i>Personal Loan</a>
+                <a href="business-history.php"><i class="fa-solid fa-briefcase"></i>Business Loan</a>
             </div>
         </li>
 

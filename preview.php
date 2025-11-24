@@ -13,7 +13,7 @@ $role = $_SESSION['role'];
 ?>
 
 <?php
-// htdocs/preview.php
+// htdocs/pr
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Sanitize and store POST data
     $name = htmlspecialchars($_POST['name']);
