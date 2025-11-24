@@ -13,6 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Get form data
     $name = $_POST['name'] ?? '';
     $data = [
+        // Financial Condition
         'income' => (float)($_POST['income'] ?? 0),
         'loan_amount' => (float)($_POST['loan_amount'] ?? 0),
         'loan_term' => (int)($_POST['loan_term'] ?? 0),
@@ -21,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ];
 
     // Call Flask API
-    $ch = curl_init('http://127.0.0.1:5000/predict/personal');
+    $ch = curl_init('http://127.0.0.1:5000/predict');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);

@@ -396,7 +396,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                     <div class="button-container">
                         <a href="business-form.php?step=4" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</a>
                         <br><br>
-                        <button type="submit" class="submit-btn">Submit</button>
+                        <button type="submit" id="submitAssessmentBtn" class="submit-btn">Submit Application</button>
                     </div>
                     <?php endif; ?>
             </form>
@@ -427,7 +427,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
     // });
     </script>
 
-    <script src="static/form.js" defer></script>
+    <script src="static/js/business-form.js?v=<?= time() ?>"></script>
     <?php include "static/footer.php"?>
 </body>
 </html> 
