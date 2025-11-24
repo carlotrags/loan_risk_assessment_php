@@ -6,6 +6,8 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+$form = $_SESSION['business_form'] ?? [];
+
 $username = $_SESSION['username'];
 $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
@@ -88,6 +90,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                 <!-- B. Financial Condition -->
                 <?php if ($currentStep === 2): ?>
                     <h3>Step 2 – Financial Condition</h3>
+                    <p class="company-name-placeholder"><?= $form['company_name'] ?? '-' ?></p>
                     <table class="business-form-table">
                         <thead>
                             <tr>
@@ -221,6 +224,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                     <!-- C. Industry/Market Analysis -->
                     <?php if ($currentStep == 3): ?>
                     <h3>Step 3 – Industry/Market Analysis</h3>
+                    <p class="company-name-placeholder"><?= $form['company_name'] ?? '-' ?></p>
                         <table class="business-form-table"> 
                             <thead>
                                 <tr>
@@ -299,6 +303,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                     <!-- D. Management quality -->
                     <?php if ($currentStep == 4): ?>
                     <h3>Step 4 – Management Quality</h3>
+                    <p class="company-name-placeholder"><?= $form['company_name'] ?? '-' ?></p>
                         <table class="business-form-table">
                             <thead>
                                 <tr>
