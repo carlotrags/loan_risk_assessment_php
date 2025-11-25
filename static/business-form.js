@@ -1,70 +1,94 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const form = document.querySelector("form");
-    const inputs = form.querySelectorAll("input, select");
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form');
+    const stepContainer = document.querySelector('.step-container');
+    const steps = stepContainer ? stepContainer.querySelectorAll('.step') : [];
+    const hiddenStep = form ? form.querySelector('input[name="hiddenStep"]') : null;
+
+    // Show current step based on hiddenStep value
+    let currentStepIndex = hiddenStep ? parseInt(hiddenStep.value) - 1 : 0;
+    showStep(currentStepIndex);
 
     form.addEventListener("submit", (e) => {
-    let hasError = false;
+        e.preventDefault();
+        let hasError = false;
 
-    // Clear previous errors
-    inputs.forEach((input) => input.classList.remove("input-error"));
+        const currentInputs = steps[currentStepIndex] ? 
+            Array.from(steps[currentStepIndex].querySelectorAll('input, select, textarea')) : [];
 
-    inputs.forEach((input) => {
-    const val = input.value.trim();
+        // Clear previous errors
+        currentInputs.forEach(input => {
+            input.classList.remove("input-error");
+            clearError(input);
+        });
 
-    // Basic required field check
-    if (!val) {
-        markError(input, "This field is required.");
-        hasError = true;
-        return;
-    }
+        // Validate text/number fields
+        currentInputs.forEach(input => {
+            const val = input.value.trim();
+            if (input.type !== 'radio' && input.type !== 'checkbox') {
+                if (!val) {
+                    markError(input, "This field is required.");
+                    hasError = true;
+                    return;
+                }
 
-    // Validate input types
-    if (input.name === "income" || input.name === "loan_amount") {
-        if (isNaN(val) || parseFloat(val) <= 0) {
-            markError(input, "Must be a positive number.");
-            hasError = true;
+                if (input.name === "income" || input.name === "loan_amount") {
+                    if (isNaN(val) || parseFloat(val) <= 0) {
+                        markError(input, "Must be a positive number.");
+                        hasError = true;
+                    }
+                }
+
+                if (input.name === "loan_term") {
+                    if (isNaN(val) || parseInt(val) <= 0 || parseInt(val) > 60) {
+                        markError(input, "Loan term must be between 1 and 60 months.");
+                        hasError = true;
+                    }
+                }
+            }
+        });
+
+        // Validate radio groups in current step
+        const radioNames = new Set(
+            currentInputs.filter(input => input.type === 'radio').map(input => input.name)
+        );
+
+        radioNames.forEach(name => {
+            const radios = steps[currentStepIndex].querySelectorAll(`input[name="${name}"]`);
+            const isChecked = Array.from(radios).some(r => r.checked);
+            if (!isChecked) {
+                markError(radios[0], "Please select an option.");
+                hasError = true;
+            }
+        });
+
+        if (!hasError) {
+            // Update hidden step
+            if (hiddenStep) hiddenStep.value = currentStepIndex + 1;
+            form.submit();
         }
-    }
-
-    if (input.name === "credit_score") {
-        const score = parseInt(val);
-        if (isNaN(score) || score < 300 || score > 850) {
-            markError(input, "Credit score must be between 300 and 850.");
-            hasError = true;
-        }
-    }
-
-    if (input.name === "loan_term") {
-        if (isNaN(val) || parseInt(val) <= 0 || parseInt(val) > 60) {
-            markError(input, "Loan term must be between 1 and 60 months.");
-            hasError = true;
-        }
-    }
-
-    if (input.name === "name") {
-        if (/[^a-zA-Z\s'.-]/.test(val)) {
-        markError(input, "Invalid characters in name.");
-        hasError = true;
-        }
-    }
-
-    if (input.name === "previous_defaults") {
-        if (!["0", "1"].includes(val)) {
-            markError(input, "Invalid value for defaults.");
-            hasError = true;
-        }
-    }
     });
 
-    if (hasError) {
-      e.preventDefault(); // Block submission if validation fails
+    function showStep(index) {
+        steps.forEach((step, i) => {
+            step.style.display = i === index ? 'block' : 'none';
+        });
+    }
+
+    function markError(el, msg) {
+        el.classList.add("input-error");
+        let error = el.nextElementSibling;
+        if (!error || !error.classList.contains('error-msg')) {
+            error = document.createElement('div');
+            error.className = 'error-msg';
+            el.parentNode.insertBefore(error, el.nextSibling);
+        }
+        error.textContent = msg;
+    }
+
+    function clearError(el) {
+        const error = el.nextElementSibling;
+        if (error && error.classList.contains('error-msg')) {
+            error.remove();
+        }
     }
 });
-
-function markError(input, message) {
-    input.classList.add("input-error");
-    input.setCustomValidity(message);
-    input.reportValidity();
-    }
-});
-

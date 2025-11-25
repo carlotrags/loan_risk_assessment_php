@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("form");
+  const form = document.querySelector("business_form");
   const inputs = form.querySelectorAll("input, select");
 
   form.addEventListener("submit", (e) => {
