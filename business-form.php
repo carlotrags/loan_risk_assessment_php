@@ -6,6 +6,8 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+$form = $_SESSION['business_form'] ?? [];
+
 $username = $_SESSION['username'];
 $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
@@ -88,6 +90,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                 <!-- B. Financial Condition -->
                 <?php if ($currentStep === 2): ?>
                     <h3>Step 2 – Financial Condition</h3>
+                    <p class="company-name-placeholder"><?= $form['company_name'] ?? '-' ?></p>
                     <table class="business-form-table">
                         <thead>
                             <tr>
@@ -221,6 +224,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                     <!-- C. Industry/Market Analysis -->
                     <?php if ($currentStep == 3): ?>
                     <h3>Step 3 – Industry/Market Analysis</h3>
+                    <p class="company-name-placeholder"><?= $form['company_name'] ?? '-' ?></p>
                         <table class="business-form-table"> 
                             <thead>
                                 <tr>
@@ -299,6 +303,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                     <!-- D. Management quality -->
                     <?php if ($currentStep == 4): ?>
                     <h3>Step 4 – Management Quality</h3>
+                    <p class="company-name-placeholder"><?= $form['company_name'] ?? '-' ?></p>
                         <table class="business-form-table">
                             <thead>
                                 <tr>
@@ -396,7 +401,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                     <div class="button-container">
                         <a href="business-form.php?step=4" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</a>
                         <br><br>
-                        <button type="submit" class="submit-btn">Submit</button>
+                        <button type="submit" id="submitAssessmentBtn" class="submit-btn">Submit Application</button>
                     </div>
                     <?php endif; ?>
             </form>
@@ -427,7 +432,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
     // });
     </script>
 
-    <script src="static/form.js" defer></script>
+    <script src="static/js/business-form.js?v=<?= time() ?>"></script>
     <?php include "static/footer.php"?>
 </body>
 </html> 

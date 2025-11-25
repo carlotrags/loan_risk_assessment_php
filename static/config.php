@@ -3,7 +3,7 @@ $host = "127.0.0.1";
 $user = "root";
 $pass = "";
 $db   = "loan_system";
-$port = 3306;
+$port = 3307;
 
 // MySQLi connection
 $conn = new mysqli($host, $user, $pass, $db, $port);

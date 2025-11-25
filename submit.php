@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ];
 
     // Call Flask API
-    $ch = curl_init('http://127.0.0.1:5000/predict');
+    $ch = curl_init('http://127.0.0.1:5000/predict/personal');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $statusClass = $prediction == 1 ? "approved" : "denied";
 
         // Save to MySQL
-        $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3306);
+        $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3307);
         if ($conn->connect_error) {
             die("MySQL Connection failed: " . $conn->connect_error);
         }
