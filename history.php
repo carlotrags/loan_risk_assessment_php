@@ -58,11 +58,13 @@ $sql = "SELECT
         la.name, 
         la.loan_amount, 
         la.prediction, 
+        la.loan_type,
+        la.loan_term,
         la.submitted_at,
         ba.first_name, 
         ba.last_name, 
         ba.role
-    FROM loan_applications AS la
+    FROM loan_application_history AS la
     INNER JOIN bank_accounts AS ba ON la.user_id = ba.user_id";
 
 if ($conditions) {
@@ -140,7 +142,7 @@ foreach ($rows as $row) {
                             <?php 
                             // Rebuild the current query string to pass filters to the PDF script 
                             $queryString = http_build_query($_GET);?>
-                            <a href="generatepdf.php?<?= htmlspecialchars($queryString) ?>" class="btn btn-success btn-pdf-narrow"">
+                            <a href="generatepdf.php?<?= htmlspecialchars($queryString) ?>" class="btn btn-success btn-pdf-narrow">
                                 <i class="fas fa-file-pdf"></i> Download PDF
                             </a>
                         </div>
@@ -153,6 +155,7 @@ foreach ($rows as $row) {
                             <tr>
                                 <th>Name</th>
                                 <th>Loan Amount</th>
+                                <th>Loan Term</th>
                                 <th>Prediction</th>
                                 <th>Loan Type</th>
                                 <th>Submitted At</th>
@@ -164,6 +167,7 @@ foreach ($rows as $row) {
                                 <tr>
                                     <td><?= htmlspecialchars($row['name']) ?></td>
                                     <td><?= htmlspecialchars($row['loan_amount']) ?></td>
+                                    <td><?= htmlspecialchars($row['loan_term']) ?></td>
                                     <td class="prediction <?= $row['prediction'] == 0 ? 'low' : 'high' ?>">
                                     <?= $row['prediction'] == 0 ? 'Low Risk' : 'High Risk' ?></td>
                                     <td><?= htmlspecialchars($row['loan_type']) ?></td>

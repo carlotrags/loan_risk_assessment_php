@@ -55,17 +55,42 @@ if ($conditions) {
 
 // Fetch Records
 $sql = "SELECT 
-        la.name, 
-        la.income, 
-        la.credit_score, 
+        la.company_name, 
         la.loan_amount, 
-        la.prediction,
+        la.prediction, 
         la.loan_term,
+        la.loan_type, 
         la.submitted_at,
         ba.first_name, 
         ba.last_name, 
-        ba.role
-    FROM personal_loan_applications AS la
+        ba.role,
+        la.capital_to_risk_assets_ratio,
+        la.debt_to_equity_ratio,
+        la.npl_ratio,
+        la.npa_ratio,
+        la.npa_coverage_ratio,
+        la.roae,
+        la.roaa,
+        la.cost_to_income_ratio,
+        la.liquid_assets_to_borrowed_funds,
+        la.debt_service_cover,
+        la.threat_of_entry,
+        la.intensity_of_entry,
+        la.substitution_threat,
+        la.buyer_bargaining_power,
+        la.supplier_bargaining_power,
+        la.overall_industry_outlook,
+        la.market_position,
+        la.character_of_management,
+        la.quality_and_experience_management,
+        la.bank_relationship,
+        la.labor_relations,
+        la.existence,
+        la.nfis_cmap_checkings,
+        la.management_cntrl_business_planning,
+        la.management_structure_succession_strategy,
+        la.long_term_management_strategy
+    FROM business_loan_applications AS la
     INNER JOIN bank_accounts AS ba ON la.user_id = ba.user_id";
 
 if ($conditions) {
@@ -143,7 +168,7 @@ foreach ($rows as $row) {
                             <?php 
                             // Rebuild the current query string to pass filters to the PDF script 
                             $queryString = http_build_query($_GET);?>
-                            <a href="generatepdf.php?<?= htmlspecialchars($queryString) ?>" class="btn btn-success btn-pdf-narrow"">
+                            <a href="generatepdf.php?<?= htmlspecialchars($queryString) ?>" class="btn btn-success btn-pdf-narrow">
                                 <i class="fas fa-file-pdf"></i> Download PDF
                             </a>
                         </div>
@@ -153,27 +178,26 @@ foreach ($rows as $row) {
                 <?php if (count($rows) > 0): ?>
                     <table>
                         <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Income</th>
-                                <th>Credit Score</th>
+                            <tr class="main-details">
+                                <th>Company Name</th>
                                 <th>Loan Amount</th>
                                 <th>Loan Term</th>
                                 <th>Prediction</th>
+                                <th>Loan Type</th>
                                 <th>Submitted At</th>
                                 <th>Assessment By</th>
+                                <th>More Details</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($rows as $row): ?>
                                 <tr>
-                                    <td><?= htmlspecialchars($row['name']) ?></td>
-                                    <td><?= htmlspecialchars($row['income']) ?></td>
-                                    <td><?= htmlspecialchars($row['credit_score']) ?></td>
+                                    <td><?= htmlspecialchars($row['company_name']) ?></td>
                                     <td><?= htmlspecialchars($row['loan_amount']) ?></td>
                                     <td><?= htmlspecialchars($row['loan_term']) ?></td>
                                     <td class="prediction <?= $row['prediction'] == 0 ? 'low' : 'high' ?>">
                                     <?= $row['prediction'] == 0 ? 'Low Risk' : 'High Risk' ?></td>
+                                    <td><?= htmlspecialchars($row['loan_type']) ?></td>
                                     <td><?= htmlspecialchars($row['submitted_at']) ?></td>
                                     <td>
                                         <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?> 
@@ -184,7 +208,48 @@ foreach ($rows as $row) {
                                             <?= htmlspecialchars($row['role']) ?>
                                         </span>
                                     </td>
+                                    <td class="more-details"><button class="toggle-more-details"><i class="fa-solid fa-sort-down"></i></button></td>
                                 </tr>
+                                <tr class="hidden-details" style="display: none;">
+                                <!-- Hidden Variables / More detailed view -->
+                                    <td class="hidden-variables" colspan="8">
+                                        <div class="detailed-variables">
+                                        <h4>Financial Condition</h4>
+                                            <p><strong>Capital to Risk Assets Ratio:</strong> <?= htmlspecialchars($row['capital_to_risk_assets_ratio']) ?></p>
+                                            <p><strong>Debt to Equity Ratio:</strong> <?= htmlspecialchars($row['debt_to_equity_ratio']) ?></p>
+                                            <p><strong>NPL Ratio: </strong> <?= htmlspecialchars($row['npl_ratio']) ?></p>
+                                            <p><strong>NPA Ratio: </strong> <?= htmlspecialchars($row['npa_ratio']) ?></p>
+                                            <p><strong>NPA Coverage Ratio: </strong> <?= htmlspecialchars($row['npa_coverage_ratio']) ?></p>
+                                            <p><strong>ROAE: </strong> <?= htmlspecialchars($row['roae']) ?></p>
+                                            <p><strong>ROAA: </strong> <?= htmlspecialchars($row['roaa']) ?></p>
+                                            <p><strong>Cost to Income Ratio: </strong> <?= htmlspecialchars($row['cost_to_income_ratio']) ?></p>
+                                            <p><strong>Liquid Assets to Borrowed Funds: </strong> <?= htmlspecialchars($row['liquid_assets_to_borrowed_funds']) ?></p>
+                                            <p><strong>Debt Service Cover: </strong> <?= htmlspecialchars($row['debt_service_cover']) ?></p>
+                                        </div>
+                                        <div class="detailed-variables">
+                                            <h4>Industry / Market Analysis</h4>
+                                            <p><strong>Threat of Entry: </strong> <?= htmlspecialchars($row['threat_of_entry']) ?></p>
+                                            <p><strong>Intensity of Entry: </strong> <?= htmlspecialchars($row['intensity_of_entry']) ?></p>
+                                            <p><strong>Substitution Threat: </strong> <?= htmlspecialchars($row['substitution_threat']) ?></p>
+                                            <p><strong>Buyer Bargaining Power: </strong> <?= htmlspecialchars($row['buyer_bargaining_power']) ?></p>
+                                            <p><strong>Supplier Bargaining Power: </strong> <?= htmlspecialchars($row['supplier_bargaining_power']) ?></p>
+                                            <p><strong>Overall Industry Outlook: </strong> <?= htmlspecialchars($row['overall_industry_outlook']) ?></p>
+                                            <p><strong>Market Position: </strong> <?= htmlspecialchars($row['market_position']) ?></p>
+                                        </div>
+                                        <div class="detailed-variables">
+                                            <h4>Management Quality</h4>
+                                            <p><strong>Character of Management: </strong> <?= htmlspecialchars($row['character_of_management']) ?></p>
+                                            <p><strong>Quality and Experience Management: </strong> <?= htmlspecialchars($row['quality_and_experience_management']) ?></p>
+                                            <p><strong>Bank Relationship: </strong> <?= htmlspecialchars($row['bank_relationship']) ?></p>
+                                            <p><strong>Labor Relations: </strong> <?= htmlspecialchars($row['labor_relations']) ?></p>
+                                            <p><strong>Existence: </strong> <?= htmlspecialchars($row['existence']) ?></p>
+                                            <p><strong>NFIS/CMAP Checkings: </strong> <?= htmlspecialchars($row['nfis_cmap_checkings']) ?></p>
+                                            <p><strong>Management Control and Business Planning: </strong> <?= htmlspecialchars($row['management_cntrl_business_planning']) ?></p>
+                                            <p><strong>Management Structure and Succession Strategy: </strong> <?= htmlspecialchars($row['management_structure_succession_strategy']) ?></p>
+                                            <p><strong>Clear Long-Term Management Strategy: </strong> <?= htmlspecialchars($row['long_term_management_strategy']) ?></p>
+                                        </div>
+                                    </td>
+                            </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -194,6 +259,17 @@ foreach ($rows as $row) {
             </div>
         </div>
     </section>
+    <script>
+    document.querySelectorAll('.toggle-more-details').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const detailsRow = btn.closest('tr').nextElementSibling;
+            detailsRow.classList.toggle('show-details'); // toggle a class
+            const icon = btn.querySelector('i');
+            icon.classList.toggle('fa-sort-down');
+            icon.classList.toggle('fa-sort-up');
+        });
+    });
+    </script>
     <?php include "static/footer.php"?>
 </body>
 </html>
