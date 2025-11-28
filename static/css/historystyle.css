@@ -53,16 +53,12 @@ td.prediction.high{
 }
 
 .btn-pdf-narrow {
-    /* This ensures the button only takes up the space it needs */
     display: inline-block !important; 
-    /* Optional: If you want it smaller than the content: */
     width: 240px; 
 }
 
 .btn-pdf-narrow {
-    /* This ensures the button only takes up the space it needs */
     display: inline-block !important; 
-    /* Optional: If you want it smaller than the content: */
     width: 240px; 
 }
 
@@ -87,22 +83,42 @@ td.prediction.high{
     background-color: #ccc;
 }
 
-.hidden-variables{
+.hidden-variables-container{
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
-.hidden-details td {
-    display: block;
+.hidden-item{
+    flex: 1;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid rgb(156, 156, 156);
+    border-radius: 10px;
+}
+
+.hidden-item p{
+    font-size: 15px;
+}
+
+.hidden-item h4{
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 15px;
 }
 
 .hidden-details {
-  display: none; /* hidden by default */
+    display: none;
 }
 
 .hidden-details.show-details {
-  display: table-row; /* show when toggled */
+    display: table-row;
+}
+
+.hidden-details td {
+    display: table-cell;
+    padding: 20px 10px;
 }
 
 /* Animation */

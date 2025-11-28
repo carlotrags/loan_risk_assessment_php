@@ -98,7 +98,7 @@ foreach ($rows as $row) {
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-    <title>History</title>
+    <title>History - Personal Loans</title>
 </head>
 <body>
     <section class="header-navbar">
@@ -108,7 +108,7 @@ foreach ($rows as $row) {
     <section class="container">
         <div class="container-fluid px-4">
             <div class="history-container w-auto">
-                <h2>Loan Application Records</h2>
+                <h2>Loan Application Records (Personal Loan Applications)</h2>
 
                 <form method="GET">
                     <div class="filter-bar">
