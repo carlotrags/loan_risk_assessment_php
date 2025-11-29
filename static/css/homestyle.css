@@ -98,6 +98,19 @@
     color: #0f172a;
 }
 
+/* Color of Predictions */
+td.prediction.low{
+    background: #11ff00;
+    color: rgb(255, 255, 255);
+    font-weight: 600;
+}
+
+td.prediction.high{
+    background: #ff0015;
+    color: rgb(255, 255, 255);
+    font-weight: 600;
+}
+
 /* semantic color variants */
 .summary-item.eligible .item-icon{ background: linear-gradient(90deg,#d1fae5,#bbf7d0); color:#065f46 }
 .summary-item.ineligible .item-icon{ background: linear-gradient(90deg,#fee2e2,#fecaca); color:#991b1b }

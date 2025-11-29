@@ -59,12 +59,13 @@ $sql = "SELECT
         la.income, 
         la.credit_score, 
         la.loan_amount, 
-        la.prediction, 
+        la.prediction,
+        la.loan_term,
         la.submitted_at,
         ba.first_name, 
         ba.last_name, 
         ba.role
-    FROM loan_applications AS la
+    FROM personal_loan_applications AS la
     INNER JOIN bank_accounts AS ba ON la.user_id = ba.user_id";
 
 if ($conditions) {
@@ -97,7 +98,7 @@ foreach ($rows as $row) {
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-    <title>History</title>
+    <title>History - Personal Loans</title>
 </head>
 <body>
     <section class="header-navbar">
@@ -107,7 +108,7 @@ foreach ($rows as $row) {
     <section class="container">
         <div class="container-fluid px-4">
             <div class="history-container w-auto">
-                <h2>Loan Application Records</h2>
+                <h2>Loan Application Records (Personal Loan Applications)</h2>
 
                 <form method="GET">
                     <div class="filter-bar">
@@ -157,6 +158,7 @@ foreach ($rows as $row) {
                                 <th>Income</th>
                                 <th>Credit Score</th>
                                 <th>Loan Amount</th>
+                                <th>Loan Term</th>
                                 <th>Prediction</th>
                                 <th>Submitted At</th>
                                 <th>Assessment By</th>
@@ -169,6 +171,7 @@ foreach ($rows as $row) {
                                     <td><?= htmlspecialchars($row['income']) ?></td>
                                     <td><?= htmlspecialchars($row['credit_score']) ?></td>
                                     <td><?= htmlspecialchars($row['loan_amount']) ?></td>
+                                    <td><?= htmlspecialchars($row['loan_term']) ?></td>
                                     <td class="prediction <?= $row['prediction'] == 0 ? 'low' : 'high' ?>">
                                     <?= $row['prediction'] == 0 ? 'Low Risk' : 'High Risk' ?></td>
                                     <td><?= htmlspecialchars($row['submitted_at']) ?></td>

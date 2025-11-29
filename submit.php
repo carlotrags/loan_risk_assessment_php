@@ -41,13 +41,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $message = $prediction == 1 ? "Loan Approved" : "Loan Denied";
         $statusClass = $prediction == 1 ? "approved" : "denied";
 
-        // Save to MySQL
-        $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3307);
+        $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3306);
         if ($conn->connect_error) {
             die("MySQL Connection failed: " . $conn->connect_error);
         }
 
-        $stmt = $conn->prepare("INSERT INTO loan_applications (name, income, loan_amount, loan_term, credit_score, previous_defaults, prediction, submitted_at, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
+        // Insert into personal_loan_applications
+        $stmt = $conn->prepare("INSERT INTO personal_loan_applications 
+            (name, income, loan_amount, loan_term, credit_score, previous_defaults, prediction, submitted_at, user_id) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
         $stmt->bind_param(
             "sdddddii",
             $name,
@@ -60,6 +62,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $user_id
         );
         $stmt->execute();
+
+        $personalAppId = $conn->insert_id;
+
+        // Insert into general history (application_history)
+        $loanType = 'personal';
+        $stmt2 = $conn->prepare("INSERT INTO application_history 
+            (user_id, application_id, name, loan_amount, loan_term, loan_type, submitted_at, assessed_by, prediction) 
+            VALUES (?, ?, ?, ?, ?, ?, NOW(), ?, ?)");
+        $stmt2->bind_param(
+            "iidddssi",
+            $user_id,
+            $personalAppId,
+            $name,
+            $data['loan_amount'],
+            $data['loan_term'],
+            $loanType,
+            $user_id,
+            $prediction
+        );
+        $stmt2->execute();
+        $stmt2->close();
+
         $stmt->close();
         $conn->close();
     } else {

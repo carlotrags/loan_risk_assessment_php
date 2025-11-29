@@ -23,41 +23,45 @@
     ];
 
     // Total assessments
-    $res = $conn->query("SELECT COUNT(*) AS total FROM loan_applications");
+    $res = $conn->query("SELECT COUNT(*) AS total FROM loan_application_history");
     if ($res) {
         $r = $res->fetch_assoc();
         $totals['total'] = (int)$r['total'];
     }
 
     // Eligible:prediction = 1 (approved)
-    $res = $conn->query("SELECT COUNT(*) AS eligible FROM loan_applications WHERE prediction = 1");
+    $res = $conn->query("SELECT COUNT(*) AS eligible FROM loan_application_history WHERE prediction = 1");
     if ($res) {
         $r = $res->fetch_assoc();
         $totals['eligible'] = (int)$r['eligible'];
     }
 
     // Ineligible:prediction = 0 (denied)
-    $res = $conn->query("SELECT COUNT(*) AS ineligible FROM loan_applications WHERE prediction = '0'");
+    $res = $conn->query("SELECT COUNT(*) AS ineligible FROM loan_application_history WHERE prediction = '0'");
     if ($res) {
         $r = $res->fetch_assoc();
         $totals['ineligible'] = (int)$r['ineligible'];
     }
 
     // Today's assessments
-    $res = $conn->query("SELECT COUNT(*) AS today FROM loan_applications WHERE DATE(submitted_at) = CURDATE()");
+    $res = $conn->query("SELECT COUNT(*) AS today FROM loan_application_history WHERE DATE(submitted_at) = CURDATE()");
     if ($res) {
         $r = $res->fetch_assoc();
         $totals['today'] = (int)$r['today'];
     }
 
     // This month's assessments
-    $res = $conn->query("SELECT COUNT(*) AS month FROM loan_applications WHERE YEAR(submitted_at) = YEAR(CURDATE()) AND MONTH(submitted_at) = MONTH(CURDATE())");
+    $res = $conn->query("SELECT COUNT(*) AS month FROM loan_application_history WHERE YEAR(submitted_at) = YEAR(CURDATE()) AND MONTH(submitted_at) = MONTH(CURDATE())");
     if ($res) {
         $r = $res->fetch_assoc();
         $totals['month'] = (int)$r['month'];
     }
 
-    $sql = "SELECT name, income, credit_score, loan_amount, prediction, submitted_at FROM loan_applications ORDER BY submitted_at DESC LIMIT 5";
+    $sql = "SELECT l.name, l.loan_amount, l.prediction, l.loan_type, l.submitted_at, b.first_name, b.last_name, b.role
+            FROM loan_application_history AS l
+            INNER JOIN bank_accounts AS b ON l.user_id = b.user_id
+            ORDER BY l.submitted_at DESC
+            LIMIT 5";
     $result = $conn->query($sql);
 
     $rows = [];
@@ -66,6 +70,7 @@
             $rows[] = $row;
         }
     }
+    
 ?>
 
 <!DOCTYPE html>
@@ -158,22 +163,23 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Income</th>
-                        <th>Credit Score</th>
                         <th>Loan Amount</th>
                         <th>Prediction</th>
+                        <th>Loan Type</th>
                         <th>Submitted At</th>
+                        <th>Assessment By</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($rows as $row): ?>
                         <tr>
                             <td><?= htmlspecialchars($row['name']) ?></td>
-                            <td><?= htmlspecialchars($row['income']) ?></td>
-                            <td><?= htmlspecialchars($row['credit_score']) ?></td>
                             <td><?= htmlspecialchars($row['loan_amount']) ?></td>
-                            <td><?= $row['prediction'] == 0 ? 'Low Risk' : 'High Risk' ?></td>
+                            <td class="prediction <?= $row['prediction'] == 0 ? 'low' : 'high' ?>">
+                                    <?= $row['prediction'] == 0 ? 'Low Risk' : 'High Risk' ?></td>
+                            <td><?= htmlspecialchars($row['loan_type']) ?></td>
                             <td><?= htmlspecialchars($row['submitted_at']) ?></td>
+                            <td><?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
