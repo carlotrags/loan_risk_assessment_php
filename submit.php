@@ -12,6 +12,8 @@ $username = $_SESSION['username'] ?? '';
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Get form data
     $name = $_POST['name'] ?? '';
+    $loan_type = $_POST['loan_type'] ?? 'personal'; // <-- set default as 'personal'
+
     $data = [
         'income' => (float)($_POST['income'] ?? 0),
         'loan_amount' => (float)($_POST['loan_amount'] ?? 0),
@@ -20,8 +22,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         'previous_defaults' => ($_POST['previous_defaults'] == "1") ? 1 : 0
     ];
 
+    // Determine API URL based on loan type
+    $api_url = $loan_type === 'business' ? 'http://127.0.0.1:5000/predict/business' : 'http://127.0.0.1:5000/predict/personal';
+
     // Call Flask API
-    $ch = curl_init('http://127.0.0.1:5000/predict/personal');
+    $ch = curl_init($api_url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
@@ -41,13 +46,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $message = $prediction == 1 ? "Loan Approved" : "Loan Denied";
         $statusClass = $prediction == 1 ? "approved" : "denied";
 
-        $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3306);
+        // Save to MySQL
+        $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3307);
         if ($conn->connect_error) {
             die("MySQL Connection failed: " . $conn->connect_error);
         }
 
-        // Insert into personal_loan_applications
-        $stmt = $conn->prepare("INSERT INTO personal_loan_applications 
+        // Insert into personal or business table (optional)
+        if ($loan_type === 'personal') {
+            $table = 'personal_loan_applications';
+        } else {
+            $table = 'business_loan_applications';
+        }
+
+        $stmt = $conn->prepare("INSERT INTO $table 
             (name, income, loan_amount, loan_term, credit_score, previous_defaults, prediction, submitted_at, user_id) 
             VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
         $stmt->bind_param(
@@ -62,30 +74,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $user_id
         );
         $stmt->execute();
+        $application_id = $conn->insert_id;
+        $stmt->close();
 
-        $personalAppId = $conn->insert_id;
-
-        // Insert into general history (application_history)
-        $loanType = 'personal';
-        $stmt2 = $conn->prepare("INSERT INTO application_history 
-            (user_id, application_id, name, loan_amount, loan_term, loan_type, submitted_at, assessed_by, prediction) 
-            VALUES (?, ?, ?, ?, ?, ?, NOW(), ?, ?)");
+        // Insert into general history
+        $stmt2 = $conn->prepare("INSERT INTO loan_application_history 
+            (user_id, application_id, name, loan_amount, loan_term, loan_type, submitted_at, prediction) 
+            VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)");
         $stmt2->bind_param(
-            "iidddssi",
-            $user_id,
-            $personalAppId,
-            $name,
-            $data['loan_amount'],
-            $data['loan_term'],
-            $loanType,
-            $user_id,
-            $prediction
+        "iisdisi",
+        $user_id,          // i
+        $application_id,   // i
+        $name,             // s
+        $data['loan_amount'], // d
+        $data['loan_term'],   // i
+        $loan_type,        // s
+        $prediction        // i
         );
+
         $stmt2->execute();
         $stmt2->close();
 
-        $stmt->close();
         $conn->close();
+
     } else {
         $message = "Error: " . ($result['error'] ?? 'Unknown error from API');
         $statusClass = "error";
@@ -93,6 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -102,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="static/css/style.css?v=<?= time() ?>">
     <link rel="stylesheet" href="static/css/navbarstyle.css">
-    <link rel='stylesheet' href='static/css/result.css?v=<?php echo time() ?>'>
+    <link rel='stylesheet' href='static/css/result.css?v=<?= time() ?>'>
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
     <title>Loan Assessment Result</title>
 </head>
@@ -120,8 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <div class="assessment-status <?= htmlspecialchars($statusClass ?? 'info') ?>">
                 <?php if (isset($prediction)): ?>
-                    <i class="icon">
-                        <?= $prediction == 1 ? '&#10003;' : '&#10007;' ?> </i>
+                    <i class="icon"><?= $prediction == 1 ? '&#10003;' : '&#10007;' ?></i>
                 <?php endif; ?>
                 <div class="status-message">
                     <h3><?= htmlspecialchars($message ?? 'No result available') ?></h3>
@@ -137,6 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <div><span class="label">Monthly Income:</span> <span class="value">₱<?= number_format($data['income'] ?? 0, 2) ?></span></div>
                     <div><span class="label">Credit Score:</span> <span class="value"><?= number_format($data['credit_score'] ?? 0, 0) ?></span></div>
                     <div><span class="label">Previous Defaults:</span> <span class="value"><?= ($data['previous_defaults'] == 1 ? 'Yes' : 'No') ?></span></div>
+                    <div><span class="label">Loan Type:</span> <span class="value"><?= htmlspecialchars($loan_type ?? 'N/A') ?></span></div>
                 </div>
             </div>
             <?php endif; ?>
@@ -161,6 +173,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
         </div>
     </div>
-        <?php include "static/footer.php"?>
+
+    <?php include "static/footer.php"?>
 </body>
 </html>

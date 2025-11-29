@@ -142,8 +142,8 @@ foreach ($rows as $row) {
                             <?php 
                             // Rebuild the current query string to pass filters to the PDF script 
                             $queryString = http_build_query($_GET);?>
-                            <a href="generatepdf.php?<?= htmlspecialchars($queryString) ?>" class="btn btn-success btn-pdf-narrow">
-                                <i class="fas fa-file-pdf"></i> Download PDF
+                            <a href="generatepdf.php?<?= htmlspecialchars($queryString) ?>&loan_type=general" class="btn btn-success btn-pdf-narrow">
+                            <i class="fas fa-file-pdf"></i> Download PDF
                             </a>
                             <a href="personal-history.php" class="btn btn-primary btn-pdf-narrow"><i class="fa-solid fa-user" style="padding-right: 10px;"></i>Personal Loans History</a>
                             <a href="business-history.php" class="btn btn-primary btn-pdf-narrow"><i class="fa-solid fa-briefcase" style="padding-right: 10px;"></i>Business Loans History</a>

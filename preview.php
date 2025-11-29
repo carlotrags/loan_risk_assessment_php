@@ -59,11 +59,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <input type="hidden" name="loan_amount" value="<?= $loan_amount ?>">
                         <input type="hidden" name="loan_term" value="<?= $loan_term ?>">
                         <input type="hidden" name="previous_defaults" value="<?= $previous_defaults ?>">
-                        
+                        <input type="hidden" name="loan_type" value="personal">
+
                         <label><input type="checkbox" id="confirmCheckbox">I have confirmed that the details above are correct.</label>
                         <button id="backBtn" onclick="history.back()">Back</button>
                         <button id="confirmAssessmentBtn" disabled>Start Assessment</button>
                     </form>
+
                 </div>
             </div>
         </div>
