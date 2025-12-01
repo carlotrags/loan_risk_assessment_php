@@ -1,100 +1,132 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('.business-form-container form');
-    const stepContainer = document.querySelector('.step-container');
-    const steps = stepContainer ? stepContainer.querySelectorAll('.step') : [];
-    const hiddenStep = form ? form.querySelector('input[name="step"]') : null;
 
-    // Set current step
+    const form = document.querySelector('.business-form-container form');
+    if (!form) return;
+
+    const steps = Array.from(document.querySelectorAll('.step'));
+    const hiddenStep = form.querySelector('input[name="step"]');
+
     let currentStepIndex = hiddenStep ? parseInt(hiddenStep.value) - 1 : 0;
     showStep(currentStepIndex);
 
     form.addEventListener("submit", (e) => {
         e.preventDefault();
+
         let hasError = false;
 
-        const currentInputs = steps[currentStepIndex] ? 
-            Array.from(steps[currentStepIndex].querySelectorAll('input, select, textarea')) : [];
+        const currentStep = steps[currentStepIndex];
+        const inputs = Array.from(
+            currentStep.querySelectorAll('input, select, textarea')
+        );
 
-        // Clear previous errors
-        currentInputs.forEach(input => {
-            input.classList.remove("input-error");
-            clearError(input);
-        });
+        clearAllErrors(currentStep);
 
-        // Validate text/number fields
-        currentInputs.forEach(input => {
+        // ========== TEXT & NUMBER VALIDATION ==========
+        inputs.forEach(input => {
             const val = input.value.trim();
-            if (input.type !== 'radio' && input.type !== 'checkbox') {
-                if (!val) {
-                    markError(input, "This field is required.");
+
+            // Skip radios (handled later)
+            if (input.type === "radio" || input.type === "checkbox") return;
+
+            // Required check
+            if (!val) {
+                markError(input, "This field is required.");
+                hasError = true;
+                return;
+            }
+
+            // Auto-validate number fields
+            if (input.type === "number") {
+                const num = parseFloat(val);
+                if (isNaN(num)) {
+                    markError(input, "Please enter a valid number.");
                     hasError = true;
                     return;
                 }
-
-                if (input.name === "income" || input.name === "loan_amount") {
-                    if (isNaN(val) || parseFloat(val) <= 0) {
-                        markError(input, "Must be a positive number.");
-                        hasError = true;
-                    }
+                if (num < 0) {
+                    markError(input, "Value cannot be negative.");
+                    hasError = true;
                 }
+            }
 
-                if (input.name === "loan_term") {
-                    if (isNaN(val) || parseInt(val) <= 0 || parseInt(val) > 60) {
-                        markError(input, "Loan term must be between 1 and 60 months.");
-                        hasError = true;
-                    }
+            // Special rule: Loan term
+            if (input.name === "loan_term") {
+                const term = parseInt(val);
+                if (isNaN(term) || term < 1 || term > 60) {
+                    markError(input, "Loan term must be between 1 and 60 months.");
+                    hasError = true;
                 }
             }
         });
 
-        // Validate radio groups in current step
-        const radioNames = new Set(
-            currentInputs.filter(input => input.type === 'radio').map(input => input.name)
+        // ========== RADIO BUTTON VALIDATION ==========
+        const radioGroups = new Set(
+            inputs.filter(i => i.type === "radio").map(i => i.name)
         );
 
-        radioNames.forEach(name => {
-            const radios = steps[currentStepIndex].querySelectorAll(`input[name="${name}"]`);
+        radioGroups.forEach(groupName => {
+            const radios = currentStep.querySelectorAll(`input[name="${groupName}"]`);
             const isChecked = Array.from(radios).some(r => r.checked);
+
             if (!isChecked) {
-                markError(radios[0], "Please select an option.");
+                markRadioGroupError(radios[0], "Please select an option.");
                 hasError = true;
             }
         });
 
+        // ========== SUBMIT OR MOVE TO NEXT STEP ==========
         if (!hasError) {
             if (currentStepIndex < steps.length - 1) {
-                // Not last step → move to next step
                 currentStepIndex++;
                 if (hiddenStep) hiddenStep.value = currentStepIndex + 1;
                 showStep(currentStepIndex);
             } else {
-                // Last step → submit form
                 form.submit();
             }
         }
     });
 
+    // =========================
+    // Helper Functions
+    // =========================
+
     function showStep(index) {
         steps.forEach((step, i) => {
-            step.style.display = i === index ? 'block' : 'none';
+            step.style.display = (i === index) ? "block" : "none";
         });
     }
 
-    function markError(el, msg) {
-        el.classList.add("input-error");
-        let error = el.nextElementSibling;
-        if (!error || !error.classList.contains('error-msg')) {
-            error = document.createElement('div');
-            error.className = 'error-msg';
-            el.parentNode.insertBefore(error, el.nextSibling);
+    function markError(input, message) {
+        input.classList.add("input-error");
+
+        let error = input.parentElement.querySelector(".error-msg");
+        if (!error) {
+            error = document.createElement("div");
+            error.classList.add("error-msg");
+            input.parentElement.appendChild(error);
         }
-        error.textContent = msg;
+        error.textContent = message;
     }
 
-    function clearError(el) {
-        const error = el.nextElementSibling;
-        if (error && error.classList.contains('error-msg')) {
-            error.remove();
+    function markRadioGroupError(radio, message) {
+        const row = radio.closest("tr");
+        if (!row) return;
+
+        let error = row.nextElementSibling;
+        if (!error || !error.classList.contains("error-msg")) {
+            error = document.createElement("tr");
+            const td = document.createElement("td");
+            td.colSpan = row.children.length;
+            td.classList.add("error-msg");
+            error.appendChild(td);
+            row.insertAdjacentElement("afterend", error);
         }
+
+        error.querySelector("td").textContent = message;
+    }
+
+    function clearAllErrors(step) {
+        step.querySelectorAll(".input-error").forEach(el => el.classList.remove("input-error"));
+        step.querySelectorAll(".error-msg").forEach(el => el.remove());
     }
 });

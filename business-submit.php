@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+// Check login
 if (!isset($_SESSION['user_id'])) {
     die("You must be logged in to submit an assessment.");
 }
@@ -9,44 +10,48 @@ $user_id = $_SESSION['user_id'];
 $username = $_SESSION['username'] ?? '';
 $first_name = $_SESSION['first_name'] ?? '';
 
-// Load the form data from session if exists
+// Load previous form data from session
 $form = $_SESSION['business_form'] ?? [];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
+    // Collect POST data
     $company_name = $_POST['company_name'] ?? '';
-    $loan_type = 'business'; 
+    $loan_type = 'business';
 
-$data = [
-    'loan_amount' => (float)($_POST['loan_amount'] ?? 0),
-    'loan_term' => (int)($_POST['loan_term'] ?? 0),
-    'capital_to_risk_assets_ratio' => (float)($_POST['capital_to_risk_assets_ratio'] ?? 0),
-    'debt_to_equity_ratio' => (float)($_POST['debt_to_equity_ratio'] ?? 0),
-    'npl_ratio' => (float)($_POST['npl_ratio'] ?? 0),
-    'npa_ratio' => (float)($_POST['npa_ratio'] ?? 0),
-    'npa_coverage_ratio' => (float)($_POST['npa_coverage_ratio'] ?? 0),
-    'roae' => (float)($_POST['roae'] ?? 0),
-    'roaa' => (float)($_POST['roaa'] ?? 0),
-    'cost_to_income_ratio' => (float)($_POST['cost_to_income_ratio'] ?? 0),
-    'liquid_assets_to_borrowed_funds' => (float)($_POST['liquid_assets_to_borrowed_funds'] ?? 0),
-    'debt_service_cover' => (float)($_POST['debt_service_cover'] ?? 0),
-    'threat_of_entry' => (float)($_POST['threat_of_entry'] ?? 0),
-    'intensity_of_rivalry' => (float)($_POST['intensity_of_rivalry'] ?? 0),
-    'substitution_of_threat' => (float)($_POST['substitution_of_threat'] ?? 0),
-    'buyer_bargaining_power' => (float)($_POST['buyer_bargaining_power'] ?? 0),
-    'supplier_bargaining_power' => (float)($_POST['supplier_bargaining_power'] ?? 0),
-    'overall_industry_outlook' => (float)($_POST['overall_industry_outlook'] ?? 0),
-    'market_position' => (float)($_POST['market_position'] ?? 0),
-    'character_of_management' => $_POST['character_of_management'] ?? '',
-    'quality_and_experience_of_management' => $_POST['quality_and_experience_of_management'] ?? '',
-    'bank_relationship' => $_POST['bank_relationship'] ?? '',
-    'labor_relations' => $_POST['labor_relations'] ?? '',
-    'existence' => $_POST['existence'] ?? '',
-    'nfis_cmap_checkings' => $_POST['nfis_cmap_checkings'] ?? '',
-    'management_cntrl_business_planning' => $_POST['management_cntrl_business_planning'] ?? '',
-    'management_structure_succession_strategy' => $_POST['management_structure_succession_strategy'] ?? '',
-    'long_term_management_strategy' => $_POST['long_term_management_strategy'] ?? ''
-];
+    // Cast numeric fields
+    $data = [
+        'loan_amount' => (float)($_POST['loan_amount'] ?? 0),
+        'loan_term' => (float)($_POST['loan_term'] ?? 0),
+        // All enums cast to int
+        'capital_to_risk_assets_ratio' => (int)($_POST['capital_to_risk_assets_ratio'] ?? 0),
+        'debt_to_equity_ratio' => (int)($_POST['debt_to_equity_ratio'] ?? 0),
+        'npl_ratio' => (int)($_POST['npl_ratio'] ?? 0),
+        'npa_ratio' => (int)($_POST['npa_ratio'] ?? 0),
+        'npa_coverage_ratio' => (int)($_POST['npa_coverage_ratio'] ?? 0),
+        'roae' => (int)($_POST['roae'] ?? 0),
+        'roaa' => (int)($_POST['roaa'] ?? 0),
+        'cost_to_income_ratio' => (int)($_POST['cost_to_income_ratio'] ?? 0),
+        'liquid_assets_to_borrowed_funds' => (int)($_POST['liquid_assets_to_borrowed_funds'] ?? 0),
+        'debt_service_cover' => (int)($_POST['debt_service_cover'] ?? 0),
+        'threat_of_entry' => (int)($_POST['threat_of_entry'] ?? 0),
+        'intensity_of_rivalry' => (int)($_POST['intensity_of_rivalry'] ?? 0),
+        'substitution_of_threat' => (int)($_POST['substitution_of_threat'] ?? 0),
+        'buyer_bargaining_power' => (int)($_POST['buyer_bargaining_power'] ?? 0),
+        'supplier_bargaining_power' => (int)($_POST['supplier_bargaining_power'] ?? 0),
+        'overall_industry_outlook' => (int)($_POST['overall_industry_outlook'] ?? 0),
+        'market_position' => (int)($_POST['market_position'] ?? 0),
+        'character_of_management' => (int)($_POST['character_of_management'] ?? 0),
+        'quality_and_experience_of_management' => (int)($_POST['quality_and_experience_of_management'] ?? 0),
+        'bank_relationship' => (int)($_POST['bank_relationship'] ?? 0),
+        'labor_relations' => (int)($_POST['labor_relations'] ?? 0),
+        'existence' => (int)($_POST['existence'] ?? 0),
+        'nfis_cmap_checkings' => (int)($_POST['nfis_cmap_checkings'] ?? 0),
+        'management_cntrl_business_planning' => (int)($_POST['management_cntrl_business_planning'] ?? 0),
+        'management_structure_succession_strategy' => (int)($_POST['management_structure_succession_strategy'] ?? 0),
+        'long_term_management_strategy' => (int)($_POST['long_term_management_strategy'] ?? 0)
+    ];
+
     // Save to session for preview
     $_SESSION['business_form'] = array_merge($form, $data, ['company_name' => $company_name]);
 
@@ -62,85 +67,87 @@ $data = [
         die("Error calling prediction API: " . curl_error($ch));
     }
     curl_close($ch);
+
     $result = json_decode($response, true);
-
-    if (isset($result['prediction'])) {
-        $prediction = $result['prediction'];
-        $explanation = $result['explanation'] ?? [];
-        $message = $prediction == 1 ? "Loan Approved" : "Loan Denied";
-        $statusClass = $prediction == 1 ? "approved" : "denied";
-
-        // Save to MySQL
-        $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3307);
-        if ($conn->connect_error) die("MySQL Connection failed: " . $conn->connect_error);
-
-        $stmt = $conn->prepare("INSERT INTO business_loan_applications 
-            (company_name, loan_amount, loan_term, capital_to_risk_assets_ratio, debt_to_equity_ratio, npl_ratio, npa_ratio, npa_coverage_ratio, roae, roaa, cost_to_income_ratio, liquid_assets_to_borrowed_funds, debt_service_cover, threat_of_entry, intensity_of_rivalry, substitution_of_threat, buyer_bargaining_power, supplier_bargaining_power, overall_industry_outlook, market_position, character_of_management, quality_and_experience_of_management, bank_relationship, labor_relations, existence, nfis_cmap_checkings, management_cntrl_business_planning, management_structure_succession_strategy, long_term_management_strategy, prediction, submitted_at, user_id) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
-
-        $stmt->bind_param(
-            "sddddddddddddssssssssssssssii",
-            $company_name,
-            $data['loan_amount'],
-            $data['loan_term'],
-            $data['capital_to_risk_assets_ratio'],
-            $data['debt_to_equity_ratio'],
-            $data['npl_ratio'],
-            $data['npa_ratio'],
-            $data['npa_coverage_ratio'],
-            $data['roae'],
-            $data['roaa'],
-            $data['cost_to_income_ratio'],
-            $data['liquid_assets_to_borrowed_funds'],
-            $data['debt_service_cover'],
-            $data['threat_of_entry'],
-            $data['intensity_of_rivalry'],
-            $data['substitution_of_threat'],
-            $data['buyer_bargaining_power'],
-            $data['supplier_bargaining_power'],
-            $data['overall_industry_outlook'],
-            $data['market_position'],
-            $data['character_of_management'],
-            $data['quality_and_experience_of_management'],
-            $data['bank_relationship'],
-            $data['labor_relations'],
-            $data['existence'],
-            $data['nfis_cmap_checkings'],
-            $data['management_cntrl_business_planning'],
-            $data['management_structure_succession_strategy'],
-            $data['long_term_management_strategy'],
-            $prediction,
-            $user_id
-        );
-        $stmt->execute();
-        $application_id = $conn->insert_id;
-        $stmt->close();
-
-        // General history
-        $stmt2 = $conn->prepare("INSERT INTO loan_application_history 
-            (user_id, application_id, name, loan_amount, loan_term, loan_type, submitted_at, prediction) 
-            VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)");
-        $stmt2->bind_param(
-            "iisdisi",
-            $user_id,
-            $application_id,
-            $company_name,
-            $data['loan_amount'],
-            $data['loan_term'],
-            $loan_type,
-            $prediction
-        );
-        $stmt2->execute();
-        $stmt2->close();
-
-        $conn->close();
-    } else {
-        $message = "Error: " . ($result['error'] ?? 'Unknown API error');
-        $statusClass = "error";
-        $explanation = [];
+    if (!isset($result['prediction'])) {
+        die("API did not return a prediction.");
     }
+
+    $prediction = (int)$result['prediction']; // make sure it's int
+    $explanation = $result['explanation'] ?? [];
+    $message = $prediction === 1 ? "Loan Approved" : "Loan Denied";
+    $statusClass = $prediction === 1 ? "approved" : "denied";
+
+    // Save to MySQL
+    $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3307);
+    if ($conn->connect_error) die("MySQL Connection failed: " . $conn->connect_error);
+
+    $stmt = $conn->prepare("INSERT INTO business_loan_applications
+        (company_name, loan_amount, loan_term, capital_to_risk_assets_ratio, debt_to_equity_ratio, npl_ratio, npa_ratio, npa_coverage_ratio, roae, roaa, cost_to_income_ratio, liquid_assets_to_borrowed_funds, debt_service_cover, threat_of_entry, intensity_of_rivalry, substitution_of_threat, buyer_bargaining_power, supplier_bargaining_power, overall_industry_outlook, market_position, character_of_management, quality_and_experience_of_management, bank_relationship, labor_relations, existence, nfis_cmap_checkings, management_cntrl_business_planning, management_structure_succession_strategy, long_term_management_strategy, prediction, submitted_at, user_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
+
+    $stmt->bind_param(
+        "sddiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+        $company_name,
+        $data['loan_amount'],
+        $data['loan_term'],
+        $data['capital_to_risk_assets_ratio'],
+        $data['debt_to_equity_ratio'],
+        $data['npl_ratio'],
+        $data['npa_ratio'],
+        $data['npa_coverage_ratio'],
+        $data['roae'],
+        $data['roaa'],
+        $data['cost_to_income_ratio'],
+        $data['liquid_assets_to_borrowed_funds'],
+        $data['debt_service_cover'],
+        $data['threat_of_entry'],
+        $data['intensity_of_rivalry'],
+        $data['substitution_of_threat'],
+        $data['buyer_bargaining_power'],
+        $data['supplier_bargaining_power'],
+        $data['overall_industry_outlook'],
+        $data['market_position'],
+        $data['character_of_management'],
+        $data['quality_and_experience_of_management'],
+        $data['bank_relationship'],
+        $data['labor_relations'],
+        $data['existence'],
+        $data['nfis_cmap_checkings'],
+        $data['management_cntrl_business_planning'],
+        $data['management_structure_succession_strategy'],
+        $data['long_term_management_strategy'],
+        $prediction,
+        $user_id
+    );
+
+    if (!$stmt->execute()) {
+        die("DB Insert failed: " . $stmt->error);
+    }
+
+    $application_id = $conn->insert_id;
+    $stmt->close();
+
+    // Save general history
+    $stmt2 = $conn->prepare("INSERT INTO loan_application_history 
+        (user_id, application_id, name, loan_amount, loan_term, loan_type, submitted_at, prediction) 
+        VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)");
+    $stmt2->bind_param(
+        "iisdisi",
+        $user_id,
+        $application_id,
+        $company_name,
+        $data['loan_amount'],
+        $data['loan_term'],
+        $loan_type,
+        $prediction
+    );
+    $stmt2->execute();
+    $stmt2->close();
+    $conn->close();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

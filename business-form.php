@@ -27,6 +27,100 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
 ?>
 
+<?php
+$descriptions = [
+
+    // 1. Capital to Risk Assets Ratio (CAR)
+    "capital_to_risk_assets_ratio" => [
+        1 => "CAR is critically low and poses severe solvency risk.",
+        2 => "CAR is below acceptable thresholds and requires immediate improvement.",
+        3 => "CAR meets minimum requirements but does not demonstrate strong capital stability.",
+        4 => "CAR is healthy, indicating a well-capitalized financial position.",
+        5 => "CAR is exceptionally strong and reflects outstanding capital adequacy."
+    ],
+
+    // 2. Debt-to-Equity Ratio
+    "debt_to_equity_ratio" => [
+        1 => "Debt levels are excessively high relative to equity, posing significant financial strain.",
+        2 => "Debt levels are high and increase the company’s financial vulnerability.",
+        3 => "Debt-to-equity position is moderately balanced but not optimal.",
+        4 => "Debt-to-equity structure is sound and indicates strong financial discipline.",
+        5 => "Debt-to-equity structure is excellent with very strong equity support and low leverage risk."
+    ],
+
+    // 3. NPL Ratio
+    "npl_ratio" => [
+        1 => "NPL ratio is extremely high, indicating major credit-quality deterioration.",
+        2 => "NPL ratio is above acceptable levels and reflects poor asset quality.",
+        3 => "NPL ratio is manageable but may require monitoring.",
+        4 => "NPL ratio reflects good portfolio quality with low credit stress.",
+        5 => "NPL ratio is excellent with minimal delinquency and strong loan performance."
+    ],
+
+    // 4. NPA Ratio
+    "npa_ratio" => [
+        1 => "NPA ratio is critically high and signals major asset impairment issues.",
+        2 => "NPA ratio exceeds safe levels and indicates weak portfolio performance.",
+        3 => "NPA ratio is moderate but could improve.",
+        4 => "NPA ratio is healthy and reflects strong asset performance.",
+        5 => "NPA ratio is outstanding with minimal problem assets."
+    ],
+
+    // 5. NPA Coverage Ratio
+    "npa_coverage_ratio" => [
+        1 => "Coverage ratio is severely insufficient to absorb potential losses.",
+        2 => "Coverage ratio is below recommended levels and poses risk.",
+        3 => "Coverage ratio is adequate but not robust.",
+        4 => "Coverage ratio is strong and provides comfortable loss absorption.",
+        5 => "Coverage ratio is excellent, demonstrating very strong provisioning capacity."
+    ],
+
+    // 6. ROAE
+    "roae" => [
+        1 => "ROAE is extremely poor, indicating weak shareholder returns.",
+        2 => "ROAE is below expectations and reflects suboptimal profitability.",
+        3 => "ROAE is average and meets minimum benchmarks.",
+        4 => "ROAE is strong and reflects healthy profitability.",
+        5 => "ROAE is exceptional, delivering superior returns to equity holders."
+    ],
+
+    // 7. ROAA
+    "roaa" => [
+        1 => "ROAA is critically low and reflects inefficient asset utilization.",
+        2 => "ROAA is below industry standards and requires improvement.",
+        3 => "ROAA is acceptable but lacks strong performance.",
+        4 => "ROAA is strong and indicates efficient use of assets.",
+        5 => "ROAA is outstanding with excellent profitability from assets."
+    ],
+
+    // 8. Cost-to-Income Ratio
+    "cost_to_income_ratio" => [
+        1 => "Cost-to-income ratio is excessively high and reflects poor operational efficiency.",
+        2 => "Cost-to-income ratio is above optimal levels and indicates inefficiency.",
+        3 => "Cost-to-income ratio is average with room for improvement.",
+        4 => "Cost-to-income ratio is efficient and indicates good cost management.",
+        5 => "Cost-to-income ratio is excellent with highly efficient operations."
+    ],
+
+    // 9. Liquid Assets to Borrowed Funds
+    "liquid_assets_to_borrowed_funds" => [
+        1 => "Liquidity is critically weak relative to borrowings.",
+        2 => "Liquidity coverage is insufficient and exposes the firm to refinancing risk.",
+        3 => "Liquidity is acceptable but not strong.",
+        4 => "Liquidity is strong and indicates healthy coverage of borrowings.",
+        5 => "Liquidity is exceptionally strong, providing excellent coverage of obligations."
+    ],
+
+    // 10. Debt Service Cover
+    "debt_service_cover" => [
+        1 => "DSCR is critically low and indicates inability to meet debt obligations.",
+        2 => "DSCR is below acceptable levels and signifies repayment risk.",
+        3 => "DSCR is adequate but not fully comfortable.",
+        4 => "DSCR is strong and reflects reliable debt-servicing capacity.",
+        5 => "DSCR is excellent with very strong ability to service debt commitments."
+    ]
+];
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -63,7 +157,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                 <input type="hidden" name="step" value="<?= $currentStep ?>">
 
                 <!-- A. BASIC DETAILS -->
-                <?php if ($currentStep === 1): ?>
+                <?php if ($currentStep == 1): ?>
                     <div class="company-basic-details-form">
                         <h3>Step 1 – Client Basic Details</h3>
                         <div class="business-form-item">
@@ -88,7 +182,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                 <?php endif; ?>
 
                 <!-- B. Financial Condition -->
-                <?php if ($currentStep === 2): ?>
+                <?php if ($currentStep == 2): ?>
                     <h3>Step 2 – Financial Condition</h3>
                     <p class="company-name-placeholder"><?= $form['company_name'] ?? '-' ?></p>
                     <table class="business-form-table">
@@ -401,7 +495,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                     <div class="button-container">
                         <a href="business-form.php?step=4" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</a>
                         <br><br>
-                        <button type="submit" id="submitAssessmentBtn" class="submit-btn">Submit Application</button>
+                        <button type="submit" name="final_submit" value="1" id="submitAssessmentBtn" class="submit-btn">Submit Application</button>
                     </div>
                     <?php endif; ?>
             </form>
