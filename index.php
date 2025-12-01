@@ -59,7 +59,7 @@
 
     $sql = "SELECT l.name, l.loan_amount, l.prediction, l.loan_type, l.submitted_at, b.first_name, b.last_name, b.role
             FROM loan_application_history AS l
-            INNER JOIN bank_accounts AS b ON l.user_id = b.user_id
+            INNER JOIN user_accounts AS b ON l.user_id = b.user_id
             ORDER BY l.submitted_at DESC
             LIMIT 5";
     $result = $conn->query($sql);

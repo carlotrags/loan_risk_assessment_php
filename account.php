@@ -9,12 +9,12 @@ if (!isset($_SESSION['user_id'])) {
 require 'static/config.php';
 
 $user_id = $_SESSION['user_id'];
-$stmt = $pdo->prepare("SELECT * FROM bank_accounts WHERE user_id = ?");
+$stmt = $pdo->prepare("SELECT * FROM user_accounts WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Get total assessments done by this user
-$stmt = $pdo->prepare("SELECT COUNT(*) as total_assessments FROM loan_applications WHERE user_id = ?");
+$stmt = $pdo->prepare("SELECT COUNT(*) as total_assessments FROM loan_application_history WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $stats = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
@@ -50,7 +50,7 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
         .account-page .profile-avatar { font-size: 4rem; width: 96px; height: 96px; display:flex; align-items:center; justify-content:center; border-radius:50%; }
         .account-page .profile-role { font-size: .9rem; color: #6c757d; }
         .account-page .detail-term { color: #6c757d; }
- 
+
         .account-page .form-control-plaintext { width: 100%; }
 
         /* Allow the center flex column to shrink so it doesn't push the right-side buttons out
@@ -75,7 +75,7 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
                             <div class="me-3">
                                 
                                 <img src="https://ui-avatars.com/api/?name=<?= rawurlencode($user['first_name'] . ' ' . $user['last_name']) ?>&size=256&background=0D6EFD&color=ffffff" 
-                                     class="rounded-circle profile-avatar" width="96" height="96" alt="profile">
+                                    class="rounded-circle profile-avatar" width="96" height="96" alt="profile">
                             </div>
                             <div class="flex-grow-1">
                                 <div class="d-flex align-items-center">
@@ -103,7 +103,7 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
                             </div>
                             <div class="col-12 col-md-4">
                                 <div class="detail-term small">Joined</div>
-                                <div><?= date('F j, Y', strtotime($user['created_at'])) ?></div>
+                                <div><?= date('F j, Y', strtotime($user['creation_date'])) ?></div>
                             </div>
                         </div>
 
@@ -186,7 +186,7 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
                                     <label class="text-muted small mb-1">Join Date</label>
                                     <div class="form-control-plaintext">
                                         <i class="bi bi-calendar-event text-muted me-1"></i>
-                                        <?= date('F j, Y', strtotime($user['created_at'])) ?>
+                                        <?= date('F j, Y', strtotime($user['creation_date'])) ?>
                                     </div>
                                 </div>
                             </div>

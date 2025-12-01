@@ -12,7 +12,7 @@ if (empty($username) || empty($password)) {
     exit;
 }
 
-$stmt = $pdo->prepare("SELECT * FROM bank_accounts WHERE username = ?");
+$stmt = $pdo->prepare("SELECT * FROM user_accounts WHERE username = ?");
 $stmt->execute([$username]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 

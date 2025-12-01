@@ -13,7 +13,7 @@ $role = $_SESSION['role'];
 
 include 'static/config.php';
 
-$userStmt = $pdo->query("SELECT DISTINCT CONCAT(first_name,' ',last_name) AS full_name FROM bank_accounts ORDER BY full_name ASC");
+$userStmt = $pdo->query("SELECT DISTINCT CONCAT(first_name,' ',last_name) AS full_name FROM user_accounts ORDER BY full_name ASC");
 $allUsers = $userStmt->fetchAll(PDO::FETCH_COLUMN);
 
 $conditions = [];
@@ -21,7 +21,7 @@ $params = [];
 
 // NAME FILTER
 if (!empty($_GET['searchName'])) {
-    $conditions[] = 'la.name LIKE :name';
+    $conditions[] = 'la.company_name LIKE :name';
     $params[':name'] = '%' . $_GET['searchName'] . '%';
 }
 
@@ -91,7 +91,7 @@ $sql = "SELECT
         la.management_structure_succession_strategy,
         la.long_term_management_strategy
     FROM business_loan_applications AS la
-    INNER JOIN bank_accounts AS ba ON la.user_id = ba.user_id";
+    INNER JOIN user_accounts AS ba ON la.user_id = ba.user_id";
 
 if ($conditions) {
     $sql .= " WHERE " . implode(' AND ', $conditions);
