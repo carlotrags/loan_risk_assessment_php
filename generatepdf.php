@@ -130,8 +130,8 @@ switch ($loan_type) {
 
             // QUALITATIVE
             'Threat of Entry'=>'threat_of_entry',
-            'Intensity of Entry'=>'intensity_of_entry',
-            'Substitution Threat'=>'substitution_threat',
+            'Intensity of Rivalry'=>'intensity_of_rivalry',
+            'Substitution of Threat'=>'substitution_of_threat',
             'Buyer Bargaining Power'=>'buyer_bargaining_power',
             'Supplier Bargaining Power'=>'supplier_bargaining_power',
             'Overall Industry Outlook'=>'overall_industry_outlook',
@@ -139,7 +139,7 @@ switch ($loan_type) {
             // MANAGEMENT
             'Market Position'=>'market_position',
             'Character of Management'=>'character_of_management',
-            'Quality & Experience Management'=>'quality_and_experience_management',
+            'Quality & Experience of Management'=>'quality_and_experience_of_management',
             'Bank Relationship'=>'bank_relationship',
             'Labor Relations'=>'labor_relations',
             'Existence'=>'existence',
@@ -166,7 +166,7 @@ switch ($loan_type) {
 // --- PRE-COUNT ---
 $countSql = "SELECT COUNT(*) 
              FROM $table la 
-             INNER JOIN bank_accounts ba ON la.user_id = ba.user_id 
+             INNER JOIN user_accounts ba ON la.user_id = ba.user_id 
              $whereClause";
 $stmt = $pdo->prepare($countSql);
 $stmt->execute($params);
@@ -180,7 +180,7 @@ if ($totalRecords > MAX_RECORDS_LIMIT) {
 // --- FETCH DATA ---
 $sql = "SELECT ba.first_name, ba.last_name, ba.role, la.* 
         FROM $table la
-        INNER JOIN bank_accounts ba ON la.user_id = ba.user_id
+        INNER JOIN user_accounts ba ON la.user_id = ba.user_id
         $whereClause
         ORDER BY la.submitted_at DESC";
 

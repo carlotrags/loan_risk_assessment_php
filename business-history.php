@@ -75,14 +75,14 @@ $sql = "SELECT
         la.liquid_assets_to_borrowed_funds,
         la.debt_service_cover,
         la.threat_of_entry,
-        la.intensity_of_entry,
-        la.substitution_threat,
+        la.intensity_of_rivalry,
+        la.substitution_of_threat,
         la.buyer_bargaining_power,
         la.supplier_bargaining_power,
         la.overall_industry_outlook,
         la.market_position,
         la.character_of_management,
-        la.quality_and_experience_management,
+        la.quality_and_experience_of_management,
         la.bank_relationship,
         la.labor_relations,
         la.existence,
@@ -230,8 +230,8 @@ foreach ($rows as $row) {
                                             <div class="hidden-item">
                                                 <h4>Industry/Market Analysis</h4>
                                                 <p><strong>Threat of Entry: </strong> <?= htmlspecialchars($row['threat_of_entry']) ?></p>
-                                                <p><strong>Intensity of Entry: </strong> <?= htmlspecialchars($row['intensity_of_entry']) ?></p>
-                                                <p><strong>Substitution Threat: </strong> <?= htmlspecialchars($row['substitution_threat']) ?></p>
+                                                <p><strong>Intensity of Rivalry: </strong> <?= htmlspecialchars($row['intensity_of_rivalry']) ?></p>
+                                                <p><strong>Substitution of Threat: </strong> <?= htmlspecialchars($row['substitution_of_threat']) ?></p>
                                                 <p><strong>Buyer Bargaining Power: </strong> <?= htmlspecialchars($row['buyer_bargaining_power']) ?></p>
                                                 <p><strong>Supplier Bargaining Power: </strong> <?= htmlspecialchars($row['supplier_bargaining_power']) ?></p>
                                                 <p><strong>Overall Industry Outlook: </strong> <?= htmlspecialchars($row['overall_industry_outlook']) ?></p>
@@ -240,7 +240,7 @@ foreach ($rows as $row) {
                                             <div class="hidden-item">
                                                 <h4>Management Quality</h4>
                                                 <p><strong>Character of Management: </strong> <?= htmlspecialchars($row['character_of_management']) ?></p>
-                                                <p><strong>Quality and Experience Management: </strong> <?= htmlspecialchars($row['quality_and_experience_management']) ?></p>
+                                                <p><strong>Quality and Experience of Management: </strong> <?= htmlspecialchars($row['quality_and_experience_of_management']) ?></p>
                                                 <p><strong>Bank Relationship: </strong> <?= htmlspecialchars($row['bank_relationship']) ?></p>
                                                 <p><strong>Labor Relations: </strong> <?= htmlspecialchars($row['labor_relations']) ?></p>
                                                 <p><strong>Existence: </strong> <?= htmlspecialchars($row['existence']) ?></p>

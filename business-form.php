@@ -1,17 +1,21 @@
 <?php
 session_start();
 
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: static/login.php");
     exit;
 }
 
+
 $form = $_SESSION['business_form'] ?? [];
+
 
 $username = $_SESSION['username'];
 $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
 $role = $_SESSION['role'];
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $currentStep = isset($_POST['step']) ? (int)$_POST['step'] : 1;
@@ -24,103 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $currentStep = isset($_GET['step']) ? (int)$_GET['step'] : 1;
 }
 
+
 if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
 ?>
 
-<?php
-$descriptions = [
-
-    // 1. Capital to Risk Assets Ratio (CAR)
-    "capital_to_risk_assets_ratio" => [
-        1 => "CAR is critically low and poses severe solvency risk.",
-        2 => "CAR is below acceptable thresholds and requires immediate improvement.",
-        3 => "CAR meets minimum requirements but does not demonstrate strong capital stability.",
-        4 => "CAR is healthy, indicating a well-capitalized financial position.",
-        5 => "CAR is exceptionally strong and reflects outstanding capital adequacy."
-    ],
-
-    // 2. Debt-to-Equity Ratio
-    "debt_to_equity_ratio" => [
-        1 => "Debt levels are excessively high relative to equity, posing significant financial strain.",
-        2 => "Debt levels are high and increase the company’s financial vulnerability.",
-        3 => "Debt-to-equity position is moderately balanced but not optimal.",
-        4 => "Debt-to-equity structure is sound and indicates strong financial discipline.",
-        5 => "Debt-to-equity structure is excellent with very strong equity support and low leverage risk."
-    ],
-
-    // 3. NPL Ratio
-    "npl_ratio" => [
-        1 => "NPL ratio is extremely high, indicating major credit-quality deterioration.",
-        2 => "NPL ratio is above acceptable levels and reflects poor asset quality.",
-        3 => "NPL ratio is manageable but may require monitoring.",
-        4 => "NPL ratio reflects good portfolio quality with low credit stress.",
-        5 => "NPL ratio is excellent with minimal delinquency and strong loan performance."
-    ],
-
-    // 4. NPA Ratio
-    "npa_ratio" => [
-        1 => "NPA ratio is critically high and signals major asset impairment issues.",
-        2 => "NPA ratio exceeds safe levels and indicates weak portfolio performance.",
-        3 => "NPA ratio is moderate but could improve.",
-        4 => "NPA ratio is healthy and reflects strong asset performance.",
-        5 => "NPA ratio is outstanding with minimal problem assets."
-    ],
-
-    // 5. NPA Coverage Ratio
-    "npa_coverage_ratio" => [
-        1 => "Coverage ratio is severely insufficient to absorb potential losses.",
-        2 => "Coverage ratio is below recommended levels and poses risk.",
-        3 => "Coverage ratio is adequate but not robust.",
-        4 => "Coverage ratio is strong and provides comfortable loss absorption.",
-        5 => "Coverage ratio is excellent, demonstrating very strong provisioning capacity."
-    ],
-
-    // 6. ROAE
-    "roae" => [
-        1 => "ROAE is extremely poor, indicating weak shareholder returns.",
-        2 => "ROAE is below expectations and reflects suboptimal profitability.",
-        3 => "ROAE is average and meets minimum benchmarks.",
-        4 => "ROAE is strong and reflects healthy profitability.",
-        5 => "ROAE is exceptional, delivering superior returns to equity holders."
-    ],
-
-    // 7. ROAA
-    "roaa" => [
-        1 => "ROAA is critically low and reflects inefficient asset utilization.",
-        2 => "ROAA is below industry standards and requires improvement.",
-        3 => "ROAA is acceptable but lacks strong performance.",
-        4 => "ROAA is strong and indicates efficient use of assets.",
-        5 => "ROAA is outstanding with excellent profitability from assets."
-    ],
-
-    // 8. Cost-to-Income Ratio
-    "cost_to_income_ratio" => [
-        1 => "Cost-to-income ratio is excessively high and reflects poor operational efficiency.",
-        2 => "Cost-to-income ratio is above optimal levels and indicates inefficiency.",
-        3 => "Cost-to-income ratio is average with room for improvement.",
-        4 => "Cost-to-income ratio is efficient and indicates good cost management.",
-        5 => "Cost-to-income ratio is excellent with highly efficient operations."
-    ],
-
-    // 9. Liquid Assets to Borrowed Funds
-    "liquid_assets_to_borrowed_funds" => [
-        1 => "Liquidity is critically weak relative to borrowings.",
-        2 => "Liquidity coverage is insufficient and exposes the firm to refinancing risk.",
-        3 => "Liquidity is acceptable but not strong.",
-        4 => "Liquidity is strong and indicates healthy coverage of borrowings.",
-        5 => "Liquidity is exceptionally strong, providing excellent coverage of obligations."
-    ],
-
-    // 10. Debt Service Cover
-    "debt_service_cover" => [
-        1 => "DSCR is critically low and indicates inability to meet debt obligations.",
-        2 => "DSCR is below acceptable levels and signifies repayment risk.",
-        3 => "DSCR is adequate but not fully comfortable.",
-        4 => "DSCR is strong and reflects reliable debt-servicing capacity.",
-        5 => "DSCR is excellent with very strong ability to service debt commitments."
-    ]
-];
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -133,6 +44,7 @@ $descriptions = [
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
+
     <title>Business Loan Risk Assessment</title>
 </head>
 <body>
@@ -140,7 +52,9 @@ $descriptions = [
         <?php include "static/navbar.php"?>
     </section>
 
+
     <!-- 5 - Highly Satisfactory, 4 - Satisfactory, 3 - Neutral, 2 - Unsatisfactory, 1 - Highly Unsatisfactory -->
+
 
     <section class="container">
         <h1 style="text-align: center; padding-bottom:20px;">Business Loan Risk Assessment</h1>
@@ -152,9 +66,11 @@ $descriptions = [
             <div class="step <?= $currentStep === 5 ? 'active' : '' ?>">Preview</div>
         </div>
 
+
         <div class="business-form-container">
             <form method="POST" action="business-submit.php">
                 <input type="hidden" name="step" value="<?= $currentStep ?>">
+
 
                 <!-- A. BASIC DETAILS -->
                 <?php if ($currentStep == 1): ?>
@@ -165,10 +81,12 @@ $descriptions = [
                             <input type="text" id="company_name" name="company_name" required value="<?= $_SESSION['business_form']['company_name'] ?? '' ?>">
                         </div>
 
+
                         <div class="business-form-item">
                             <label for="loan_amount">Loan Amount:</label>
                             <input type="number" id="loan_amount" name="loan_amount" required value="<?= $_SESSION['business_form']['loan_amount'] ?? '' ?>">
                         </div>
+
 
                         <div class="business-form-item">
                             <label for="loan_term">Loan Term (Months):</label>
@@ -176,10 +94,11 @@ $descriptions = [
                         </div>
                         <br>
                         <div class="button-container">
-                            <button type="submit" name="step" value="2" class="next-button">Next <i class="fa-solid fa-caret-right"></i></button>
+                            <a href="business-form.php?step=2" class="next-button">Next <i class="fa-solid fa-caret-right"></i></a>
                         </div>
                     </div>
                 <?php endif; ?>
+
 
                 <!-- B. Financial Condition -->
                 <?php if ($currentStep == 2): ?>
@@ -208,6 +127,7 @@ $descriptions = [
                                 <td><input type="radio" name="capital_to_risk_assets_ratio" value="5" <?= (isset($_SESSION['business_form']['capital_to_risk_assets_ratio']) && $_SESSION['business_form']['capital_to_risk_assets_ratio']=='5') ? 'checked' : '' ?>>This company has outstanding ---</td>
                             </tr>
 
+
                             <tr>
                                 <td>Debt-to-Equity Ratio (X)
                                     <p class="variable-details">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus, id!</p>
@@ -218,6 +138,7 @@ $descriptions = [
                                 <td><input type="radio" name="debt_to_equity_ratio" value="4" <?= (isset($_SESSION['business_form']['debt_to_equity_ratio']) && $_SESSION['business_form']['debt_to_equity_ratio']=='4') ? 'checked' : '' ?>>4 - Satisfactory</td>
                                 <td><input type="radio" name="debt_to_equity_ratio" value="5" <?= (isset($_SESSION['business_form']['debt_to_equity_ratio']) && $_SESSION['business_form']['debt_to_equity_ratio']=='5') ? 'checked' : '' ?>>5 - Highly Satisfactory</td>
                             </tr>
+
 
                             <tr>
                                 <td>NPL Ratio
@@ -230,6 +151,7 @@ $descriptions = [
                                 <td><input type="radio" name="npl_ratio" value="5" <?= (isset($_SESSION['business_form']['npl_ratio']) && $_SESSION['business_form']['npl_ratio']=='5') ? 'checked' : '' ?>>5 - Highly Satisfactory</td>
                             </tr>
 
+
                             <tr>
                                 <td>NPA Ratio
                                     <p class="variable-details">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus, id!</p>
@@ -240,6 +162,7 @@ $descriptions = [
                                 <td><input type="radio" name="npa_ratio" value="4" <?= (isset($_SESSION['business_form']['npa_ratio']) && $_SESSION['business_form']['npa_ratio']=='4') ? 'checked' : '' ?>>4 - Satisfactory</td>
                                 <td><input type="radio" name="npa_ratio" value="5" <?= (isset($_SESSION['business_form']['npa_ratio']) && $_SESSION['business_form']['npa_ratio']=='5') ? 'checked' : '' ?>>5 - Highly Satisfactory</td>
                             </tr>
+
 
                             <tr>
                                 <td>NPA Coverage Ratio
@@ -262,6 +185,7 @@ $descriptions = [
                                 <td><input type="radio" name="roae" value="5" <?= (isset($_SESSION['business_form']['roae']) && $_SESSION['business_form']['roae']=='5') ? 'checked' : '' ?>>5 - Highly Satisfactory</td>
                             </tr>
 
+
                             <tr>
                                 <td>ROAA
                                     <p class="variable-details">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus, id!</p>
@@ -272,6 +196,7 @@ $descriptions = [
                                 <td><input type="radio" name="roaa" value="4" <?= (isset($_SESSION['business_form']['roaa']) && $_SESSION['business_form']['roaa']=='4') ? 'checked' : '' ?>>4 - Satisfactory</td>
                                 <td><input type="radio" name="roaa" value="5" <?= (isset($_SESSION['business_form']['roaa']) && $_SESSION['business_form']['roaa']=='5') ? 'checked' : '' ?>>5 - Highly Satisfactory</td>
                             </tr>
+
 
                             <tr>
                                 <td>Cost to Income Ratio
@@ -284,6 +209,7 @@ $descriptions = [
                                 <td><input type="radio" name="cost_to_income_ratio" value="5" <?= (isset($_SESSION['business_form']['cost_to_income_ratio']) && $_SESSION['business_form']['cost_to_income_ratio']=='5') ? 'checked' : '' ?>>5 - Highly Satisfactory</td>
                             </tr>
 
+
                             <tr>
                                 <td>Liquid Assets to Borrowed Funds
                                     <p class="variable-details">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus, id!</p>
@@ -294,6 +220,7 @@ $descriptions = [
                                 <td><input type="radio" name="liquid_assets_to_borrowed_funds" value="4" <?= (isset($_SESSION['business_form']['liquid_assets_to_borrowed_funds']) && $_SESSION['business_form']['liquid_assets_to_borrowed_funds']=='4') ? 'checked' : '' ?>>4 - Satisfactory</td>
                                 <td><input type="radio" name="liquid_assets_to_borrowed_funds" value="5" <?= (isset($_SESSION['business_form']['liquid_assets_to_borrowed_funds']) && $_SESSION['business_form']['liquid_assets_to_borrowed_funds']=='5') ? 'checked' : '' ?>>5 - Highly Satisfactory</td>
                             </tr>
+
 
                             <tr>
                                 <td>Debt Service Cover (X)
@@ -308,18 +235,20 @@ $descriptions = [
                         </tbody>
                     </table>
 
+
                     <div class="button-container">
-                        <button type="submit" name="step" value="1" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</button>
-                        <button type="submit" name="step" value="3" class="next-button">Next <i class="fa-solid fa-caret-right"></i></button>
+                        <a href="business-form.php?step=1" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</a>
+                        <a href="business-form.php?step=3" class="next-button">Next <i class="fa-solid fa-caret-right"></i></a>
                     </div>
                     <?php endif; ?>
 
-                    
+
+                   
                     <!-- C. Industry/Market Analysis -->
                     <?php if ($currentStep == 3): ?>
                     <h3>Step 3 – Industry/Market Analysis</h3>
                     <p class="company-name-placeholder"><?= $form['company_name'] ?? '-' ?></p>
-                        <table class="business-form-table"> 
+                        <table class="business-form-table">
                             <thead>
                                 <tr>
                                     <th>Variable</th>
@@ -389,10 +318,11 @@ $descriptions = [
                                 </tr>
                         </table>
                         <div class="button-container">
-                            <button type="submit" name="step" value="2" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</button>
-                            <button type="submit" name="step" value="4" class="next-button">Next <i class="fa-solid fa-caret-right"></i></button>
+                            <a href="business-form.php?step=2" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</a>
+                            <a href="business-form.php?step=4" class="next-button">Next <i class="fa-solid fa-caret-right"></i></a>
                         </div>
                     <?php endif; ?>
+
 
                     <!-- D. Management quality -->
                     <?php if ($currentStep == 4): ?>
@@ -484,49 +414,57 @@ $descriptions = [
                                 </tr>
                             </table>
 
+
                             <div class="button-container">
-                                <button type="submit" name="step" value="3" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</button>
-                                <button type="submit" name="step" value="5" class="next-button">Next <i class="fa-solid fa-caret-right"></i></button>
+                                <a href="business-form.php?step=3" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</a>
+                                <a href="business-form.php?step=5" class="next-button">Next <i class="fa-solid fa-caret-right"></i></a>
                             </div>
                         <?php endif; ?>
+
 
                     <?php if ($currentStep == 5): ?>
                     <?php include "business-form-preview.php"?>
                     <div class="button-container">
                         <a href="business-form.php?step=4" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</a>
                         <br><br>
-                        <button type="submit" name="final_submit" value="1" id="submitAssessmentBtn" class="submit-btn">Submit Application</button>
+                        <button type="submit" id="submitAssessmentBtn" class="submit-btn">Submit Application</button>
                     </div>
                     <?php endif; ?>
             </form>
         </div>
     </section>
 
+
     <script>
-    document.querySelectorAll('.step-container a').forEach(link => {
-        link.addEventListener('click', function(e){
-            e.preventDefault();
-            const form = document.querySelector('form');
-            if(form){
-                let stepInput = document.createElement('input');
-                stepInput.type = 'hidden';
-                stepInput.name = 'step';
-                stepInput.value = this.href.split('step=')[1];
-                form.appendChild(stepInput);
-                
-                form.submit();
-            } else {
-                window.location.href = this.href;
-            }
+    document.addEventListener('DOMContentLoaded', () => {
+        // select all inputs (radio, text, number)
+        const inputs = document.querySelectorAll('input');
+
+
+        inputs.forEach(input => {
+            input.addEventListener('change', () => {
+                const data = new FormData();
+                data.append(input.name, input.value);
+                data.append('step', <?= $currentStep ?>);
+
+
+                fetch('business-form-save.php', {
+                    method: 'POST',
+                    body: data
+                })
+                .then(res => res.text())
+                .then(res => console.log(res))
+                .catch(err => console.error('Save failed', err));
+            });
         });
     });
-
-    // window.addEventListener('beforeunload', function() {
-    //     navigator.sendBeacon('static/clear_business_form.php');
-    // });
     </script>
+
 
     <script src="static/js/business-form.js?v=<?= time() ?>"></script>
     <?php include "static/footer.php"?>
 </body>
-</html> 
+</html>
+
+
+
