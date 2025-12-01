@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('form');
+    const form = document.querySelector('.business-form-container form');
     const stepContainer = document.querySelector('.step-container');
     const steps = stepContainer ? stepContainer.querySelectorAll('.step') : [];
-    const hiddenStep = form ? form.querySelector('input[name="hiddenStep"]') : null;
+    const hiddenStep = form ? form.querySelector('input[name="step"]') : null;
 
-    // Show current step based on hiddenStep value
+    // Set current step
     let currentStepIndex = hiddenStep ? parseInt(hiddenStep.value) - 1 : 0;
     showStep(currentStepIndex);
 
@@ -62,9 +62,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (!hasError) {
-            // Update hidden step
-            if (hiddenStep) hiddenStep.value = currentStepIndex + 1;
-            form.submit();
+            if (currentStepIndex < steps.length - 1) {
+                // Not last step → move to next step
+                currentStepIndex++;
+                if (hiddenStep) hiddenStep.value = currentStepIndex + 1;
+                showStep(currentStepIndex);
+            } else {
+                // Last step → submit form
+                form.submit();
+            }
         }
     });
 

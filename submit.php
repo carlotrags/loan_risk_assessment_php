@@ -9,10 +9,12 @@ $user_id = $_SESSION['user_id'];
 $first_name = $_SESSION['first_name'] ?? '';
 $username = $_SESSION['username'] ?? '';
 
+// Only handle POST submissions
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Get form data
+
+    // Auto-set loan type to personal
+    $loan_type = 'personal';
     $name = $_POST['name'] ?? '';
-    $loan_type = $_POST['loan_type'] ?? 'personal'; // <-- set default as 'personal'
 
     $data = [
         'income' => (float)($_POST['income'] ?? 0),
@@ -22,10 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         'previous_defaults' => ($_POST['previous_defaults'] == "1") ? 1 : 0
     ];
 
-    // Determine API URL based on loan type
-    $api_url = $loan_type === 'business' ? 'http://127.0.0.1:5000/predict/business' : 'http://127.0.0.1:5000/predict/personal';
+    // Use personal loan API only
+    $api_url = 'http://127.0.0.1:5000/predict/personal';
 
-    // Call Flask API
     $ch = curl_init($api_url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
@@ -52,18 +53,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             die("MySQL Connection failed: " . $conn->connect_error);
         }
 
-        // Insert into personal or business table (optional)
-        if ($loan_type === 'personal') {
-            $table = 'personal_loan_applications';
-        } else {
-            $table = 'business_loan_applications';
-        }
+        // Personal loans table
+        $table = 'personal_loan_applications';
 
         $stmt = $conn->prepare("INSERT INTO $table 
             (name, income, loan_amount, loan_term, credit_score, previous_defaults, prediction, submitted_at, user_id) 
             VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
         $stmt->bind_param(
-            "sdddddii",
+            "sddddiii",
             $name,
             $data['income'],
             $data['loan_amount'],
@@ -82,16 +79,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             (user_id, application_id, name, loan_amount, loan_term, loan_type, submitted_at, prediction) 
             VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)");
         $stmt2->bind_param(
-        "iisdisi",
-        $user_id,          // i
-        $application_id,   // i
-        $name,             // s
-        $data['loan_amount'], // d
-        $data['loan_term'],   // i
-        $loan_type,        // s
-        $prediction        // i
+            "iisdisi",
+            $user_id,
+            $application_id,
+            $name,
+            $data['loan_amount'],
+            $data['loan_term'],
+            $loan_type,
+            $prediction
         );
-
         $stmt2->execute();
         $stmt2->close();
 
@@ -105,75 +101,74 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="stylesheet" href="static/css/style.css?v=<?= time() ?>">
-    <link rel="stylesheet" href="static/css/navbarstyle.css">
-    <link rel='stylesheet' href='static/css/result.css?v=<?= time() ?>'>
-    <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
-    <title>Loan Assessment Result</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<link rel="stylesheet" href="static/css/style.css?v=<?= time() ?>">
+<link rel="stylesheet" href="static/css/navbarstyle.css">
+<link rel='stylesheet' href='static/css/result.css?v=<?= time() ?>'>
+<link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
+<title>Personal Loan Assessment Result</title>
 </head>
 <body>
-    <section class="header-navbar">
-        <?php include "static/navbar.php"?>
-    </section>
+<section class="header-navbar">
+    <?php include "static/navbar.php"?>
+</section>
 
-    <div class="result-container">
-        <div class="result-card">
-            <div class="card-header">
-                <h2>Loan Assessment Result</h2>
-                <p class="applicant-info">Applicant: <?= htmlspecialchars($name ?? '') ?></p>
-            </div>
+<div class="result-container">
+    <div class="result-card">
+        <div class="card-header">
+            <h2>Loan Assessment Result</h2>
+            <p class="applicant-info">Applicant: <?= htmlspecialchars($name ?? '') ?></p>
+        </div>
 
-            <div class="assessment-status <?= htmlspecialchars($statusClass ?? 'info') ?>">
-                <?php if (isset($prediction)): ?>
-                    <i class="icon"><?= $prediction == 1 ? '&#10003;' : '&#10007;' ?></i>
-                <?php endif; ?>
-                <div class="status-message">
-                    <h3><?= htmlspecialchars($message ?? 'No result available') ?></h3>
-                </div>
-            </div>
-            
-            <?php if (isset($data)): ?>
-            <div class="section application-summary">
-                <h4>Application Details Submitted</h4>
-                <div class="data-grid">
-                    <div><span class="label">Loan Amount:</span> <span class="value">₱<?= number_format($data['loan_amount'] ?? 0, 2) ?></span></div>
-                    <div><span class="label">Loan Term:</span> <span class="value"><?= htmlspecialchars($data['loan_term'] ?? 0) ?> months</span></div>
-                    <div><span class="label">Monthly Income:</span> <span class="value">₱<?= number_format($data['income'] ?? 0, 2) ?></span></div>
-                    <div><span class="label">Credit Score:</span> <span class="value"><?= number_format($data['credit_score'] ?? 0, 0) ?></span></div>
-                    <div><span class="label">Previous Defaults:</span> <span class="value"><?= ($data['previous_defaults'] == 1 ? 'Yes' : 'No') ?></span></div>
-                    <div><span class="label">Loan Type:</span> <span class="value"><?= htmlspecialchars($loan_type ?? 'N/A') ?></span></div>
-                </div>
-            </div>
+        <div class="assessment-status <?= htmlspecialchars($statusClass ?? 'info') ?>">
+            <?php if (isset($prediction)): ?>
+                <i class="icon"><?= $prediction == 1 ? '&#10003;' : '&#10007;' ?></i>
             <?php endif; ?>
-
-            <?php if (!empty($explanation) && isset($prediction) && $prediction == 0): ?>
-                <div class="section denial-reasons">
-                    <h4>Reason(s) for Denial</h4>
-                    <ul class="reason-list">
-                        <?php foreach ($explanation as $reason): ?>
-                            <li><i class="icon-reason">&#x25CF;</i> <?= htmlspecialchars($reason) ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
-            <?php endif; ?>
-
-            <div class="action-buttons">
-                <a href="index.php" class="btn-primary">Submit New Assessment</a> 
-            </div>
-
-            <div class="footer-result">
-                <p>Results are preliminary and subject to final verification.</p>
+            <div class="status-message">
+                <h3><?= htmlspecialchars($message ?? 'No result available') ?></h3>
             </div>
         </div>
-    </div>
+        
+        <?php if (isset($data)): ?>
+        <div class="section application-summary">
+            <h4>Application Details Submitted</h4>
+            <div class="data-grid">
+                <div><span class="label">Loan Amount:</span> <span class="value">₱<?= number_format($data['loan_amount'] ?? 0, 2) ?></span></div>
+                <div><span class="label">Loan Term:</span> <span class="value"><?= htmlspecialchars($data['loan_term'] ?? 0) ?> months</span></div>
+                <div><span class="label">Monthly Income:</span> <span class="value">₱<?= number_format($data['income'] ?? 0, 2) ?></span></div>
+                <div><span class="label">Credit Score:</span> <span class="value"><?= number_format($data['credit_score'] ?? 0, 0) ?></span></div>
+                <div><span class="label">Previous Defaults:</span> <span class="value"><?= ($data['previous_defaults'] == 1 ? 'Yes' : 'No') ?></span></div>
+                <div><span class="label">Loan Type:</span> <span class="value">Personal</span></div>
+            </div>
+        </div>
+        <?php endif; ?>
 
-    <?php include "static/footer.php"?>
+        <?php if (!empty($explanation) && isset($prediction) && $prediction == 0): ?>
+            <div class="section denial-reasons">
+                <h4>Reason(s) for Denial</h4>
+                <ul class="reason-list">
+                    <?php foreach ($explanation as $reason): ?>
+                        <li><i class="icon-reason">&#x25CF;</i> <?= htmlspecialchars($reason) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
+        <div class="action-buttons">
+            <a href="form.php" class="btn-primary">Submit New Assessment</a> 
+        </div>
+
+        <div class="footer-result">
+            <p>Results are preliminary and subject to final verification.</p>
+        </div>
+    </div>
+</div>
+
+<?php include "static/footer.php"?>
 </body>
 </html>

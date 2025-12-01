@@ -59,7 +59,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
         </div>
 
         <div class="business-form-container">
-            <form method="POST" action="business-form.php">
+            <form method="POST" action="business-submit.php">
                 <input type="hidden" name="step" value="<?= $currentStep ?>">
 
                 <!-- A. BASIC DETAILS -->
