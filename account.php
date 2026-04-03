@@ -1,17 +1,21 @@
 <?php
 session_start();
 
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: static/login.php");
     exit;
 }
 
+
 require 'static/config.php';
+
 
 $user_id = $_SESSION['user_id'];
 $stmt = $pdo->prepare("SELECT * FROM user_accounts WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
 
 // Get total assessments done by this user
 $stmt = $pdo->prepare("SELECT COUNT(*) as total_assessments FROM loan_application_history WHERE user_id = ?");
@@ -19,17 +23,18 @@ $stmt->execute([$user_id]);
 $stats = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Profile - Loan Risk Assessment</title>
-    
+   
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    
+   
     <!-- Custom CSS -->
     <link rel="stylesheet" href="static/css/style.css?v=<?= time() ?>">
     <link rel="stylesheet" href="static/css/navbarstyle.css?v=<?= time() ?>">
@@ -41,6 +46,7 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
         <?php include "static/navbar.php"?>
     </section>
 
+
     <!-- Account content styles below keep changes local to this page -->
     <style>
         /*Overrides to avoid touching global CSS files so don't touch thisss*/
@@ -51,18 +57,22 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
         .account-page .profile-role { font-size: .9rem; color: #6c757d; }
         .account-page .detail-term { color: #6c757d; }
 
+
         .account-page .form-control-plaintext { width: 100%; }
+
 
         /* Allow the center flex column to shrink so it doesn't push the right-side buttons out
            and enable truncation of long text like email/username when space is tight */
         .account-page .d-flex > .flex-grow-1 { min-width: 0; }
         .account-page .profile-role { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+
         @media (max-width: 767px) {
             .account-page .profile-avatar { font-size:3rem; width:72px; height:72px; }
             .account-page .profile-role { white-space: normal; }
         }
     </style>
+
 
     <main class="account-page">
         <div class="container account-container py-5">
@@ -73,8 +83,8 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="me-3">
-                                
-                                <img src="https://ui-avatars.com/api/?name=<?= rawurlencode($user['first_name'] . ' ' . $user['last_name']) ?>&size=256&background=0D6EFD&color=ffffff" 
+                               
+                                <img src="https://ui-avatars.com/api/?name=<?= rawurlencode($user['first_name'] . ' ' . $user['last_name']) ?>&size=256&background=0D6EFD&color=ffffff"
                                     class="rounded-circle profile-avatar" width="96" height="96" alt="profile">
                             </div>
                             <div class="flex-grow-1">
@@ -90,7 +100,9 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
                             </div>
                         </div>
 
+
                         <hr class="my-3">
+
 
                         <div class="row g-3">
                             <div class="col-6 col-md-4">
@@ -107,7 +119,9 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
                             </div>
                         </div>
 
+
                         <hr class="my-3">
+
 
                         <div>
                             <h6 class="mb-2">Account Details</h6>
@@ -133,6 +147,7 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
                     </div>
                 </div>
             </div>
+
 
             <!-- Account Details -->
             <div class="col-lg-8">
@@ -194,6 +209,7 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
                     </div>
                 </div>
 
+
                 <!-- Account Activity -->
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white py-3">
@@ -214,7 +230,7 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
                                 <p class="text-muted small mb-0">You have completed <?= htmlspecialchars($stats['total_assessments']) ?> loan risk assessments</p>
                             </div>
                         </div>
-                        
+                       
                         <div class="d-flex align-items-center p-3 bg-light rounded">
                             <div class="bg-primary bg-opacity-10 p-2 rounded me-3">
                                 <i class="bi bi-shield-check text-primary"></i>
@@ -230,6 +246,8 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
         </div>
     </div>
 
+
     <?php include "static/footer.php"?>
 </body>
 </html>
+
