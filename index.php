@@ -22,12 +22,6 @@
         'month' => 0,
     ];
 
-    // Total assessments
-    $res = $conn->query("SELECT COUNT(*) AS total FROM loan_application_history");
-    if ($res) {
-        $r = $res->fetch_assoc();
-        $totals['total'] = (int)$r['total'];
-    }
 
     // Eligible:prediction = 1 (approved)
     $res = $conn->query("SELECT COUNT(*) AS eligible FROM loan_application_history WHERE prediction = 1");
@@ -42,6 +36,9 @@
         $r = $res->fetch_assoc();
         $totals['ineligible'] = (int)$r['ineligible'];
     }
+
+    // Total Assessment
+    $totals['total'] = $totals['eligible'] + $totals['ineligible'];
 
     // Today's assessments
     $res = $conn->query("SELECT COUNT(*) AS today FROM loan_application_history WHERE DATE(submitted_at) = CURDATE()");
@@ -119,7 +116,7 @@
                     <div class="item-inner">
                         <div class="item-icon"><i class="bi bi-check-circle-fill" aria-hidden="true"></i></div>
                         <div class="item-body">
-                            <div class="item-title">Eligible</div>
+                            <div class="item-title">Low Risk</div>
                             <div class="item-count"><?= htmlspecialchars($totals['eligible']) ?></div>
                         </div>
                     </div>
@@ -129,7 +126,7 @@
                     <div class="item-inner">
                         <div class="item-icon"><i class="bi bi-x-circle-fill" aria-hidden="true"></i></div>
                         <div class="item-body">
-                            <div class="item-title">Ineligible</div>
+                            <div class="item-title">High Risk</div>
                             <div class="item-count"><?= htmlspecialchars($totals['ineligible']) ?></div>
                         </div>
                     </div>

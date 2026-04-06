@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $statusClass = $prediction == 1 ? "approved" : "denied";
 
         // Save to MySQL
-        $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3307);
+        $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3306);
         if ($conn->connect_error) {
             die("MySQL Connection failed: " . $conn->connect_error);
         }
@@ -106,6 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <link rel="stylesheet" href="static/css/style.css?v=<?= time() ?>">
 <link rel="stylesheet" href="static/css/navbarstyle.css">
@@ -159,8 +160,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
         <?php endif; ?>
 
-        <div class="action-buttons">
-            <a href="form.php" class="btn-primary">Submit New Assessment</a> 
+        <div class="action-buttons d-flex gap-3">
+            <a href="<?php echo 'view-details.php?id=' . urlencode($application_id) . '&type=' . urlencode($loan_type); ?>" class="btn btn-success">
+                Edit / Print Assessment
+            </a>
+            <a href="form.php" class="btn btn-primary">Submit New Assessment</a> 
         </div>
 
         <div class="footer-result">

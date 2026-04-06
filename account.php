@@ -1,28 +1,35 @@
 <?php
 session_start();
 
-
 if (!isset($_SESSION['user_id'])) {
     header("Location: static/login.php");
     exit;
 }
 
-
 require 'static/config.php';
-
 
 $user_id = $_SESSION['user_id'];
 $stmt = $pdo->prepare("SELECT * FROM user_accounts WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+// After fetching $user from DB
+$status = strtolower($user['status']);
+$badge_class = $status === 'active' ? 'bg-success' : 'bg-danger';
+$status_text = ucfirst($status);
+$status_message = $status === 'active' 
+    ? 'Your account is active and in good standing' 
+    : 'Your account has been deactivated';
 
 // Get total assessments done by this user
 $stmt = $pdo->prepare("SELECT COUNT(*) as total_assessments FROM loan_application_history WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $stats = $stmt->fetch(PDO::FETCH_ASSOC);
-?>
 
+// after $status, $badge_class
+$icon_class = $status === 'active' ? 'text-primary' : 'text-secondary';
+$icon_bg_class = $status === 'active' ? 'bg-primary bg-opacity-10' : 'bg-danger bg-opacity-10';
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,11 +37,11 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Profile - Loan Risk Assessment</title>
-   
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-   
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="static/css/style.css?v=<?= time() ?>">
     <link rel="stylesheet" href="static/css/navbarstyle.css?v=<?= time() ?>">
@@ -83,14 +90,13 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="me-3">
-                               
                                 <img src="https://ui-avatars.com/api/?name=<?= rawurlencode($user['first_name'] . ' ' . $user['last_name']) ?>&size=256&background=0D6EFD&color=ffffff"
                                     class="rounded-circle profile-avatar" width="96" height="96" alt="profile">
                             </div>
                             <div class="flex-grow-1">
                                 <div class="d-flex align-items-center">
                                     <h4 class="mb-0 me-2"><?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']) ?></h4>
-                                    <span class="badge bg-success text-white">Active</span>
+                                    <span class="badge <?= $badge_class ?> text-white"><?= $status_text ?></span>
                                 </div>
                                 <div class="profile-role">@<?= htmlspecialchars($user['username']) ?> · <?= htmlspecialchars($user['email']) ?></div>
                             </div>
@@ -230,14 +236,14 @@ $stats = $stmt->fetch(PDO::FETCH_ASSOC);
                                 <p class="text-muted small mb-0">You have completed <?= htmlspecialchars($stats['total_assessments']) ?> loan risk assessments</p>
                             </div>
                         </div>
-                       
+                    
                         <div class="d-flex align-items-center p-3 bg-light rounded">
-                            <div class="bg-primary bg-opacity-10 p-2 rounded me-3">
-                                <i class="bi bi-shield-check text-primary"></i>
+                            <div class="<?= $icon_bg_class ?> p-2 rounded me-3">
+                                <i class="bi bi-shield-check <?= $icon_class ?>"></i>
                             </div>
                             <div>
                                 <h6 class="mb-1">Account Status</h6>
-                                <p class="text-muted small mb-0">Your account is active and in good standing</p>
+                                <p class="text-muted small mb-0"><?= $status_message ?></p>
                             </div>
                         </div>
                     </div>
