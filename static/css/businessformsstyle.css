@@ -223,6 +223,12 @@
     word-wrap: break-word;
 }
 
+.d-flex {
+    display: flex !important;
+    justify-content: flex-end;
+}
+
+
 /* Animation */
 @keyframes fadeInUp {
     from {

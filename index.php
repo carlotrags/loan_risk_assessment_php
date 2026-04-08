@@ -1,10 +1,16 @@
 <?php
     session_start();
 
-    if (!isset($_SESSION['user_id'])) {
-        header("Location: static/login.php");
-        exit;
-    }
+// Standard headers to ensure the browser checks the session status every time
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Pragma: no-cache");
+
+if (!isset($_SESSION['user_id'])) {
+    // If NOT logged in, use replace to go to login 
+    // (This keeps the history clean if they try to bookmark the dashboard)
+    echo "<script>window.location.replace('static/login.php');</script>";
+    exit;
+}
 
     require 'static/config.php';
 

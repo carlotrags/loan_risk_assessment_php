@@ -130,10 +130,10 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <a href="generatepdf.php?<?= htmlspecialchars($queryString) ?>&loan_type=general" class="btn btn-success btn-pdf-narrow">
                                 <i class="fas fa-file-pdf"></i> Download PDF
                             </a>
-                            <a href="personal-history.php" class="btn btn-primary btn-pdf-narrow">
+                            <a href="personal-history.php" class="btn btn-primary">
                                 <i class="fa-solid fa-user" style="padding-right: 10px;"></i>Personal Loans History
                             </a>
-                            <a href="business-history.php" class="btn btn-primary btn-pdf-narrow">
+                            <a href="business-history.php" class="btn btn-primary">
                                 <i class="fa-solid fa-briefcase" style="padding-right: 10px;"></i>Business Loans History
                             </a>
                         </div>
@@ -196,9 +196,9 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                         <td>
                                             <div class="d-flex gap-3">
-                                                <a href="view-details.php?id=<?= $row['application_id'] ?>&type=<?= strtolower($row['loan_type']) ?>" class="text-info"><i class="fa-solid fa-eye"></i></a>
-                                                <a href="#" class="text-primary edit-btn" data-bs-toggle="modal" data-bs-target="#editModal<?= $row['history_id'] ?>"><i class="fa-solid fa-pen-to-square"></i></a>
-                                                <a href="actions/delete_loan.php?id=<?= $row['history_id'] ?>" class="text-danger" onclick="return confirm('Are you sure you want to delete this specific history record?')" title="Delete"><i class="fa-solid fa-trash"></i></a>
+                                                <a href="view-details.php?id=<?= $row['application_id'] ?>&type=<?= strtolower($row['loan_type']) ?>" class="text-info" ><i class="fa-solid fa-eye" alt="View"></i></a>
+                                                <a href="#" class="text-primary edit-btn" data-bs-toggle="modal" data-bs-target="#editModal<?= $row['history_id'] ?>" title="Edit"><i class="fa-solid fa-pen-to-square" alt="Edit"></i></a>
+                                                <a href="actions/delete_loan.php?id=<?= $row['history_id'] ?>" class="text-danger" onclick="return confirm('Are you sure you want to delete this specific history record?')" title="Delete"><i class="fa-solid fa-trash" alt="Delete"></i></a>
                                             </div>
                                         </td>
                                     </tr>

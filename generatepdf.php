@@ -69,7 +69,7 @@ if (!empty($_GET['filterAssessmentBy'])) {
 if (isset($_GET['filterPrediction']) && $_GET['filterPrediction'] !== '') {
     $pred = (int)$_GET['filterPrediction'];
     if ($pred === 0 || $pred === 1) {
-        $conditions[] = "la.prediction = :prediction";
+        $conditions[] = "COALESCE(h.manual_risk_adjustment, la.prediction) = :prediction";
         $params[':prediction'] = $pred;
         $filterSummary[] = "Risk Prediction: " . ($pred ? "High Risk" : "Low Risk");
     }
@@ -178,9 +178,17 @@ if ($totalRecords > MAX_RECORDS_LIMIT) {
 }
 
 // --- FETCH DATA ---
-$sql = "SELECT ba.first_name, ba.last_name, ba.role, la.* 
+$sql = "SELECT 
+            ba.first_name, 
+            ba.last_name, 
+            ba.role, 
+            la.*, 
+            h.manual_risk_adjustment
         FROM $table la
         INNER JOIN user_accounts ba ON la.user_id = ba.user_id
+        LEFT JOIN loan_application_history h 
+            ON la.application_id = h.application_id 
+            AND la.loan_type = h.loan_type
         $whereClause
         ORDER BY la.submitted_at DESC";
 
@@ -270,11 +278,15 @@ foreach ($rows as $row) {
                    . '</span>';
         }
 
-        // PREDICTION
-        elseif ($db_col === 'prediction') {
-            $value = $row['prediction'] == '1' ? "High Risk" : "Low Risk";
-        }
+// PREDICTION
+elseif ($db_col === 'prediction') {
+    // Use manual override if exists, otherwise default prediction
+    $finalRisk = ($row['manual_risk_adjustment'] !== null) 
+                 ? $row['manual_risk_adjustment'] 
+                 : $row['prediction'];
 
+    $value = ($finalRisk == '1') ? "High Risk" : "Low Risk";
+}
         // SUBMITTED_AT
         elseif ($db_col === 'submitted_at') {
             $value = date('Y-m-d H:i', strtotime($value));
@@ -291,8 +303,8 @@ foreach ($rows as $row) {
         }
 
         $class = ($db_col === 'prediction')
-            ? ' class="prediction '.($row['prediction']=='1'?'high':'low').'"'
-            : '';
+        ? ' class="prediction '.(($row['manual_risk_adjustment'] ?? $row['prediction'])=='1'?'high':'low').'"'
+        : '';
 
         $html .= "<td{$class}>{$value}</td>";
     }

@@ -89,7 +89,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
 
                         <div class="business-form-item">
                             <label for="loan_term">Loan Term (Months):</label>
-                            <input type="number" id="loan_term" name="loan_term" value="12" required value="<?= $_SESSION['business_form']['loan_term'] ?? '' ?>">
+                            <input type="number" id="loan_term" name="loan_term" required value="<?= $_SESSION['business_form']['loan_term'] ?? '' ?>">
                         </div>
                         <br>
                         <div class="button-container">

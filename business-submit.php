@@ -183,7 +183,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <link rel="stylesheet" href="static/css/navbarstyle.css">
 <link rel="stylesheet" href="static/css/result.css?v=<?= time() ?>">
 <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <title>Business Loan Assessment Result</title>
+<style>
+    .d-flex {
+    display: flex !important;
+    justify-content: flex-end;
+}
+</style>
 </head>
 <body>
 <section class="header-navbar">
@@ -317,8 +324,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
         <?php endif; ?>
 
-        <div class="action-buttons">
-            <a href="business-form.php" class="btn-primary">Submit New Assessment</a>
+        <div class="action-buttons d-flex gap-3">
+            <a href="<?php echo 'view-details.php?id=' . urlencode($application_id) . '&type=' . urlencode($loan_type); ?>" class="btn btn-success">
+                Edit / Print Assessment
+            </a>
+            <a href="business-form.php" class="btn btn-primary">Submit New Assessment</a>
         </div>
 
         <div class="footer-result">

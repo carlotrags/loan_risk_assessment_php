@@ -1,5 +1,19 @@
 <?php
 session_start();
+
+// 1. Strict Cache Control
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Expires: 0");
+
+// 2. PHP Guard: If session exists, use JS replace to bounce them back.
+// This prevents adding 'login.php' back into the history stack.
+if (isset($_SESSION['user_id'])) {
+    echo "<script>window.location.replace('../index.php');</script>";
+    exit;
+}
+
 $error = $_SESSION['login_error'] ?? '';
 unset($_SESSION['login_error']);
 ?>
@@ -40,14 +54,13 @@ unset($_SESSION['login_error']);
             <button type="submit">Sign in</button>
         </form>
     </div>
-    <script>
-        document.getElementById("togglePassword").addEventListener("click", function() {
-            const password = document.getElementById("password");
-            const type = password.getAttribute("type") === "password" ? "text" : "password";
-            password.setAttribute("type", type);
-            this.classList.toggle("fa-eye");
-            this.classList.toggle("fa-eye-slash");
-        });
-    </script>
+<script>
+    // Detect if page is loaded from back/forward cache
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+            window.location.reload();
+        }
+    });
+</script>
 </body>
 </html>

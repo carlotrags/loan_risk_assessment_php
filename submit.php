@@ -159,8 +159,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
         <?php endif; ?>
 
-        <div class="action-buttons">
-            <a href="form.php" class="btn-primary">Submit New Assessment</a> 
+        <div class="action-buttons d-flex gap-3">
+            <a href="<?php echo 'view-details.php?id=' . urlencode($application_id) . '&type=' . urlencode($loan_type); ?>" class="btn btn-success">
+                Edit / Print Assessment
+            </a>
+            <a href="form.php" class="btn btn-primary">Submit New Assessment</a>
         </div>
 
         <div class="footer-result">
