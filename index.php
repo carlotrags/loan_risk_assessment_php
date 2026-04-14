@@ -6,9 +6,7 @@ header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Pragma: no-cache");
 
 if (!isset($_SESSION['user_id'])) {
-    // If NOT logged in, use replace to go to login 
-    // (This keeps the history clean if they try to bookmark the dashboard)
-    echo "<script>window.location.replace('static/login.php');</script>";
+    header("Location: static/login.php");
     exit;
 }
 
@@ -214,5 +212,25 @@ if (!isset($_SESSION['user_id'])) {
         </div>
     </section>
     <?php include "static/footer.php"?>
+<script>
+    // 1. Force the page to refresh if loaded from the back button
+    // This breaks the cache and forces PHP to re-evaluate the session
+    window.addEventListener("pageshow", function (event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+            window.location.reload();
+        }
+    });
+
+    // 2. The "History Killer" 
+    // This pushes a new state so that the 'Back' action is intercepted
+    (function() {
+        window.history.pushState(null, "", window.location.href);        
+        window.onpopstate = function() {
+            // When user hits back, we force them to go back TWICE 
+            // This skips the hidden login_process.php and login.php files
+            window.history.go(-2);
+        };
+    })();
+</script>
 </body>
 </html>

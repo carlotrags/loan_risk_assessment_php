@@ -7,10 +7,17 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 header("Expires: 0");
 
-// 2. PHP Guard: If session exists, use JS replace to bounce them back.
-// This prevents adding 'login.php' back into the history stack.
+// 2. Updated Logic: If logged in, tell the browser to "skip" this page in history
 if (isset($_SESSION['user_id'])) {
-    echo "<script>window.location.replace('../index.php');</script>";
+    echo "<script>
+        if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+            // If they hit back to get here, push them back one more step to exit the site
+            history.back();
+        } else {
+            // Otherwise, just send them to the dashboard and replace this page in history
+            window.location.replace('../index.php');
+        }
+    </script>";
     exit;
 }
 

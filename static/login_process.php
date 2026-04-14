@@ -30,9 +30,12 @@ if ($user) {
         $_SESSION['last_name'] = $user['last_name'];
         $_SESSION['role'] = $user['role'];
 
-// Use replace() to overwrite login_process.php in history
-        echo "<script>window.location.replace('../index.php');</script>";
+        // --- UPDATED CODE BELOW ---
+        // Switched from JavaScript window.location.replace to PHP header redirect.
+        // This is faster and prevents the "white flash" of an empty script tag.
+        header("Location: ../index.php");
         exit;
+        // --- END OF UPDATE ---
 
     } else {
         $_SESSION['login_error'] = "Incorrect password.";
