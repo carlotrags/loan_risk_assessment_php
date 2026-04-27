@@ -42,6 +42,13 @@ $role = $_SESSION['role'];
                 <p><i class="fa-solid fa-briefcase"></i></p>
                 <p>Loan Risk Assessment for Business Loans</p>
             </div></a>
+            
+            <!-- added new loan type card here for home loan -->
+            <a href="home-form.php"><div class="assessment-type">
+                <p><i class="fa-solid fa-house"></i></p>
+                <p>Loan Risk Assessment for Home Loans</p>
+            </div></a>
+            
         </div>
     </section>
     <script src="static/form.js" defer></script>
