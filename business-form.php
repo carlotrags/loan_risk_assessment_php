@@ -71,6 +71,11 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                         </div>
 
                         <div class="business-form-item">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" required value="<?= $_SESSION['business_form']['email'] ?? '' ?>">
+                        </div>
+                        
+                        <div class="business-form-item">
                             <label for="loan_amount">Loan Amount:</label>
                             <input type="number" id="loan_amount" name="loan_amount" required value="<?= $_SESSION['business_form']['loan_amount'] ?? '' ?>">
                         </div>

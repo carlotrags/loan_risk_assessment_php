@@ -47,19 +47,32 @@ try {
 
 // Define fields based on schema
 if ($is_business) {
-    $profile_fields = ['company_name', 'existence'];
-    $financial_fields = [
-        'capital_to_risk_assets_ratio', 'debt_to_equity_ratio', 'npl_ratio', 
-        'roae', 'roaa', 'cost_to_income_ratio', 'liquid_assets_to_borrowed_funds'
+    $profile_fields = ['company_name', 'email'];
+
+    $financial_condition = [
+        'capital_to_risk_assets_ratio', 'debt_to_equity_ratio', 'npl_ratio', 'npa_ratio',
+        'npa_coverage_ratio', 'roae', 'roaa', 'cost_to_income_ratio',
+        'liquid_assets_to_borrowed_funds', 'debt_service_cover'
     ];
-    $management_fields = [
-        'character_of_management', 'quality_and_experience_of_management', 
+
+    $industry_market_analysis = [
+        'character_of_management', 'quality_and_experience_of_management',
         'bank_relationship', 'labor_relations', 'long_term_management_strategy'
     ];
+
+    $management_quality = [
+        'character_of_management', 'quality_and_experience_of_management',
+        'bank_relationship', 'labor_relations', 'existence',
+        'nfis_cmap_checkings', 'management_cntrl_businesS_planning',
+        'management_structure_succession_strategy', 'long_term_management_strategy'
+    ];
+
 } else {
     $profile_fields = ['email', 'phone', 'gender', 'married', 'dependents', 'education', 'self_employed'];
-    $financial_fields = ['applicant_income', 'coapplicant_income', 'total_income', 'credit_history', 'property_area'];
-    $management_fields = [];
+
+    $financial_condition = [];
+    $industry_market_analysis = [];
+    $management_quality = [];
 }
 
 function formatLabel($key) {
@@ -114,34 +127,45 @@ function formatLabel($key) {
                     </div>
                 </div>
 
+                <?php if ($is_business): ?>
                 <div class="report-section">
-                    <p class="text-uppercase small fw-bold text-primary mb-3">Financial Indicators</p>
+                    <p class="text-uppercase small fw-bold text-primary mb-3">Financial Condition</p>
+
                     <div class="row g-3">
-                        <?php foreach ($financial_fields as $f): if (isset($data[$f])): ?>
+                        <?php foreach ($financial_condition as $f): if (isset($data[$f])): ?>
                         <div class="col-sm-6 col-md-4">
                             <div class="label-text"><?= formatLabel($f) ?></div>
                             <div class="value-text">
-                                <?php 
-                                if (is_numeric($data[$f]) && strpos($f, 'income') !== false) {
-                                    echo '₱' . number_format($data[$f], 2);
-                                } else {
-                                    echo htmlspecialchars($data[$f]);
-                                }
-                                ?>
+                                <?= htmlspecialchars($data[$f]) ?>
                             </div>
                         </div>
                         <?php endif; endforeach; ?>
                     </div>
                 </div>
+                <?php endif; ?>
 
-                <?php if (!empty($management_fields)): ?>
+                <?php if (!empty($industry_market_analysis)): ?>
                 <div class="report-section">
-                    <p class="text-uppercase small fw-bold text-primary mb-3">Management Ratings (1-5 Scale)</p>
+                    <p class="text-uppercase small fw-bold text-primary mb-3">Industry/Market Analysis</p>
                     <div class="row g-3">
-                        <?php foreach ($management_fields as $f): if (isset($data[$f])): ?>
+                        <?php foreach ($industry_market_analysis as $f): if (isset($data[$f])): ?>
                         <div class="col-sm-6 col-md-4">
                             <div class="label-text"><?= formatLabel($f) ?></div>
-                            <div class="value-text"><?= htmlspecialchars($data[$f]) ?> / 5</div>
+                            <div class="value-text"><?= htmlspecialchars($data[$f]) ?></div>
+                        </div>
+                        <?php endif; endforeach; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <?php if (!empty($management_quality)): ?>
+                <div class="report-section">
+                    <p class="text-uppercase small fw-bold text-primary mb-3">Management Quality</p>
+                    <div class="row g-3">
+                        <?php foreach ($management_quality as $f): if (isset($data[$f])): ?>
+                        <div class="col-sm-6 col-md-4">
+                            <div class="label-text"><?= formatLabel($f) ?></div>
+                            <div class="value-text"><?= htmlspecialchars($data[$f]) ?></div>
                         </div>
                         <?php endif; endforeach; ?>
                     </div>

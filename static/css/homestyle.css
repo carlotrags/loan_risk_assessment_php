@@ -112,8 +112,8 @@ td.prediction.high{
 }
 
 /* semantic color variants */
-.summary-item.eligible .item-icon{ background: linear-gradient(90deg,#d1fae5,#bbf7d0); color:#065f46 }
-.summary-item.ineligible .item-icon{ background: linear-gradient(90deg,#fee2e2,#fecaca); color:#991b1b }
+.summary-item.low_risk .item-icon{ background: linear-gradient(90deg,#d1fae5,#bbf7d0); color:#065f46 }
+.summary-item.high_risk .item-icon{ background: linear-gradient(90deg,#fee2e2,#fecaca); color:#991b1b }
 .summary-item.total .item-icon{ background: linear-gradient(90deg,#e0f2fe,#bae6fd); color:#075985 }
 .summary-item.today .item-icon{ background: linear-gradient(90deg,#fff7ed,#ffedd5); color:#854d0e }
 .summary-item.month .item-icon{ background: linear-gradient(90deg,#eef2ff,#e0e7ff); color:#3730a3 }

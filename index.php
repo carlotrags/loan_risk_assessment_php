@@ -1,5 +1,5 @@
 <?php
-    session_start();
+session_start();
 
 // Standard headers to ensure the browser checks the session status every time
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -20,8 +20,8 @@ if (!isset($_SESSION['user_id'])) {
     // Summary counts for dashboard
     $totals = [
         'total' => 0,
-        'eligible' => 0,
-        'ineligible' => 0,
+        'low_risk' => 0,
+        'high_risk' => 0,
         'today' => 0,
         'month' => 0,
     ];
@@ -33,18 +33,18 @@ if (!isset($_SESSION['user_id'])) {
         $totals['total'] = (int)$r['total'];
     }
 
-    // Eligible:prediction = 1 (approved)
-    $res = $conn->query("SELECT COUNT(*) AS eligible FROM loan_application_history WHERE prediction = 1");
+    // Low Risk:prediction = 1 (approved)
+    $res = $conn->query("SELECT COUNT(*) AS low_risk FROM loan_application_history WHERE prediction = 1");
     if ($res) {
         $r = $res->fetch_assoc();
-        $totals['eligible'] = (int)$r['eligible'];
+        $totals['low_risk'] = (int)$r['low_risk'];
     }
 
-    // Ineligible:prediction = 0 (denied)
-    $res = $conn->query("SELECT COUNT(*) AS ineligible FROM loan_application_history WHERE prediction = '0'");
+    // High Risk:prediction = 0 (denied)
+    $res = $conn->query("SELECT COUNT(*) AS high_risk FROM loan_application_history WHERE prediction = '0'");
     if ($res) {
         $r = $res->fetch_assoc();
-        $totals['ineligible'] = (int)$r['ineligible'];
+        $totals['high_risk'] = (int)$r['high_risk'];
     }
 
     // Today's assessments
@@ -119,22 +119,22 @@ if (!isset($_SESSION['user_id'])) {
                     </div>
                 </div>
 
-                <div class="summary-item card eligible">
+                <div class="summary-item card low_risk">
                     <div class="item-inner">
                         <div class="item-icon"><i class="bi bi-check-circle-fill" aria-hidden="true"></i></div>
                         <div class="item-body">
-                            <div class="item-title">Eligible</div>
-                            <div class="item-count"><?= htmlspecialchars($totals['eligible']) ?></div>
+                            <div class="item-title">Low Risk</div>
+                            <div class="item-count"><?= htmlspecialchars($totals['low_risk']) ?></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="summary-item card ineligible">
+                <div class="summary-item card high_risk">
                     <div class="item-inner">
                         <div class="item-icon"><i class="bi bi-x-circle-fill" aria-hidden="true"></i></div>
                         <div class="item-body">
-                            <div class="item-title">Ineligible</div>
-                            <div class="item-count"><?= htmlspecialchars($totals['ineligible']) ?></div>
+                            <div class="item-title">High Risk</div>
+                            <div class="item-count"><?= htmlspecialchars($totals['high_risk']) ?></div>
                         </div>
                     </div>
                 </div>
@@ -195,10 +195,10 @@ if (!isset($_SESSION['user_id'])) {
         <div class="tutorial-body">
             <h3>How does the assessment work?</h3>
             <ol>
-                <li>Go to the <strong>assessment tab</strong></li>
+                <li>Go to the <strong>assessment tab</strong> and select which loan type to assess.</li>
                 <li>Fill up the form according to the <strong>client's required details</strong>.</li>
                 <li>Submit assessment and let the system compute the results.</li>
-                <li>The results will appear after the system calculates, showing if the client is <strong>eligible</strong> or <strong>ineligible</strong> for a loan.</li>
+                <li>The results will appear after the system calculates, showing if the client is <strong style="color: #1dff37;">Low Risk</strong> or <strong style="color: red;">High Risk</strong> for a loan.</li>
             </ol>
             <p>Click the button below to start Risk Assessment.</p>
             <a href="assessment.php"><button class="btn btn-primary">Start Assessment</button></a>
@@ -207,27 +207,25 @@ if (!isset($_SESSION['user_id'])) {
         
         <br>
         <div class="system-details-body">
-            <p>This website is created using HTML, CSS, PHP, and JavaScript. The system utilizes Logistic Regression for its assessment.</p>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laborum exercitationem excepturi, dolorum veniam et corporis iure reiciendis expedita earum modi repellat sapiente, numquam ab quas alias dignissimos animi explicabo maxime, consequatur adipisci distinctio at! Porro nisi velit provident laboriosam, harum earum sapiente. Commodi porro blanditiis dolorum eaque velit a optio.</p>
+            <p>This system is developed using HTML, CSS, PHP, and JavaScript and applies Logistic Regression as its primary predictive model for loan risk assessment.</p>
+            
+            <p>The model analyzes borrower data including financial capacity, credit history, employment profile, and loan characteristics to classify applicants into low-risk or high-risk categories.
+            The system is designed to assist decision-making by providing data-driven insights that support faster and more consistent loan evaluation.</p>
         </div>
     </section>
     <?php include "static/footer.php"?>
 <script>
-    // 1. Force the page to refresh if loaded from the back button
-    // This breaks the cache and forces PHP to re-evaluate the session
+    // Force the page to refresh if loaded from the back button, breaks the cache and forces PHP to re-evaluate the session
     window.addEventListener("pageshow", function (event) {
         if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
             window.location.reload();
         }
     });
 
-    // 2. The "History Killer" 
     // This pushes a new state so that the 'Back' action is intercepted
     (function() {
         window.history.pushState(null, "", window.location.href);        
         window.onpopstate = function() {
-            // When user hits back, we force them to go back TWICE 
-            // This skips the hidden login_process.php and login.php files
             window.history.go(-2);
         };
     })();

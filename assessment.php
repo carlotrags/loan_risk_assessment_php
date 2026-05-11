@@ -34,19 +34,18 @@ $role = $_SESSION['role'];
         <div class="assessment-type-container">
             <h1>Choose a Loan Type to Assess Risk:</h1>
             <a href="form.php"><div class="assessment-type">
-                <p><i class="fa-solid fa-user"></i></p>
-                <p>Loan Risk Assessment for Personal Loans</p>
+                <h3><i class="fa-solid fa-user"></i> Personal Loan</h3>
+                <p>Loan for personal needs like emergencies, education, or purchases. No collateral required.</p>
             </div></a>
 
             <a href="business-form.php"><div class="assessment-type">
-                <p><i class="fa-solid fa-briefcase"></i></p>
-                <p>Loan Risk Assessment for Business Loans</p>
+                <h3><i class="fa-solid fa-briefcase"></i> Business Loan</h3>
+                <p>Financing for business expenses such as operations, expansion, or equipment.</p>
             </div></a>
             
-            <!-- added new loan type card here for home loan -->
             <a href="home-form.php"><div class="assessment-type">
-                <p><i class="fa-solid fa-house"></i></p>
-                <p>Loan Risk Assessment for Home Loans</p>
+                <h3><i class="fa-solid fa-house"></i> Home Loan</h3>
+                <p>Loan for buying, building, or improving a property, usually secured by the property itself.</p>
             </div></a>
             
         </div>

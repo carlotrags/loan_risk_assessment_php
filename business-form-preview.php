@@ -10,17 +10,19 @@ $form = $_SESSION['business_form'] ?? [];
     <!-- A. Client Details -->
     <table class="preview-table">
         <tr class="section-header">
-            <td colspan="3">A. Client Details</td>
+            <td colspan="4">A. Client Details</td>
         </tr>
         <tr class="variable-row">
             <td>Company Name</td>
             <td>Loan Amount</td>
             <td>Loan Term</td>
+            <td>Email</td>
         </tr>
         <tr class="answer-row">
             <td><?= $form['company_name'] ?? '-' ?></td>
             <td><?= $form['loan_amount'] ?? '-' ?></td>
             <td><?= $form['loan_term'] ?? '-' ?></td>
+            <td><?= $form['email'] ?? '-' ?></td>
         </tr>
     </table>
 

@@ -10,7 +10,7 @@ $role = $_SESSION['role'] ?? '';
         <li class="assessment-dropdown">
             <a href="assessment.php"><i class="fa-solid fa-clipboard-check"></i>Assessment <i class="fa-solid fa-caret-down"></i></a>
             <div class="assessment-dropdown-menu">
-                <a href="form.php"><i class="fa-solid fa-user"></i>Personal Loan</a>
+                <a href="personal-form.php"><i class="fa-solid fa-user"></i>Personal Loan</a>
                 <a href="business-form.php"><i class="fa-solid fa-briefcase"></i>Business Loan</a>
                 <a href="home-form.php"><i class="fa-solid fa-briefcase"></i>Home Loan</a>
             </div>
@@ -22,7 +22,7 @@ $role = $_SESSION['role'] ?? '';
             <div class="history-dropdown-menu">
                 <a href="personal-history.php"><i class="fa-solid fa-user"></i>Personal Loan</a>
                 <a href="business-history.php"><i class="fa-solid fa-briefcase"></i>Business Loan</a>
-                <a href="home-history.php"><i class="fa-solid fa-briefcase"></i>??? Loan</a>
+                <a href="home-history.php"><i class="fa-solid fa-briefcase"></i>Home Loan</a>
             </div>
         </li>
 

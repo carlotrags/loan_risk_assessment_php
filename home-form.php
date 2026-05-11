@@ -110,15 +110,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .form-control, .form-select { border-radius: 8px; padding: 10px; border: 1px solid #ced4da; }
         .form-control:focus { border-color: #003366; box-shadow: none; }
         .bg-readonly { background-color: #e9ecef !important; opacity: 1; }
-.submit-btn {
-    background-color: #003366;
-    border: none;
-    padding: 10px 20px;   /* smaller */
-    font-weight: 600;     /* less bulky */
-    border-radius: 8px;   /* less pill-shaped */
-    transition: 0.3s;
-    font-size: 14px;      /* cleaner size */
-}
+        .submit-btn {
+            background-color: #003366;
+            border: none;
+            padding: 10px 20px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: 0.3s;
+            font-size: 14px;
+        }
         .submit-btn:hover { background-color: #002244; transform: translateY(-2px); }
     </style>
 </head>

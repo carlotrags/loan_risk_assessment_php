@@ -48,6 +48,7 @@ $where = $conditions ? ' WHERE ' . implode(' AND ', $conditions) : '';
 $sql = "SELECT 
         la.business_application_id, 
         la.company_name,
+        la.email,
         la.loan_amount, 
         la.prediction, 
         la.loan_term,
@@ -164,7 +165,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <thead>
                                 <tr class="main-details">
                                     <th><input type="checkbox" id="selectAll"></th>
-                                    <th>Company Name</th>
+                                    <th>Company Name/Email</th>
                                     <th>Loan Amount</th>
                                     <th>Loan Term</th>
                                     <th>Prediction</th>
@@ -178,7 +179,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php foreach ($rows as $row): ?>
                                     <tr>
                                         <td><input type="checkbox" class="rowCheckbox" name="selected_ids[]" value="<?= $row['business_application_id'] ?>"></td>
-                                        <td><?= htmlspecialchars($row['company_name']) ?></td>
+                                        <td><?= htmlspecialchars($row['company_name']) ?><br><p style="font-size: 12px; color: #838995;"><?= htmlspecialchars($row['email']) ?></p></td>
                                         <td><?= number_format($row['loan_amount'], 2) ?></td>
                                         <td><?= htmlspecialchars($row['loan_term']) ?> mos</td>
                                         
