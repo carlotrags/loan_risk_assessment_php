@@ -6,25 +6,31 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// config.php handles Asia/Manila timezone for both PHP and PDO
 include 'static/config.php';
 
 $app_id = $_GET['id'] ?? null;
-$type = $_GET['type'] ?? '';
+$type = strtolower($_GET['type'] ?? ''); // Force lowercase for consistency
 
 if (!$app_id) {
     die("Application ID missing.");
 }
 
-$is_business = (strtolower($type) === 'business');
-$table = $is_business ? "business_loan_applications" : "personal_loan_applications";
-
+// Hanapin ang block na ito at palitan ng:
+if ($type === 'business') {
+    $table = "business_loan_applications";
+    $id_column = "business_application_id";
+    $is_business = true; // Idagdag ito
+} elseif ($type === 'home') {
+    $table = "home_loan_applications";
+    $id_column = "home_application_id";
+    $is_business = false; // Idagdag ito
+} else {
+    $table = "personal_loan_applications";
+    $id_column = "application_id";
+    $is_business = false; // Idagdag ito
+}
 try {
-    // Dynamic Primary Key detection
-    $pkQuery = $pdo->query("SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'");
-    $pkData = $pkQuery->fetch(PDO::FETCH_ASSOC);
-    $id_column = $pkData['Column_name'] ?? 'id'; 
-
+    // Fetch data using the specific table and ID column identified above
     $stmt = $pdo->prepare("SELECT * FROM $table WHERE $id_column = :id");
     $stmt->execute([':id' => $app_id]);
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -45,34 +51,23 @@ try {
     die("Database Error: " . $e->getMessage());
 }
 
-// Define fields based on schema
-if ($is_business) {
+// --- FIELD GROUPINGS: Define which of the 23 variables to show ---
+if ($type === 'business') {
     $profile_fields = ['company_name', 'email'];
-
-    $financial_condition = [
-        'capital_to_risk_assets_ratio', 'debt_to_equity_ratio', 'npl_ratio', 'npa_ratio',
-        'npa_coverage_ratio', 'roae', 'roaa', 'cost_to_income_ratio',
-        'liquid_assets_to_borrowed_funds', 'debt_service_cover'
-    ];
-
-    $industry_market_analysis = [
-        'character_of_management', 'quality_and_experience_of_management',
-        'bank_relationship', 'labor_relations', 'long_term_management_strategy'
-    ];
-
-    $management_quality = [
-        'character_of_management', 'quality_and_experience_of_management',
-        'bank_relationship', 'labor_relations', 'existence',
-        'nfis_cmap_checkings', 'management_cntrl_businesS_planning',
-        'management_structure_succession_strategy', 'long_term_management_strategy'
-    ];
-
+    $financial_condition = ['capital_to_risk_assets_ratio', 'debt_to_equity_ratio', 'npl_ratio', 'npa_ratio', 'npa_coverage_ratio', 'roae', 'roaa', 'cost_to_income_ratio', 'liquid_assets_to_borrowed_funds', 'debt_service_cover'];
+    $management_quality = ['character_of_management', 'quality_and_experience_of_management', 'bank_relationship', 'labor_relations', 'existence', 'nfis_cmap_checkings', 'management_cntrl_business_planning', 'management_structure_succession_strategy', 'long_term_management_strategy'];
+    $collateral_info = [];
+} elseif ($type === 'home') {
+    // These are your Home Loan variables
+    $profile_fields = ['tin_no', 'birthdate', 'address']; 
+    $financial_condition = ['age', 'sex', 'civil_status', 'dependents', 'years_of_stay', 'home_ownership', 'employment_type', 'monthly_income', 'years_employed'];
+    $management_quality = [];
+    $collateral_info = ['collateral_type', 'property_value', 'existing_loans', 'monthly_debt', 'dti_ratio', 'default_history'];
 } else {
     $profile_fields = ['email', 'phone', 'gender', 'married', 'dependents', 'education', 'self_employed'];
-
     $financial_condition = [];
-    $industry_market_analysis = [];
     $management_quality = [];
+    $collateral_info = [];
 }
 
 function formatLabel($key) {
@@ -137,6 +132,26 @@ function formatLabel($key) {
                             <div class="label-text"><?= formatLabel($f) ?></div>
                             <div class="value-text">
                                 <?= htmlspecialchars($data[$f]) ?>
+                            </div>
+                        </div>
+                        <?php endif; endforeach; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <?php if (!empty($collateral_info)): ?>
+                <div class="report-section">
+                    <p class="text-uppercase small fw-bold text-primary mb-3">Collateral & Risk Details</p>
+                    <div class="row g-3">
+                        <?php foreach ($collateral_info as $f): if (isset($data[$f])): ?>
+                        <div class="col-sm-6 col-md-4">
+                            <div class="label-text"><?= ucwords(str_replace('_', ' ', $f)) ?></div>
+                            <div class="value-text">
+                                <?php 
+                                    if ($f === 'property_value' || $f === 'monthly_debt') echo '₱' . number_format($data[$f], 2);
+                                    elseif (in_array($data[$f], [0, 1]) && ($f === 'existing_loans' || $f === 'default_history')) echo ($data[$f] == 1 ? 'Yes' : 'No');
+                                    else echo htmlspecialchars($data[$f]); 
+                                ?>
                             </div>
                         </div>
                         <?php endif; endforeach; ?>
@@ -236,7 +251,7 @@ function formatLabel($key) {
                     <button onclick="window.print()" class="btn btn-outline-primary">
                         <i class="fa-solid fa-print me-2"></i>Print Report
                     </button>
-                    <a href="history.php" class="btn btn-dark">
+                    <a href="<?= strtolower($type) ?>-history.php" class="btn btn-dark">
                         <i class="fa-solid fa-arrow-left me-2"></i>Back to History
                     </a>
                 </div>

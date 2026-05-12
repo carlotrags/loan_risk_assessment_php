@@ -2,7 +2,6 @@
 session_start();
 
 // --- AUTHENTICATION CHECK ---
-// Ensure only logged-in users can access this page; otherwise, redirect to login
 if (!isset($_SESSION['user_id'])) {
     header("Location: static/login.php");
     exit;
@@ -10,87 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Include database connection configuration
 include 'static/config.php';
-
-// Process the form data when the user clicks the submit button
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    // --- DESCRIPTIVE VARIABLES ---
-    // General information about the applicant and the property
-    $applicant_name = $_POST['applicant_name'];
-    $tin_no = $_POST['tin_no'];
-    $home_address = $_POST['home_address'];
-    $collateral_type = $_POST['collateral_type'];
-    $property_value = $_POST['property_value'];
-    
-    // --- MODEL VARIABLES ---
-    // Numerical data used specifically for the risk assessment model
-    $age = (int)$_POST['age'];
-    $sex = (int)$_POST['sex'];
-    $civil_status = (int)$_POST['civil_status'];
-    $dependents = (int)$_POST['dependents'];
-    $years_of_stay = (int)$_POST['years_of_stay'];
-    $home_ownership = (int)$_POST['home_ownership'];
-    $employment_type = (int)$_POST['employment_type'];
-    $monthly_income = (float)$_POST['monthly_income'];
-    $years_employed = (int)$_POST['years_employed'];
-    $loan_amount = (float)$_POST['loan_amount'];
-    $loan_term = (int)$_POST['loan_term'];
-    $existing_loans = (int)$_POST['existing_loans'];
-    $monthly_debt = (float)$_POST['monthly_debt'];
-    $dti_ratio = (float)$_POST['dti_ratio'];
-    $default_history = (int)$_POST['default_history'];
-
-    // API Call
-    // Prepare the payload for the Flask-based prediction API
-    $modelData = [
-        "age" => $age, "sex" => $sex, "civil_status" => $civil_status,
-        "dependents" => $dependents, "years_of_stay" => $years_of_stay,
-        "home_ownership" => $home_ownership, "employment_type" => $employment_type,
-        "monthly_income" => $monthly_income, "years_employed" => $years_employed,
-        "loan_amount" => $loan_amount, "loan_term" => $loan_term,
-        "existing_loans" => $existing_loans, "monthly_debt" => $monthly_debt,
-        "dti_ratio" => $dti_ratio, "default_history" => $default_history
-    ];
-
-    // Initialize cURL to send a POST request to the local ML model
-    $ch = curl_init("http://127.0.0.1:5000/predict");
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($modelData));
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    $response = curl_exec($ch);
-    curl_close($ch);
-
-    // Decode the response and extract the prediction result
-    $apiResult = json_decode($response, true);
-    $prediction = $apiResult['prediction'] ?? 'Error';
-
-    // Save to Database
-    // Use prepared statements to securely insert the application data into the database
-    $stmt = $conn->prepare("INSERT INTO loan_applications 
-    (name, loan_type, tin_no, address, collateral_type, property_value, 
-    age, sex, civil_status, dependents, years_of_stay, home_ownership,
-    employment_type, monthly_income, years_employed, loan_amount,
-    loan_term, existing_loans, monthly_debt, dti_ratio, default_history, prediction, assessed_by)
-    VALUES (?, 'Home', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
-    // Bind parameters: 's' for strings, 'i' for integers, 'd' for doubles (floats)
-    $stmt->bind_param("ssssdiiiiiiiiiiiiddisi",
-        $applicant_name, $tin_no, $home_address, $collateral_type, $property_value,
-        $age, $sex, $civil_status, $dependents, $years_of_stay, $home_ownership,
-        $employment_type, $monthly_income, $years_employed, $loan_amount,
-        $loan_term, $existing_loans, $monthly_debt, $dti_ratio, $default_history, $prediction, $_SESSION['user_id']
-    );
-
-    // Execute the statement and redirect to the history page upon success
-    if ($stmt->execute()) {
-        $stmt->close();
-        header("Location: home-history.php?success=1");
-        exit;
-    }
-}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -133,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2 class="fw-bold" style="color: #003366; letter-spacing: 1px;">Individual Home Loan Risk Assessment System</h2>
     </div>
 
-    <form method="POST">
+    <form action="home-preview.php" method="POST">
         <div class="custom-card p-4">
             <h5 class="section-title">I. Applicant Identification</h5>
             <div class="row g-3">
@@ -141,13 +60,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label>Full Name</label>
                     <input type="text" name="applicant_name" class="form-control" placeholder="Dela Cruz, Juan S." required>
                 </div>
+                <div class="col-md-6">
+                    <label>Email Address</label>
+                    <input type="email" name="email" class="form-control" placeholder="example@email.com" required>
+                </div>
                 <div class="col-md-3">
                     <label>TIN Number</label>
-                    <input type="text" name="tin_no" class="form-control" placeholder="000-000-000">
+                    <input type="text" name="tin_no" class="form-control" id="tin_no" name="tin_no" maxlength="11">
                 </div>
                 <div class="col-md-3">
                     <label>Birthdate</label>
-                    <input type="date" id="birthdate" class="form-control" required>
+                    <input type="date" name="birthdate" id="birthdate" class="form-control" required>
                 </div>
                 <div class="col-12">
                     <label>Current Home Address</label>
@@ -212,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="col-md-4">
                     <label>Date Hired</label>
-                    <input type="date" id="hired" class="form-control">
+                    <input type="date" name="date_hired" id="hired" class="form-control">
                 </div>
                 <div class="col-md-3 mt-3">
                     <label>Years Employed</label>
@@ -277,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <div>
     <button type="submit" class="btn btn-primary submit-btn shadow">
-        <i class="fa-solid me-2"></i> Submit Application
+     Submit Application
     </button>
 </div>
     </form>
