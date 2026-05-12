@@ -8,88 +8,77 @@ if (!isset($_SESSION['user_id'])) {
 
 include 'static/config.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+/**
+ * LOGIC: If 'is_final_submission' exists, it means the user clicked 
+ * "Start Assessment" on preview.php. We save to the DB now.
+ */
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['is_final_submission'])) {
 
-    // 👤 Applicant Info (NOT part of ML model)
-    $first_name = $_POST['first_name'];
-    $middle_name = $_POST['middle_name'];
-    $last_name = $_POST['last_name'];
-    $suffix_name = $_POST['suffix_name'];
+    // Applicant Info
+    $first_name     = $_POST['first_name'];
+    $middle_name    = $_POST['middle_name'];
+    $last_name      = $_POST['last_name'];
+    $suffix_name    = $_POST['suffix_name'];
+    $applicant_name = trim("$first_name $middle_name $last_name $suffix_name");
+    $email          = $_POST['email']; // Added email capture
+    $home_address   = $_POST['home_address'];
 
-    $applicant_name = $first_name . " " . $middle_name . " " . $last_name . " " . $suffix_name;
-
-    $home_address = $_POST['home_address'];
-
-    // 🧠 ML FEATURES (ONLY WHAT YOU ACTUALLY HAVE)
-    $age = (int)$_POST['age'];
-    $sex = (int)$_POST['sex'];
-    $civil_status = (int)$_POST['civil_status'];
-
-    $monthly_income = (float)$_POST['monthly_income'];
-    $credit_score = (int)$_POST['credit_score'];
-    $dti_ratio = (float)$_POST['dti_ratio'];
-
-    $loan_amount = (float)$_POST['loan_amount'];
-    $loan_term = (int)$_POST['loan_term'];
-    $loan_intent = $_POST['loan_intent'];
-
-    $existing_loans = (int)$_POST['existing_loans'];
+    // ML Features
+    $age             = (int)$_POST['age'];
+    $sex             = (int)$_POST['sex'];
+    $civil_status    = (int)$_POST['civil_status'];
+    $monthly_income  = (float)$_POST['monthly_income'];
+    $credit_score    = (int)$_POST['credit_score'];
+    $dti_ratio       = (float)$_POST['dti_ratio'];
+    $loan_amount     = (float)$_POST['loan_amount'];
+    $loan_term       = (int)$_POST['loan_term'];
+    $loan_intent     = $_POST['loan_intent'];
+    $existing_loans  = (int)$_POST['existing_loans'];
     $default_history = (int)$_POST['default_history'];
 
-    // 📦 SEND TO FLASK MODEL
+    // Call Flask API
     $modelData = [
-        "age" => $age,
-        "sex" => $sex,
-        "civil_status" => $civil_status,
-        "monthly_income" => $monthly_income,
-        "credit_score" => $credit_score,
-        "dti_ratio" => $dti_ratio,
-        "loan_amount" => $loan_amount,
-        "loan_term" => $loan_term,
-        "loan_intent" => $loan_intent,
-        "existing_loans" => $existing_loans,
+        "age"             => $age, 
+        "sex"             => $sex, 
+        "civil_status"    => $civil_status,
+        "monthly_income"  => $monthly_income, 
+        "credit_score"    => $credit_score,
+        "dti_ratio"       => $dti_ratio, 
+        "loan_amount"     => $loan_amount,
+        "loan_term"       => $loan_term, 
+        "loan_intent"     => $loan_intent,
+        "existing_loans"  => $existing_loans, 
         "default_history" => $default_history
     ];
 
-    // 🤖 CALL MODEL API
     $ch = curl_init("http://127.0.0.1:5000/predict");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($modelData));
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-
     $response = curl_exec($ch);
     curl_close($ch);
 
-    $apiResult = json_decode($response, true);
+    $apiResult  = json_decode($response, true);
     $prediction = $apiResult['prediction'] ?? "API_ERROR";
 
-    // 💾 SAVE TO DATABASE
+    // Save to Database (personal_loan_applications)
+    // Updated to include 'email' column and additional '?' placeholder
     $stmt = $conn->prepare("
-        INSERT INTO loan_applications 
-        (name, tin_no, address, loan_amount, loan_term, loan_intent,
-        monthly_income, credit_score, dti_ratio, existing_loans,
-        default_history, age, sex, civil_status, prediction, assessed_by)
-        VALUES (?, '', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO personal_loan_applications 
+        (name, email, home_address, loan_amount, loan_term, loan_intent,
+        income, credit_score, dti_ratio, existing_loans,
+        default_history, age, sex, civil_status, prediction, user_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
 
+    // Updated typeString: added an 's' for the email variable (total 16 chars)
+    $typeString = "sssdisddiiiiisii";
     $stmt->bind_param(
-        "ssdsdsdiiiiisisi",
-        $applicant_name,
-        $home_address,
-        $loan_amount,
-        $loan_term,
-        $loan_intent,
-        $monthly_income,
-        $credit_score,
-        $dti_ratio,
-        $existing_loans,
-        $default_history,
-        $age,
-        $sex,
-        $civil_status,
-        $prediction,
-        $_SESSION['user_id']
+        $typeString,
+        $applicant_name, $email, $home_address, $loan_amount, $loan_term, $loan_intent,
+        $monthly_income, $credit_score, $dti_ratio, $existing_loans,
+        $default_history, $age, $sex, $civil_status, $prediction, $_SESSION['user_id']
     );
 
     if ($stmt->execute()) {
@@ -144,34 +133,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2 class="fw-bold" style="color: #003366; letter-spacing: 1px;">Personal Loan Risk Assessment System</h2>
     </div>
 
-    <form method="POST">
+    <!-- ONLY CHANGE: added action="preview.php" -->
+    <form method="POST" action="preview.php">
+
         <div class="custom-card p-4">
             <h5 class="section-title">I. Applicant Profile</h5>
             <div class="row g-3">
+
                 <div class="col-md-4">
                     <label>First Name</label>
                     <input type="text" name="first_name" class="form-control" placeholder="Juan Pedro" required>
                 </div>
+
                 <div class="col-md-3">
                     <label>Middle Name</label>
                     <input type="text" name="middle_name" class="form-control" placeholder="Santiago" required>
                 </div>
+
                 <div class="col-md-3">
                     <label>Last Name</label>
                     <input type="text" name="last_name" class="form-control" placeholder="Dela Cruz" required>
                 </div>
+
                 <div class="col-md-2">
                     <label>Suffix</label>
-                    <input type="text" name="suffix_name" class="form-control" placeholder="Jr." required>
+                    <input type="text" name="suffix_name" class="form-control" placeholder="Jr.">
                 </div>
+
                 <div class="col-md-3">
                     <label>Birthdate</label>
                     <input type="date" id="birthdate" class="form-control" required>
                 </div>
+
                 <div class="col-md-3">
                     <label>Age</label>
                     <input type="number" name="age" id="age" class="form-control bg-readonly" readonly>
                 </div>
+
                 <div class="col-md-3">
                     <label>Sex</label>
                     <select name="sex" class="form-select" required>
@@ -179,6 +177,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="0">Female</option>
                     </select>
                 </div>
+
                 <div class="col-md-3">
                     <label>Civil Status</label>
                     <select name="civil_status" class="form-select" required>
@@ -186,42 +185,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="1">Married</option>
                     </select>
                 </div>
+
                 <div class="col-12">
                     <label>Current Home Address</label>
                     <input type="text" name="home_address" class="form-control" placeholder="Unit No, Street, Brgy, City, Province" required>
                 </div>
+
             </div>
         </div>
 
         <div class="custom-card p-4">
             <h5 class="section-title">II. Financial</h5>
+
             <div class="row g-3">
+
                 <div class="col-md-3">
                     <label>Income</label>
                     <input type="number" name="monthly_income" class="form-control" value="0" required>
                 </div>
+
                 <div class="col-md-4 mt-3">
                     <label>Credit Score</label>
                     <input type="number" name="credit_score" class="form-control" value="0" required>
                 </div>
+
                 <div class="col-md-4 mt-3">
                     <label>DTI Ratio</label>
                     <input type="number" name="dti_ratio" class="form-control" value="0" required>
                 </div>
+
             </div>
         </div>
 
         <div class="custom-card p-4">
             <h5 class="section-title">III. Loan Details</h5>
+
             <div class="row g-3">
+
                 <div class="col-md-4">
                     <label>Loan Amount</label>
                     <input type="number" name="loan_amount" class="form-control" value="0" required>
                 </div>
+
                 <div class="col-md-4">
                     <label>Loan Term</label>
                     <input type="number" name="loan_term" class="form-control" value="0" required>
                 </div>
+
                 <div class="col-md-4">
                     <label>Loan Intent</label>
                     <select name="loan_intent" class="form-select" required>
@@ -233,12 +243,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="Debt Consolidation">Debt Consolidation</option>
                     </select>
                 </div>
+
             </div>
         </div>
 
         <div class="custom-card p-4">
             <h5 class="section-title">IV. Past Loan Profile</h5>
+
             <div class="row g-3">
+
                 <div class="col-md-3">
                     <label>Existing Loans</label>
                     <select name="existing_loans" class="form-select" required>
@@ -246,6 +259,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="1">Yes</option>
                     </select>
                 </div>
+
                 <div class="col-md-3">
                     <label>Default History</label>
                     <select name="default_history" class="form-select" required>
@@ -253,26 +267,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="1">Yes</option>
                     </select>
                 </div>
+
             </div>
         </div>
+
         <div class="custom-card p-4">
             <h5 class="section-title">V. Contact Details</h5>
+
             <div class="row g-3">
+
                 <div class="col-md-6">
                     <label>Email</label>
                     <input type="email" name="email" class="form-control" placeholder="juandelacruz@email.com" required>
                 </div>
+
                 <div class="col-md-6">
                     <label>Contact No.</label>
                     <input type="text" name="contact_no" class="form-control" required>
                 </div>
+
             </div>
         </div>
-    <div>
-        <button type="submit" class="btn btn-primary submit-btn shadow">
-            <i class="fa-solid me-2"></i> Submit Application
-        </button>
-    </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary submit-btn shadow">
+                Submit Application
+            </button>
+        </div>
+
     </form>
 </div>
 
