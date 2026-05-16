@@ -159,7 +159,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </button>
                 </div>
 
-                <form method="POST" action="actions/bulk_delete_business.php" id="bulkForm">
+                <form method="POST" action="actions/bulk_delete.php" id="bulkForm">
                     <?php if (count($rows) > 0): ?>
                         <table>
                             <thead>
