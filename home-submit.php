@@ -6,14 +6,17 @@ if (!isset($_SESSION['user_id'])) {
     die("You must be logged in to submit an assessment.");
 }
 
+include 'static/config.php';
+
 $user_id = $_SESSION['user_id'];
-$loan_type = 'home'; // Custom type for home loan
+$loan_type = 'Home'; // Custom type for home loan
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // 1. Collect and Cast Variables for the Logistic Regression Model
     $applicant_name = $_POST['applicant_name'] ?? '';
-    
+    $email = $_POST['email'] ?? ''; // Added email capture to sync with logs
+
     $data = [
         "age" => (int)$_POST['age'],
         "sex" => (int)$_POST['sex'],
@@ -54,40 +57,47 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $message = $prediction == 1 ? "Loan Approved" : "Loan Denied";
         $statusClass = $prediction == 1 ? "approved" : "denied";
 
-        // 3. Save to MySQL - Dual Table Strategy
-        $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3307);
-        if ($conn->connect_error) die("MySQL Connection failed: " . $conn->connect_error);
-
         // A. Insert into home_loan_applications (Detailed Table)
         $stmt = $conn->prepare("INSERT INTO home_loan_applications 
             (name, tin_no, address, collateral_type, property_value, age, sex, civil_status, dependents, years_of_stay, home_ownership, employment_type, monthly_income, years_employed, loan_amount, loan_term, existing_loans, monthly_debt, dti_ratio, default_history, prediction, assessed_by) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         
+        // Added email parameter to parameter mapping chain
         $stmt->bind_param(
-            "ssssdiiiiiiiiididdisii",
-            $applicant_name, $_POST['tin_no'], $_POST['home_address'], $_POST['collateral_type'], $_POST['property_value'],
+            "sssssdiiiiiiiiididdisii",
+            $applicant_name, $email, $_POST['tin_no'], $_POST['home_address'], $_POST['collateral_type'], $_POST['property_value'],
             $data['age'], $data['sex'], $data['civil_status'], $data['dependents'], $data['years_of_stay'], $data['home_ownership'],
             $data['employment_type'], $data['monthly_income'], $data['years_employed'], $data['loan_amount'], $data['loan_term'],
             $data['existing_loans'], $data['monthly_debt'], $data['dti_ratio'], $data['default_history'], $prediction, $user_id
         );
+
+        if (!$stmt->execute()) {
+            die("Database insertion failure on primary home table: " . $stmt->error);
+        }
+
         $stmt->execute();
         $application_id = $conn->insert_id;
         $stmt->close();
 
-        // B. Insert into general history (Summary Table)
+        // 3. Save to general history summary logging table including the email profile field
         $stmt2 = $conn->prepare("INSERT INTO loan_application_history 
-            (user_id, application_id, name, loan_amount, loan_term, loan_type, submitted_at, prediction) 
-            VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)");
+            (user_id, application_id, name, email, loan_amount, loan_term, loan_type, submitted_at, prediction) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
         $stmt2->bind_param(
-            "iisdisi",
+            "iisdissi",
             $user_id,
             $application_id,
             $applicant_name,
+            $email,
             $data['loan_amount'],
             $data['loan_term'],
             $loan_type,
             $prediction
         );
+
+        if (!$stmt2->execute()) {
+            die("Database insertion failure on history logger table: " . $stmt2->error);
+        }
         $stmt2->execute();
         $stmt2->close();
         $conn->close();
@@ -133,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <div><span class="label">Loan Amount:</span> <span class="value">₱<?= number_format($data['loan_amount'], 2) ?></span></div>
                     <div><span class="label">Collateral:</span> <span class="value"><?= htmlspecialchars($_POST['collateral_type']) ?></span></div>
                     <div><span class="label">DTI Ratio:</span> <span class="value"><?= htmlspecialchars($data['dti_ratio']) ?>%</span></div>
-                    <div><span class="label">Prediction:</span> <span class="value"><?= ($prediction == 0 ? 'Low Risk' : 'High Risk') ?></span></div>
+                    <div><span class="label">Prediction:</span> <span class="value fw-bold text-uppercase"><?= ($prediction == 1 ? 'Low Risk' : 'High Risk') ?></span></div>
                 </div>
             </div>
 

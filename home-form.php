@@ -10,6 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 // Include database connection configuration
 include 'static/config.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,7 +67,7 @@ include 'static/config.php';
                 </div>
                 <div class="col-md-3">
                     <label>TIN Number</label>
-                    <input type="text" name="tin_no" class="form-control" id="tin_no" name="tin_no" maxlength="11">
+                    <input type="text" id="tin_no" name="tin_no" class="form-control" placeholder="000-000-000-000" maxlength="15">
                 </div>
                 <div class="col-md-3">
                     <label>Birthdate</label>
