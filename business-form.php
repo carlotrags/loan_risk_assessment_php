@@ -104,6 +104,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                 <?php if ($currentStep == 5): ?>
                 <?php include "business-form-preview.php"?>
                 <input type="hidden" name="company_name" value="<?= htmlspecialchars($form['company_name'] ?? '') ?>">
+                <input type="hidden" name="email" value="<?= htmlspecialchars($form['email'] ?? '') ?>">
                 <div class="button-container">
                     <a href="business-form.php?step=4" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</a>
                         <br><br>

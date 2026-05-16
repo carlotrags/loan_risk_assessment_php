@@ -6,6 +6,9 @@ if (!isset($_SESSION['user_id'])) {
     die("You must be logged in to submit an assessment.");
 }
 
+// Use centralized master environment configurations
+include 'static/config.php';
+
 $user_id = $_SESSION['user_id'];
 $username = $_SESSION['username'] ?? '';
 $first_name = $_SESSION['first_name'] ?? '';
@@ -16,11 +19,12 @@ $form = $_SESSION['business_form'] ?? [];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Collect POST data
-    // FIXED THIS CAUSING NOT REFLECTING THE COMPANY NAME Check POST first, then fallback to the Session 'business_form' data
-    $company_name = $_POST['company_name'] ?? ($_SESSION['business_form']['company_name'] ?? 'Unknown Company');
-    $loan_type = 'business';
+        $company_name = $_POST['company_name'] ?? ($_SESSION['business_form']['company_name'] ?? 'Unknown Company');
+        // FIXED: Grabs the email parameter from the form submission, or falls back to your session cache
+        $email = $_POST['email'] ?? ($_SESSION['business_form']['email'] ?? '');
+        $loan_type = 'business';
 
-// Define all expected keys for the API call
+    // Define all expected keys for the API call
     $expected_keys = [
         'company_name', 'loan_amount', 'loan_term',
         'capital_to_risk_assets_ratio', 'debt_to_equity_ratio', 'npl_ratio',
@@ -66,18 +70,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         'management_structure_succession_strategy' => (int)($_POST['management_structure_succession_strategy'] ?? 0),
         'long_term_management_strategy' => (int)($_POST['long_term_management_strategy'] ?? 0)
     ];
+    // Define fields that are strictly text strings so they bypass numerical casting
+    $text_keys = ['company_name', 'email'];
+
     foreach ($expected_keys as $key) {
-        // Handle the two float fields
-        if ($key === 'loan_amount' || $key === 'loan_term') {
+        // 1. If it's a text string field, skip casting and let it remain a string
+        if (in_array($key, $text_keys)) {
+            continue; 
+        }
+        // 2. Handle the floating-point financial amount fields
+        elseif ($key === 'loan_amount' || $key === 'loan_term') {
             $data[$key] = (float)($form[$key] ?? 0);
         }
-        // Handle all other integer (enum) fields
+        // 3. Handle your numerical ratio assessment score options (1 to 5)
         else {
             $data[$key] = (int)($form[$key] ?? 0);
         }
     }
-    // Save to session for preview
-    $_SESSION['business_form'] = array_merge($form, $data, ['company_name' => $company_name]);
+    // Mirror current state back to session records safely
+    $_SESSION['business_form'] = array_merge($_SESSION['business_form'] ?? [], $data, ['company_name' => $company_name, 'email' => $email]);
 
     // Call Flask API
     $api_url = 'http://127.0.0.1:5000/predict/business';
@@ -106,44 +117,45 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3307);
     if ($conn->connect_error) die("MySQL Connection failed: " . $conn->connect_error);
 
+    // FIXED: Added the missing 'email' column right after 'company_name' so it perfectly matches your 31 question marks
     $stmt = $conn->prepare("INSERT INTO business_loan_applications
-        (company_name, loan_amount, loan_term, capital_to_risk_assets_ratio, debt_to_equity_ratio, npl_ratio, npa_ratio, npa_coverage_ratio, roae, roaa, cost_to_income_ratio, liquid_assets_to_borrowed_funds, debt_service_cover, threat_of_entry, intensity_of_rivalry, substitution_of_threat, buyer_bargaining_power, supplier_bargaining_power, overall_industry_outlook, market_position, character_of_management, quality_and_experience_of_management, bank_relationship, labor_relations, existence, nfis_cmap_checkings, management_cntrl_business_planning, management_structure_succession_strategy, long_term_management_strategy, prediction, submitted_at, user_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
+        (company_name, email, loan_amount, loan_term, capital_to_risk_assets_ratio, debt_to_equity_ratio, npl_ratio, npa_ratio, npa_coverage_ratio, roae, roaa, cost_to_income_ratio, liquid_assets_to_borrowed_funds, debt_service_cover, threat_of_entry, intensity_of_rivalry, substitution_of_threat, buyer_bargaining_power, supplier_bargaining_power, overall_industry_outlook, market_position, character_of_management, quality_and_experience_of_management, bank_relationship, labor_relations, existence, nfis_cmap_checkings, management_cntrl_business_planning, management_structure_succession_strategy, long_term_management_strategy, prediction, submitted_at, user_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
 
     $stmt->bind_param(
-        "sddiiiiiiiiiiiiiiiiiiiiiiiiiiii",
-        $company_name,
-        $data['loan_amount'],
-        $data['loan_term'],
-        $data['capital_to_risk_assets_ratio'],
-        $data['debt_to_equity_ratio'],
-        $data['npl_ratio'],
-        $data['npa_ratio'],
-        $data['npa_coverage_ratio'],
-        $data['roae'],
-        $data['roaa'],
-        $data['cost_to_income_ratio'],
-        $data['liquid_assets_to_borrowed_funds'],
-        $data['debt_service_cover'],
-        $data['threat_of_entry'],
-        $data['intensity_of_rivalry'],
-        $data['substitution_of_threat'],
-        $data['buyer_bargaining_power'],
-        $data['supplier_bargaining_power'],
-        $data['overall_industry_outlook'],
-        $data['market_position'],
-        $data['character_of_management'],
-        $data['quality_and_experience_of_management'],
-        $data['bank_relationship'],
-        $data['labor_relations'],
-        $data['existence'],
-        $data['nfis_cmap_checkings'],
-        $data['management_cntrl_business_planning'],
-        $data['management_structure_succession_strategy'],
-        $data['long_term_management_strategy'],
-        $prediction,
-        $user_id
-    );
+            "ssddiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            $company_name, 
+            $email, 
+            $data['loan_amount'], 
+            $data['loan_term'],
+            $data['capital_to_risk_assets_ratio'], 
+            $data['debt_to_equity_ratio'], 
+            $data['npl_ratio'],
+            $data['npa_ratio'], 
+            $data['npa_coverage_ratio'], 
+            $data['roae'], 
+            $data['roaa'],
+            $data['cost_to_income_ratio'], 
+            $data['liquid_assets_to_borrowed_funds'], 
+            $data['debt_service_cover'],
+            $data['threat_of_entry'], 
+            $data['intensity_of_rivalry'], 
+            $data['substitution_of_threat'],
+            $data['buyer_bargaining_power'], 
+            $data['supplier_bargaining_power'], 
+            $data['overall_industry_outlook'],
+            $data['market_position'], 
+            $data['character_of_management'], 
+            $data['quality_and_experience_of_management'],
+            $data['bank_relationship'], 
+            $data['labor_relations'], 
+            $data['existence'], 
+            $data['nfis_cmap_checkings'],
+            $data['management_cntrl_business_planning'], 
+            $data['management_structure_succession_strategy'],
+            $data['long_term_management_strategy'], 
+            $prediction, $user_id
+        );
 
     if (!$stmt->execute()) {
         die("DB Insert failed: " . $stmt->error);
@@ -152,15 +164,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $application_id = $conn->insert_id;
     $stmt->close();
 
-    // Save general history
+    // FIXED: Added 'email' to the column list and added a corresponding '?' placeholder
     $stmt2 = $conn->prepare("INSERT INTO loan_application_history 
-        (user_id, application_id, name, loan_amount, loan_term, loan_type, submitted_at, prediction) 
-        VALUES (?, ?, ?, ?, ?, ?, NOW(), ?)");
+        (user_id, application_id, name, email, loan_amount, loan_term, loan_type, submitted_at, prediction) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?)");
+
+    // FIXED: 'iisdissi' matches: name (s), email (s), loan_amount (d), loan_term (i), loan_type (s)
     $stmt2->bind_param(
-        "iisdisi",
+        "iisdissi",
         $user_id,
         $application_id,
         $company_name,
+        $email, // This sends your active email string directly into the history table row
         $data['loan_amount'],
         $data['loan_term'],
         $loan_type,
@@ -168,7 +183,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     );
     $stmt2->execute();
     $stmt2->close();
-    $conn->close();
+
+    // Clear session to prepare for subsequent assessments
+    unset($_SESSION['business_form']);
 }
 ?>
 

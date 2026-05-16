@@ -58,6 +58,8 @@ try {
 if ($type === 'business') {
     $profile_fields = ['company_name', 'email'];
     $financial_condition = ['capital_to_risk_assets_ratio', 'debt_to_equity_ratio', 'npl_ratio', 'npa_ratio', 'npa_coverage_ratio', 'roae', 'roaa', 'cost_to_income_ratio', 'liquid_assets_to_borrowed_funds', 'debt_service_cover'];
+    // FIXED: Mapping initialized fields to allow the rendering loop to load data
+    $industry_market_analysis = ['threat_of_entry', 'intensity_of_rivalry', 'substitution_of_threat', 'buyer_bargaining_power', 'supplier_bargaining_power', 'overall_industry_outlook', 'market_position'];
     $management_quality = ['character_of_management', 'quality_and_experience_of_management', 'bank_relationship', 'labor_relations', 'existence', 'nfis_cmap_checkings', 'management_cntrl_business_planning', 'management_structure_succession_strategy', 'long_term_management_strategy'];
     $collateral_info = [];
 } elseif ($type === 'home') {
@@ -135,8 +137,8 @@ function formatLabel($key) {
                             <div class="label-text"><?= formatLabel($f) ?></div>
                             <div class="value-text">
                                 <?php 
-                                    if ($f === 'income') echo '₱' . number_format($data[$f], 2);
-                                    else echo htmlspecialchars($data[$f]); 
+                                    // Displays the raw numerical rating score clearly (e.g., Score: 4/5)
+                                    echo htmlspecialchars($data[$f]) . " / 5"; 
                                 ?>
                             </div>
                         </div>

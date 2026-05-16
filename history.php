@@ -47,7 +47,8 @@ $where = $conditions ? ' WHERE ' . implode(' AND ', $conditions) : '';
 $sql = "SELECT 
         la.history_id, 
         la.application_id,
-        la.name, 
+        la.name,
+        la.email,
         la.loan_amount, 
         la.prediction, 
         la.manual_risk_adjustment,
@@ -155,7 +156,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="selectAll"></th>
-                                    <th>Name</th>
+                                    <th>Name /Email Address</th>
                                     <th>Loan Amount</th>
                                     <th>Loan Term</th>
                                     <th>Prediction</th>
