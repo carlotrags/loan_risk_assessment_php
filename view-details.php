@@ -64,10 +64,11 @@ if ($type === 'business') {
     $management_quality = [];
     $collateral_info = ['collateral_type', 'property_value', 'existing_loans', 'monthly_debt', 'dti_ratio', 'default_history'];
 } else {
-    $profile_fields = ['email', 'phone', 'gender', 'married', 'dependents', 'education', 'self_employed'];
-    $financial_condition = [];
+    // Corrected to use the real columns found in your personal_loan_applications schema
+    $profile_fields = ['email', 'contact_no', 'home_address', 'age'];
+    $financial_condition = ['income', 'credit_score', 'dti_ratio'];
     $management_quality = [];
-    $collateral_info = [];
+    $collateral_info = ['existing_loans', 'default_history', 'loan_intent'];
 }
 
 function formatLabel($key) {
@@ -125,13 +126,15 @@ function formatLabel($key) {
                 <?php if ($is_business): ?>
                 <div class="report-section">
                     <p class="text-uppercase small fw-bold text-primary mb-3">Financial Condition</p>
-
                     <div class="row g-3">
                         <?php foreach ($financial_condition as $f): if (isset($data[$f])): ?>
                         <div class="col-sm-6 col-md-4">
                             <div class="label-text"><?= formatLabel($f) ?></div>
                             <div class="value-text">
-                                <?= htmlspecialchars($data[$f]) ?>
+                                <?php 
+                                    if ($f === 'income') echo '₱' . number_format($data[$f], 2);
+                                    else echo htmlspecialchars($data[$f]); 
+                                ?>
                             </div>
                         </div>
                         <?php endif; endforeach; ?>

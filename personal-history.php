@@ -33,7 +33,7 @@ if (!empty($_GET['filterAssessmentBy'])) {
     $params[':assessedBy'] = $_GET['filterAssessmentBy'];
 }
 if (isset($_GET['filterPrediction']) && $_GET['filterPrediction'] !== '') {
-    $conditions[] = 'CAST(la.prediction AS CHAR) = :prediction';
+    $conditions[] = 'la.prediction = :prediction'; //updated this and removed "CAST/AS CHAR"
     $params[':prediction'] = $_GET['filterPrediction'];
 }
 if (!empty($_GET['dateFrom'])) {

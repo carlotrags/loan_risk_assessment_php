@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['is_final_submission'])
     $suffix_name    = $_POST['suffix_name'];
     $applicant_name = trim("$first_name $middle_name $last_name $suffix_name");
     $email          = $_POST['email']; // Added email capture
+    $contact_no     = $_POST['contact_no']; //added contact number capture
     $home_address   = $_POST['home_address'];
 
     // ML Features
@@ -63,20 +64,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['is_final_submission'])
     $prediction = $apiResult['prediction'] ?? "API_ERROR";
 
     // Save to Database (personal_loan_applications)
-    // Updated to include 'email' column and additional '?' placeholder
+    // Updated to include 'contact_no' column and an additional '?' placeholder
     $stmt = $conn->prepare("
         INSERT INTO personal_loan_applications 
-        (name, email, home_address, loan_amount, loan_term, loan_intent,
+        (name, email, contact_no, home_address, loan_amount, loan_term, loan_intent,
         income, credit_score, dti_ratio, existing_loans,
         default_history, age, sex, civil_status, prediction, user_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
 
-    // Updated typeString: added an 's' for the email variable (total 16 chars)
-    $typeString = "sssdisddiiiiisii";
+    // Updated typeString: added an 's' for the contact string variable (total 17 chars)
+    $typeString = "ssssdisddiiiiisii";
     $stmt->bind_param(
         $typeString,
-        $applicant_name, $email, $home_address, $loan_amount, $loan_term, $loan_intent,
+        $applicant_name, $email, $contact_no, $home_address, $loan_amount, $loan_term, $loan_intent,
         $monthly_income, $credit_score, $dti_ratio, $existing_loans,
         $default_history, $age, $sex, $civil_status, $prediction, $_SESSION['user_id']
     );
@@ -134,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['is_final_submission'])
     </div>
 
     <!-- ONLY CHANGE: added action="preview.php" -->
-    <form method="POST" action="preview.php">
+    <form method="POST" action="personal-preview.php">
 
         <div class="custom-card p-4">
             <h5 class="section-title">I. Applicant Profile</h5>
