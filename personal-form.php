@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['is_final_submission'])
 
     if ($stmt->execute()) {
         $stmt->close();
-        header("Location: home-history.php?success=1");
+        header("Location: personal-history.php?success=1"); // Updated redirect target
         exit;
     } else {
         echo "DB Error: " . $stmt->error;

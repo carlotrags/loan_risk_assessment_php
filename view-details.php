@@ -15,20 +15,23 @@ if (!$app_id) {
     die("Application ID missing.");
 }
 
-// Hanapin ang block na ito at palitan ng:
 if ($type === 'business') {
     $table = "business_loan_applications";
     $id_column = "business_application_id";
-    $is_business = true; // Idagdag ito
+    $is_business = true;
+    $db_loan_type = 'Business'; // Matching DB Enum casing
 } elseif ($type === 'home') {
     $table = "home_loan_applications";
     $id_column = "home_application_id";
-    $is_business = false; // Idagdag ito
+    $is_business = false;
+    $db_loan_type = 'Home'; // Matching DB Enum casing
 } else {
     $table = "personal_loan_applications";
     $id_column = "application_id";
-    $is_business = false; // Idagdag ito
+    $is_business = false;
+    $db_loan_type = 'Personal'; // Matching DB Enum casing
 }
+
 try {
     // Fetch data using the specific table and ID column identified above
     $stmt = $pdo->prepare("SELECT * FROM $table WHERE $id_column = :id");
@@ -40,7 +43,7 @@ try {
     }
 
     $histStmt = $pdo->prepare("SELECT history_id, name, officer_notes, manual_risk_adjustment, prediction, submitted_at, updated_at FROM loan_application_history WHERE application_id = :id AND loan_type = :type");
-    $histStmt->execute([':id' => $app_id, ':type' => $type]);
+    $histStmt->execute([':id' => $app_id, ':type' => $db_loan_type]);
     $history = $histStmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$history) {

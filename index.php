@@ -179,8 +179,9 @@ if (!isset($_SESSION['user_id'])) {
                         <tr>
                             <td><?= htmlspecialchars($row['name']) ?></td>
                             <td><?= htmlspecialchars($row['loan_amount']) ?></td>
-                            <td class="prediction <?= $row['prediction'] == 0 ? 'low' : 'high' ?>">
-                                    <?= $row['prediction'] == 0 ? 'Low Risk' : 'High Risk' ?></td>
+                            <td class="prediction <?= $row['prediction'] == 1 ? 'low' : 'high' ?>">
+                                <?= $row['prediction'] == 1 ? 'Low Risk' : 'High Risk' ?>
+                            </td>
                             <td><?= htmlspecialchars($row['loan_type']) ?></td>
                             <td><?= htmlspecialchars($row['submitted_at']) ?></td>
                             <td><?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></td>
