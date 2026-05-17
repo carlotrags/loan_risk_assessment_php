@@ -52,6 +52,7 @@ $sql = "SELECT
         la.history_id, 
         la.application_id,
         la.name, 
+        la.email,
         la.loan_amount, 
         la.prediction, 
         la.manual_risk_adjustment,
@@ -123,6 +124,13 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <a href="generatepdf.php?<?= htmlspecialchars($queryString) ?>&loan_type=personal" class="btn btn-success btn-pdf-narrow">
                                 <i class="fas fa-file-pdf"></i> Download PDF
                             </a>
+                            </a>
+                            <a href="business-history.php" class="btn btn-primary">
+                                <i class="fa-solid fa-briefcase" style="padding-right: 10px;"></i>Business Loans
+                            </a>
+                            <a href="home-history.php" class="btn btn-primary">
+                                <i class="fa-solid fa-briefcase" style="padding-right: 10px;"></i>Home Loans
+                            </a>
                         </div>
                     </div>
                 </form>
@@ -139,7 +147,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="selectAll"></th>
-                                    <th>Name</th>
+                                    <th>Name / Email Address</th>
                                     <th>Loan Amount</th>
                                     <th>Loan Term</th>
                                     <th>Prediction</th>
@@ -152,7 +160,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php foreach ($rows as $row): ?>
                                     <tr id="row-<?= $row['history_id'] ?>">
                                         <td><input type="checkbox" class="rowCheckbox" name="selected_ids[]" value="<?= $row['history_id'] ?>"></td>
-                                        <td><?= htmlspecialchars($row['name']) ?></td>
+                                        <td><?= htmlspecialchars($row['name']) ?><br><p style="font-size: 12px; color: #838995;"><?= htmlspecialchars($row['email']) ?></p></td>
                                         <td>₱<?= number_format($row['loan_amount'], 2) ?></td>
                                         <td><?= htmlspecialchars($row['loan_term']) ?> Months</td>
                                         

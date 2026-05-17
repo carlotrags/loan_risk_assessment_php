@@ -256,6 +256,24 @@ function formatLabel($key) {
                 </div>
 
                 <div class="d-grid gap-2 mt-auto no-print">
+                    <?php
+                    $recipientEmail = $data['email'] ?? '';
+
+                    $subject = "Loan Assessment Result - " . ($history['name'] ?? '');
+
+                    $body = "Hi,\n\nPlease download the generated PDF from your system and attach it before sending.\n\nThank you.";
+
+                    $gmailLink = "https://mail.google.com/mail/?view=cm&fs=1"
+                        . "&to=" . urlencode($recipientEmail)
+                        . "&su=" . urlencode($subject)
+                        . "&body=" . urlencode($body);
+                    ?>
+
+                    <a href="<?= $gmailLink ?>"
+                    target="_blank"
+                    class="btn btn-success">
+                    Send Email
+                    </a>
                     <button onclick="window.print()" class="btn btn-outline-primary">
                         <i class="fa-solid fa-print me-2"></i>Print Report
                     </button>

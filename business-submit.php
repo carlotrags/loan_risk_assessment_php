@@ -171,7 +171,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // FIXED: 'iisdissi' matches: name (s), email (s), loan_amount (d), loan_term (i), loan_type (s)
     $stmt2->bind_param(
-        "iisdissi",
+        "iissdisi",
         $user_id,
         $application_id,
         $company_name,

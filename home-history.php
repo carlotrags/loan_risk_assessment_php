@@ -20,6 +20,9 @@ $allUsers = $userStmt->fetchAll(PDO::FETCH_COLUMN);
 $conditions = [];
 $params = [];
 
+// FORCE PERSONAL LOAN TYPE ONLY
+$conditions[] = "la.loan_type = 'Home'";
+
 // FILTERS
 if (!empty($_GET['searchName'])) {
     $conditions[] = 'la.name LIKE :name';
@@ -30,7 +33,7 @@ if (!empty($_GET['filterAssessmentBy'])) {
     $params[':assessedBy'] = $_GET['filterAssessmentBy'];
 }
 if (isset($_GET['filterPrediction']) && $_GET['filterPrediction'] !== '') {
-    $conditions[] = 'la.prediction = :prediction'; //updated this removed "CAST/ AS CHAR"
+    $conditions[] = 'la.prediction = :prediction'; //updated this and removed "CAST/AS CHAR"
     $params[':prediction'] = $_GET['filterPrediction'];
 }
 if (!empty($_GET['dateFrom'])) {
@@ -42,12 +45,13 @@ if (!empty($_GET['dateTo'])) {
     $params[':dateTo'] = $_GET['dateTo'];
 }
 
-$where = $conditions ? ' WHERE ' . implode(' AND ', $conditions) : '';
+$where = ' WHERE ' . implode(' AND ', $conditions);
 
+// Fetch Records from the History table (which links to the original application data)
 $sql = "SELECT 
         la.history_id, 
         la.application_id,
-        la.name,
+        la.name, 
         la.email,
         la.loan_amount, 
         la.prediction, 
@@ -80,18 +84,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="static/css/navbarstyle.css?v=<?= time() ?>">
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <title>History</title>
-
-    <style>
-        .edit-timer { 
-            display: block; 
-            font-size: 10px; 
-            color: #8e8e8e; 
-            margin-top: 2px; 
-            font-weight: normal;
-        }
-        td.prediction { line-height: 1.2; vertical-align: middle !important; }
-    </style>
+    <title>History - Personal Loans</title>
 </head>
 
 <body>
@@ -102,7 +95,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <section class="container">
         <div class="container-fluid px-4">
             <div class="history-container w-auto">
-                <h2>Loan Application Records</h2>
+                <h2>Personal Loan Records</h2>
 
                 <form method="GET">
                     <div class="filter-bar">
@@ -128,11 +121,9 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <button type="submit" class="btn btn-primary">Filter</button>
                             
                             <?php $queryString = http_build_query($_GET); ?>
-                            <a href="generatepdf.php?<?= htmlspecialchars($queryString) ?>&loan_type=general" class="btn btn-success btn-pdf-narrow">
+                            <a href="generatepdf.php?<?= htmlspecialchars($queryString) ?>&loan_type=personal" class="btn btn-success btn-pdf-narrow">
                                 <i class="fas fa-file-pdf"></i> Download PDF
                             </a>
-                            <a href="personal-history.php" class="btn btn-primary">
-                                <i class="fa-solid fa-user" style="padding-right: 10px;"></i>Personal Loans
                             </a>
                             <a href="business-history.php" class="btn btn-primary">
                                 <i class="fa-solid fa-briefcase" style="padding-right: 10px;"></i>Business Loans
@@ -160,7 +151,6 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     <th>Loan Amount</th>
                                     <th>Loan Term</th>
                                     <th>Prediction</th>
-                                    <th>Loan Type</th>
                                     <th>Submitted At</th>
                                     <th>Assessment By</th>
                                     <th>Action</th>
@@ -172,7 +162,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <td><input type="checkbox" class="rowCheckbox" name="selected_ids[]" value="<?= $row['history_id'] ?>"></td>
                                         <td><?= htmlspecialchars($row['name']) ?><br><p style="font-size: 12px; color: #838995;"><?= htmlspecialchars($row['email']) ?></p></td>
                                         <td>₱<?= number_format($row['loan_amount'], 2) ?></td>
-                                        <td><?= htmlspecialchars($row['loan_term']) ?></td>
+                                        <td><?= htmlspecialchars($row['loan_term']) ?> Months</td>
                                         
                                         <td class="prediction <?= (($row['manual_risk_adjustment'] ?? $row['prediction']) == 0) ? 'low' : 'high' ?>">
                                             <span class="risk-label">
@@ -187,7 +177,6 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <?php endif; ?>
                                         </td>
 
-                                        <td><?= htmlspecialchars($row['loan_type']) ?></td>
                                         <td><?= htmlspecialchars($row['submitted_at']) ?></td>
                                         
                                         <td>
@@ -200,14 +189,9 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                         <td>
                                             <div class="d-flex gap-3">
-                                                <a href="view-details.php?id=<?= $row['application_id'] ?>&type=<?= strtolower($row['loan_type']) ?>" class="text-info" ><i class="fa-solid fa-eye" alt="View"></i></a>
-                                                <a href="#" class="text-primary edit-btn" data-bs-toggle="modal" data-bs-target="#editModal<?= $row['history_id'] ?>" title="Edit"><i class="fa-solid fa-pen-to-square" alt="Edit"></i></a>
-                                                <a href="actions/delete_loan.php?id=<?= $row['history_id'] ?>" 
-                                                class="text-danger" 
-                                                onclick="return confirm('Are you sure you want to delete this loan record?')" 
-                                                title="Delete">
-                                                <i class="fa-solid fa-trash"></i>
-                                                </a>
+                                                <a href="view-details.php?id=<?= $row['application_id'] ?>&type=personal" class="text-info"><i class="fa-solid fa-eye"></i></a>
+                                                <a href="#" class="text-primary edit-btn" data-bs-toggle="modal" data-bs-target="#editModal<?= $row['history_id'] ?>"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                <a href="actions/delete_loan.php?id=<?= $row['history_id'] ?>" class="text-danger" onclick="return confirm('Delete this personal loan history record?')" title="Delete"><i class="fa-solid fa-trash"></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -216,7 +200,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </table>
                     </form>
                 <?php else: ?>
-                    <p>No loan applications found.</p>
+                    <p>No personal loan applications found.</p>
                 <?php endif; ?>
             </div>
         </div>
@@ -258,7 +242,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="static/history-actions.js" defer></script>
-    
+
 <?php include "static/footer.php"?>
 </body>
 </html>
