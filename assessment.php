@@ -33,10 +33,10 @@ $role = $_SESSION['role'];
         
         <div class="assessment-type-container">
             <h1>Choose a Loan Type to Assess Risk:</h1>
-            <a href="personal-form.php"><div class="assessment-type">
+            <!-- <a href="personal-form.php"><div class="assessment-type">
                 <h3><i class="fa-solid fa-user"></i> Personal Loan</h3>
                 <p>Loan for personal needs like emergencies, education, or purchases. No collateral required.</p>
-            </div></a>
+            </div></a> -->
 
             <a href="business-form.php"><div class="assessment-type">
                 <h3><i class="fa-solid fa-briefcase"></i> Business Loan</h3>

@@ -131,9 +131,9 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <a href="generatepdf.php?<?= htmlspecialchars($queryString) ?>&loan_type=general" class="btn btn-success btn-pdf-narrow">
                                 <i class="fas fa-file-pdf"></i> Download PDF
                             </a>
-                            <a href="personal-history.php" class="btn btn-primary">
+                            <!-- <a href="personal-history.php" class="btn btn-primary">
                                 <i class="fa-solid fa-user" style="padding-right: 10px;"></i>Personal Loans
-                            </a>
+                            </a> -->
                             <a href="business-history.php" class="btn btn-primary">
                                 <i class="fa-solid fa-briefcase" style="padding-right: 10px;"></i>Business Loans
                             </a>
