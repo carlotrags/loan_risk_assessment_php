@@ -1,30 +1,24 @@
 <?php
 session_start();
 
-
 if (!isset($_SESSION['user_id'])) {
     header("Location: static/login.php");
     exit;
 }
-
 
 $username = $_SESSION['username'];
 $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
 $role = $_SESSION['role'];
 
-
-if ($_SESSION['role'] !== 'Manager') {
+if (!in_array($_SESSION['role'], ['Manager', 'System Admin'])) {
     header("Location: index.php");
     exit;
 }
 
-
 include 'static/config.php';
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
 
     $first_name = trim($_POST['first_name'] ?? '');
     $last_name = trim($_POST['last_name'] ?? '');
@@ -33,20 +27,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $role = $_POST['role'] ?? '';
 
-
     if (!$first_name || !$last_name || !$username || !$email || !$password || !$role) {
         die("All fields are required!");
     }
 
-
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
 
     try {
         $stmt = $pdo->prepare("INSERT INTO user_accounts
             (first_name, last_name, username, email, password, role, creation_date)
             VALUES (:first_name, :last_name, :username, :email, :password, :role, NOW())");
-
 
         $stmt->execute([
             ':first_name' => $first_name,
@@ -57,17 +47,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':role' => $role,
         ]);
 
-
         header("Location: user-accounts.php?success=1");
         exit;
-
 
     } catch (PDOException $e) {
         die("Error adding account: " . $e->getMessage());
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -81,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-
     <title>Add Account</title>
 </head>
 <body>
@@ -89,13 +75,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include "static/navbar.php"?>
     </section>
 
-
     <section class="container">
         <div class="add-user-container">
             <h1>Create New Account</h1>
 
-
-            <form method="POST" action="add_account_process.php" class="add-account-form">
+            <form method="POST" action="user_add_account_process.php" class="add-account-form">
                 <!-- Row 1: First + Last Name -->
                 <div class="form-row">
                     <div class="form-group">
@@ -108,7 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
 
-
                 <!-- Row 2: Username -->
                 <div class="form-row">
                     <div class="form-group">
@@ -116,7 +99,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="text" name="username" placeholder="Username" required>
                     </div>
                 </div>
-
 
                 <!-- Row 3: Email, Password -->
                 <div class="form-row">
@@ -132,7 +114,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
 
-
                 <!-- Row 4: Role -->
                 <div class="form-row">
                     <div class="form-group">
@@ -144,7 +125,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </select>
                     </div>
                 </div>
-
 
                 <div class="form-submit-button">
                     <button type="submit" class="btn btn-success">
@@ -159,7 +139,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script>
         const togglePassword = document.querySelector('.toggle-password');
         const passwordField = document.getElementById('password');
-
 
         togglePassword.addEventListener('click', () => {
             if(passwordField.type === 'password'){
@@ -176,4 +155,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include "static/footer.php"?>
 </body>
 </html>
-

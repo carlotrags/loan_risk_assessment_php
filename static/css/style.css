@@ -254,6 +254,19 @@ td.prediction.high{
   font-weight: 600;
 }
 
+/* System Admin pill color */
+.text-purple-emphasis {
+    color: #6f42c1 !important;
+}
+
+.bg-purple-subtle {
+    background-color: rgba(111, 66, 193, 0.15) !important;
+}
+
+.border-purple-subtle {
+    border-color: rgba(111, 66, 193, 0.35) !important;
+}
+
 /* Animation */
 @keyframes fadeInUp {
   from {

@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 include 'static/config.php';
 
 $app_id = $_GET['id'] ?? null;
-$type = strtolower($_GET['type'] ?? ''); // Force lowercase for consistency
+$type = strtolower($_GET['type'] ?? '');
 
 if (!$app_id) {
     die("Application ID missing.");
@@ -19,18 +19,19 @@ if ($type === 'business') {
     $table = "business_loan_applications";
     $id_column = "business_application_id";
     $is_business = true;
-    $db_loan_type = 'Business'; // Matching DB Enum casing
+    $db_loan_type = 'Business';
 } elseif ($type === 'home') {
     $table = "home_loan_applications";
     $id_column = "home_application_id";
     $is_business = false;
-    $db_loan_type = 'Home'; // Matching DB Enum casing
-} else {
-    $table = "personal_loan_applications";
-    $id_column = "application_id";
-    $is_business = false;
-    $db_loan_type = 'Personal'; // Matching DB Enum casing
+    $db_loan_type = 'Home';
 }
+// else {
+//     $table = "personal_loan_applications";
+//     $id_column = "application_id";
+//     $is_business = false;
+//     $db_loan_type = 'Personal';
+// }
 
 try {
     // Fetch data using the specific table and ID column identified above
@@ -56,7 +57,7 @@ try {
 
 // --- FIELD GROUPINGS: Define which of the 23 variables to show ---
 if ($type === 'business') {
-    $profile_fields = ['company_name', 'email'];
+    $profile_fields = [];
     $financial_condition = ['capital_to_risk_assets_ratio', 'debt_to_equity_ratio', 'npl_ratio', 'npa_ratio', 'npa_coverage_ratio', 'roae', 'roaa', 'cost_to_income_ratio', 'liquid_assets_to_borrowed_funds', 'debt_service_cover'];
     // FIXED: Mapping initialized fields to allow the rendering loop to load data
     $industry_market_analysis = ['threat_of_entry', 'intensity_of_rivalry', 'substitution_of_threat', 'buyer_bargaining_power', 'supplier_bargaining_power', 'overall_industry_outlook', 'market_position'];
@@ -68,13 +69,14 @@ if ($type === 'business') {
     $financial_condition = ['age', 'sex', 'civil_status', 'dependents', 'years_of_stay', 'home_ownership', 'employment_type', 'monthly_income', 'years_employed'];
     $management_quality = [];
     $collateral_info = ['collateral_type', 'property_value', 'existing_loans', 'monthly_debt', 'dti_ratio', 'default_history'];
-} else {
-    // Corrected to use the real columns found in your personal_loan_applications schema
-    $profile_fields = ['email', 'contact_no', 'home_address', 'age'];
-    $financial_condition = ['income', 'credit_score', 'dti_ratio'];
-    $management_quality = [];
-    $collateral_info = ['existing_loans', 'default_history', 'loan_intent'];
-}
+} 
+// else {
+//     // Corrected to use the real columns found in your personal_loan_applications schema
+//     $profile_fields = ['email', 'contact_no', 'home_address', 'age'];
+//     $financial_condition = ['income', 'credit_score', 'dti_ratio'];
+//     $management_quality = [];
+//     $collateral_info = ['existing_loans', 'default_history', 'loan_intent'];
+// }
 
 function formatLabel($key) {
     return ucwords(str_replace('_', ' ', $key));
@@ -113,9 +115,18 @@ function formatLabel($key) {
                 <div class="report-section">
                     <p class="text-uppercase small fw-bold text-primary mb-3"><?= $is_business ? 'Company Profile' : 'Client Profile' ?></p>
                     <div class="row mb-3">
-                        <div class="col-12">
-                            <div class="label-text">Name / Entity</div>
-                            <div class="value-text fs-5 fw-semibold text-dark"><?= htmlspecialchars($history['name']) ?></div>
+                    <div class="col-12">
+                        <div class="label-text">Name / Entity</div>
+
+                        <div class="value-text fs-5 fw-semibold text-dark">
+                            <?= htmlspecialchars($history['name']) ?>
+                        </div>
+
+                        <?php if (!empty($data['email'])): ?>
+                            <div class="text-muted small mt-1">
+                                <?= htmlspecialchars($data['email']) ?>
+                            </div>
+                        <?php endif; ?>
                         </div>
                     </div>
                     <div class="row g-3">

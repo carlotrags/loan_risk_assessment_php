@@ -2,27 +2,30 @@
 session_start();
 include 'static/config.php';
 
-
 if (!isset($_GET['user_id'])) {
     header("Location: user-accounts.php");
     exit;
 }
 
-
 $user_id = $_GET['user_id'];
-
 
 $stmt = $pdo->prepare("SELECT * FROM user_accounts WHERE user_id = :id");
 $stmt->execute([':id' => $user_id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
 if (!$user) {
     echo "User not found.";
     exit;
 }
-?>
 
+if ($user && $user['role'] === 'System Admin') {
+    echo "<script>
+        alert('System Administrator account cannot be edited.');
+        window.location.href = 'user-accounts.php';
+    </script>";
+    exit;
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +39,6 @@ if (!$user) {
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-
     <title>Edit Account</title>
 </head>
 <body>
@@ -44,15 +46,13 @@ if (!$user) {
         <?php include "static/navbar.php"?>
     </section>
 
-
     <section class="container">
         <div class="add-user-container">
             <h1>Edit Account</h1>
 
-
             <form method="POST" action="user-edit-process.php" class="add-account-form">
                 <input type="hidden" name="user_id" value="<?= $user['user_id'] ?>">
-               
+        
                 <div class="form-row">
                     <div class="form-group">
                         <label>First Name:</label>
@@ -63,7 +63,6 @@ if (!$user) {
                         <input type="text" name="last_name" value="<?= htmlspecialchars($user['last_name']) ?>" required>
                     </div>
                 </div>
-
 
                 <div class="form-row">
                     <div class="form-group">
@@ -76,9 +75,7 @@ if (!$user) {
                     </div>
                 </div>
 
-
                 <p class="pass-p">Leave password blank to keep current password.</p>
-
 
                 <div class="form-row">
                     <div class="form-group" style="position: relative;">

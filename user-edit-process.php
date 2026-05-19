@@ -2,77 +2,54 @@
 session_start();
 include 'static/config.php';
 
-
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Manager') {
+// ✅ Allow Manager + System Administrator only
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Manager', 'System Administrator'])) {
     header("Location: index.php");
     exit;
 }
 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+// Validate request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['current_status'])) {
 
     $user_id = $_POST['user_id'];
-    $first_name = trim($_POST['first_name']);
-    $last_name = trim($_POST['last_name']);
-    $username = trim($_POST['username']);
-    $email = trim($_POST['email']);
-    $role = $_POST['role'];
-    $password = $_POST['password'] ?? '';
-    $confirm_password = $_POST['confirm_password'] ?? '';
+    $current_status = $_POST['current_status'];
 
+    // 🔥 SECURITY: Check if target user is System Administrator
+    $check = $pdo->prepare("SELECT role FROM user_accounts WHERE user_id = :id");
+    $check->execute([':id' => $user_id]);
+    $user = $check->fetch(PDO::FETCH_ASSOC);
 
-    if ($password !== $confirm_password) {
-        echo "<script>alert('Passwords do not match!'); window.history.back();</script>";
-        exit;
+    if ($user && $user['role'] === 'System Admin') {
+        die("System Administrator account cannot be modified.");
     }
 
+    // Toggle status
+    $new_status = ($current_status === 'Deactivated') ? 'Active' : 'Deactivated';
 
     try {
-        $sql = "UPDATE user_accounts SET
-                    first_name = :first_name,
-                    last_name = :last_name,
-                    username = :username,
-                    email = :email,
-                    role = :role";
+        $stmt = $pdo->prepare("
+            UPDATE user_accounts 
+            SET status = :new_status 
+            WHERE user_id = :user_id
+        ");
 
-
-        $params = [
-            ':first_name' => $first_name,
-            ':last_name' => $last_name,
-            ':username' => $username,
-            ':email' => $email,
-            ':role' => $role,
+        $stmt->execute([
+            ':new_status' => $new_status,
             ':user_id' => $user_id
-        ];
+        ]);
 
-
-        if (!empty($password)) {
-            $hashed = password_hash($password, PASSWORD_DEFAULT);
-            $sql .= ", password = :password";
-            $params[':password'] = $hashed;
-        }
-
-
-        $sql .= " WHERE user_id = :user_id";
-
-
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($params);
-
-
-        echo "<script>alert('User updated successfully!'); window.location.href='user-accounts.php';</script>";
-
+        echo "<script>
+                alert('User status is now $new_status.');
+                window.location.href='user-accounts.php';
+            </script>";
 
     } catch (PDOException $e) {
-        echo "Error updating user: " . $e->getMessage();
+        echo "Error updating status: " . $e->getMessage();
         exit;
     }
-
 
 } else {
     header("Location: user-accounts.php");
     exit;
 }
 ?>
-

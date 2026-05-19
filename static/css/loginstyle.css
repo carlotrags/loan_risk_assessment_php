@@ -6,7 +6,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: linear-gradient(rgba(0, 60, 130, 0.6), rgba(0, 60, 130, 0.6)), url("login-page-bg.jpg") center/cover no-repeat;
+    background: linear-gradient(rgba(0, 60, 130, 0.6), rgba(0, 60, 130, 0.6)), url("../images/login-page-bg.jpg") center/cover no-repeat;
     min-height: 100vh;
 }
 

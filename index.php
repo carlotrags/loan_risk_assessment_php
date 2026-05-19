@@ -10,71 +10,76 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-    require 'static/config.php';
+require 'static/config.php';
 
-    $username = $_SESSION['username'];
-    $first_name = $_SESSION['first_name'];
-    $last_name = $_SESSION['last_name'];
-    $role = $_SESSION['role'];
+$username = $_SESSION['username'];
+$first_name = $_SESSION['first_name'];
+$last_name = $_SESSION['last_name'];
+$role = $_SESSION['role'];
 
-    // Summary counts for dashboard
-    $totals = [
-        'total' => 0,
-        'low_risk' => 0,
-        'high_risk' => 0,
-        'today' => 0,
-        'month' => 0,
-    ];
+// Summary counts for dashboard
+$totals = [
+    'total' => 0,
+    'low_risk' => 0,
+    'high_risk' => 0,
+    'today' => 0,
+    'month' => 0,
+];
 
-    // Total assessments
-    $res = $conn->query("SELECT COUNT(*) AS total FROM loan_application_history");
-    if ($res) {
-        $r = $res->fetch_assoc();
-        $totals['total'] = (int)$r['total'];
+// Total assessments
+$res = $conn->query("SELECT COUNT(*) AS total FROM loan_application_history");
+if ($res) {
+    $r = $res->fetch_assoc();
+    $totals['total'] = (int)$r['total'];
+}
+
+// LOW RISK (manual overrides included)
+$res = $conn->query("
+    SELECT COUNT(*) AS low_risk 
+    FROM loan_application_history 
+    WHERE COALESCE(manual_risk_adjustment, prediction) = 1
+");
+if ($res) {
+    $totals['low_risk'] = (int)$res->fetch_assoc()['low_risk'];
+}
+
+// HIGH RISK (manual overrides included)
+$res = $conn->query("
+    SELECT COUNT(*) AS high_risk 
+    FROM loan_application_history 
+    WHERE COALESCE(manual_risk_adjustment, prediction) = 0
+");
+if ($res) {
+    $totals['high_risk'] = (int)$res->fetch_assoc()['high_risk'];
+}
+
+// Today's assessments
+$res = $conn->query("SELECT COUNT(*) AS today FROM loan_application_history WHERE DATE(submitted_at) = CURDATE()");
+if ($res) {
+    $r = $res->fetch_assoc();
+    $totals['today'] = (int)$r['today'];
+}
+
+// This month's assessments
+$res = $conn->query("SELECT COUNT(*) AS month FROM loan_application_history WHERE YEAR(submitted_at) = YEAR(CURDATE()) AND MONTH(submitted_at) = MONTH(CURDATE())");
+if ($res) {
+    $r = $res->fetch_assoc();
+    $totals['month'] = (int)$r['month'];
+}
+
+$sql = "SELECT l.name, l.loan_amount, l.prediction, l.manual_risk_adjustment, l.loan_type, l.submitted_at, b.first_name, b.last_name, b.role
+        FROM loan_application_history AS l
+        INNER JOIN user_accounts AS b ON l.user_id = b.user_id
+        ORDER BY l.submitted_at DESC
+        LIMIT 5";
+$result = $conn->query($sql);
+
+$rows = [];
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $rows[] = $row;
     }
-
-    // Low Risk:prediction = 1 (approved)
-    $res = $conn->query("SELECT COUNT(*) AS low_risk FROM loan_application_history WHERE prediction = 1");
-    if ($res) {
-        $r = $res->fetch_assoc();
-        $totals['low_risk'] = (int)$r['low_risk'];
-    }
-
-    // High Risk:prediction = 0 (denied)
-    $res = $conn->query("SELECT COUNT(*) AS high_risk FROM loan_application_history WHERE prediction = '0'");
-    if ($res) {
-        $r = $res->fetch_assoc();
-        $totals['high_risk'] = (int)$r['high_risk'];
-    }
-
-    // Today's assessments
-    $res = $conn->query("SELECT COUNT(*) AS today FROM loan_application_history WHERE DATE(submitted_at) = CURDATE()");
-    if ($res) {
-        $r = $res->fetch_assoc();
-        $totals['today'] = (int)$r['today'];
-    }
-
-    // This month's assessments
-    $res = $conn->query("SELECT COUNT(*) AS month FROM loan_application_history WHERE YEAR(submitted_at) = YEAR(CURDATE()) AND MONTH(submitted_at) = MONTH(CURDATE())");
-    if ($res) {
-        $r = $res->fetch_assoc();
-        $totals['month'] = (int)$r['month'];
-    }
-
-    $sql = "SELECT l.name, l.loan_amount, l.prediction, l.loan_type, l.submitted_at, b.first_name, b.last_name, b.role
-            FROM loan_application_history AS l
-            INNER JOIN user_accounts AS b ON l.user_id = b.user_id
-            ORDER BY l.submitted_at DESC
-            LIMIT 5";
-    $result = $conn->query($sql);
-
-    $rows = [];
-    if ($result && $result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $rows[] = $row;
-        }
-    }
-    
+}
 ?>
 
 <!DOCTYPE html>
@@ -174,19 +179,32 @@ if (!isset($_SESSION['user_id'])) {
                         <th>Assessment By</th>
                     </tr>
                 </thead>
-                <tbody>
+                    <tbody>
                     <?php foreach ($rows as $row): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($row['name']) ?></td>
-                            <td><?= htmlspecialchars($row['loan_amount']) ?></td>
-                            <td class="prediction <?= $row['prediction'] == 1 ? 'low' : 'high' ?>">
-                                <?= $row['prediction'] == 1 ? 'Low Risk' : 'High Risk' ?>
-                            </td>
-                            <td><?= htmlspecialchars($row['loan_type']) ?></td>
-                            <td><?= htmlspecialchars($row['submitted_at']) ?></td>
-                            <td><?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
+
+                    <?php
+                    $risk = ($row['manual_risk_adjustment'] !== null)
+                        ? $row['manual_risk_adjustment']
+                        : $row['prediction'];
+                    ?>
+
+                    <tr>
+                        <td><?= htmlspecialchars($row['name']) ?></td>
+
+                        <td>₱<?= number_format($row['loan_amount'], 2) ?></td>
+
+                        <td class="prediction <?= $risk == 1 ? 'low' : 'high' ?>">
+                            <?= $risk == 1 ? 'Low Risk' : 'High Risk' ?>
+                        </td>
+
+                        <td><?= htmlspecialchars($row['loan_type']) ?></td>
+
+                        <td><?= htmlspecialchars($row['submitted_at']) ?></td>
+
+                        <td><?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></td>
+                    </tr>
+
+                <?php endforeach; ?>
                 </tbody>
             </table>
             <a href="history.php"><button class="btn btn-primary">See Full History</button></a>

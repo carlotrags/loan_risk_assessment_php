@@ -59,7 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     $result = json_decode($response, true);
-   
     if (isset($result['prediction'])) {
         $prediction = (int)$result['prediction'];
         $explanation = $result['explanation'] ?? [];

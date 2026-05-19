@@ -75,30 +75,18 @@ $icon_bg_class = $status === 'active' ? 'bg-primary bg-opacity-10' : 'bg-danger 
         .account-page .profile-role { font-size: .9rem; color: #6c757d; }
         .account-page .detail-term { color: #6c757d; }
 
-
-
-
         .account-page .form-control-plaintext { width: 100%; }
-
-
-
 
         /* Allow the center flex column to shrink so it doesn't push the right-side buttons out
            and enable truncation of long text like email/username when space is tight */
         .account-page .d-flex > .flex-grow-1 { min-width: 0; }
         .account-page .profile-role { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-
-
-
         @media (max-width: 767px) {
             .account-page .profile-avatar { font-size:3rem; width:72px; height:72px; }
             .account-page .profile-role { white-space: normal; }
         }
     </style>
-
-
-
 
     <main class="account-page">
         <div class="container account-container py-5">

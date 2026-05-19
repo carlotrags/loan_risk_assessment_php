@@ -6,34 +6,28 @@ $role = $_SESSION['role'] ?? '';
     <ul class="main-navbar mx-auto flex items-center gap-5 list-none m-0 p-0">
         <li><a href="index.php"><i class="fa-solid fa-house"></i>Home</a></li>
 
-
         <li class="assessment-dropdown">
             <a href="assessment.php"><i class="fa-solid fa-clipboard-check"></i>Assessment <i class="fa-solid fa-caret-down"></i></a>
             <div class="assessment-dropdown-menu">
                 <!-- <a href="personal-form.php"><i class="fa-solid fa-user"></i>Personal Loan</a> -->
                 <a href="business-form.php"><i class="fa-solid fa-briefcase"></i>Business Loan</a>
-                <a href="home-form.php"><i class="fa-solid fa-briefcase"></i>Home Loan</a>
+                <a href="home-form.php"><i class="fa-solid fa-house"></i>Home Loan</a>
             </div>
         </li>
-
 
         <li class="history-dropdown">
             <a href="history.php"><i class="fa-solid fa-clock-rotate-left"></i>History <i class="fa-solid fa-caret-down"></i></a>
             <div class="history-dropdown-menu">
                 <!-- <a href="personal-history.php"><i class="fa-solid fa-user"></i>Personal Loan</a> -->
                 <a href="business-history.php"><i class="fa-solid fa-briefcase"></i>Business Loan</a>
-                <a href="home-history.php"><i class="fa-solid fa-briefcase"></i>Home Loan</a>
+                <a href="home-history.php"><i class="fa-solid fa-house"></i>Home Loan</a>
             </div>
         </li>
 
-
-
-
-        <?php if ($role === 'Manager') : ?>
-        <li><a href="user-accounts.php"><i class="fa-solid fa-users"></i>User Accounts</a></li>
+        <?php if (in_array($role, ['Manager', 'System Admin'])) : ?>
+            <li><a href="user-accounts.php"><i class="fa-solid fa-users"></i>User Accounts</a></li>
         <?php endif; ?>
     </ul>
-
 
     <div class="user-menu">
         <button class="user-btn bg-green-600 text-white font-bold px-3 py-2 rounded-md flex items-center gap-2" id="user-dropdown-btn">
@@ -46,7 +40,6 @@ $role = $_SESSION['role'] ?? '';
             </div>
         </div>
 </div>
-
 
 <script>
     document.addEventListener('click', function(event) {

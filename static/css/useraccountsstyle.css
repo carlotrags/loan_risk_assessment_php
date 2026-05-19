@@ -7,12 +7,10 @@
     flex-direction: column;
 }
 
-
 .user-container h1{
     margin: 0;
     color: #333;
 }
-
 
 /* FILTER */
 .accounts-filter{
@@ -23,7 +21,6 @@
     gap: 15px;
     justify-content: flex-start;
 }
-
 
 .accounts-filter input,
 .accounts-filter select {
@@ -36,13 +33,11 @@
     transition: 0.2s all;
 }
 
-
 .accounts-filter input:focus,
 .accounts-filter select:focus {
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0,123,255,0.3);
 }
-
 
 .accounts-filter button{
     display: flex;
@@ -58,22 +53,18 @@
     transition: 0.2s all;
 }
 
-
 .accounts-filter button:hover {
     background-color: #0056b3;
 }
-
 
 .accounts-filter button.new-account-button {
     background-color: #28a745;
     color: #fff;
 }
 
-
 .accounts-filter button.new-account-button:hover {
     background-color: #218838;
 }
-
 
 /* USER TABLE */
 .user-container table{
@@ -84,19 +75,16 @@
     box-shadow: 0 0 10px rgba(0,0,0,0.05);
 }
 
-
 .user-container  table th, td{
     padding: 12px;    
     border: 1px solid #e0e0e0;
     text-align: left;
 }
 
-
 .user-container th{
     background-color: #263238;
     color: #fff;
 }
-
 
 .actions-buttons button{
     border: none;
@@ -104,7 +92,6 @@
     padding: 5px;
     cursor: pointer;
 }
-
 
 /* ACCOUNT CREATION */
 .add-user-container {
@@ -115,13 +102,11 @@
     align-items: center;
 }
 
-
 .add-user-container h1 {
     margin-bottom: 20px;
     text-align: center;
     color: #333;
 }
-
 
 .add-account-form{
     background-color: white;
@@ -129,7 +114,6 @@
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0,0,0,0.05);
 }
-
 
 .form-row {
     display: flex;
@@ -139,14 +123,12 @@
     flex-wrap: wrap;
 }
 
-
 .form-group {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
-
 
 .form-group input,
 .form-group select {
@@ -159,20 +141,17 @@
     transition: 0.2s all;
 }
 
-
 .form-group input:focus,
 .form-group select:focus {
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0,123,255,0.3);
 }
 
-
 .form-submit-button{
     display: flex;
     justify-content: center;
     margin-top: 20px;
 }
-
 
 .form-submit-button button {
     padding: 10px 20px;
@@ -188,17 +167,14 @@
     gap: 12px;
 }
 
-
 .form-submit-button button:hover {
     background-color: #218838;
 }
-
 
 .pass-p{
     font-size: 16px;
     color: gray;
 }
-
 
 .account-non-edit-fields{
     padding: 10px;
@@ -206,3 +182,18 @@
     border-radius: 5px;
 }
 
+/* For system admin */
+.disabled-action {
+    pointer-events: none;
+    opacity: 0.4;
+    cursor: not-allowed;
+    filter: grayscale(100%);
+}
+
+.bg-purple {
+    background-color: #6f42c1;
+}
+
+.border-purple {
+    border-color: #6f42c1;
+}

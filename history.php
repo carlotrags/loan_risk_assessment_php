@@ -30,7 +30,7 @@ if (!empty($_GET['filterAssessmentBy'])) {
     $params[':assessedBy'] = $_GET['filterAssessmentBy'];
 }
 if (isset($_GET['filterPrediction']) && $_GET['filterPrediction'] !== '') {
-    $conditions[] = 'la.prediction = :prediction'; //updated this removed "CAST/ AS CHAR"
+    $conditions[] = 'la.prediction = :prediction';
     $params[':prediction'] = $_GET['filterPrediction'];
 }
 if (!empty($_GET['dateFrom'])) {
@@ -118,8 +118,8 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                             <select name="filterPrediction" class="form-select">
                                 <option value="">Prediction (All)</option>
-                                <option value="0" <?= (isset($_GET['filterPrediction']) && $_GET['filterPrediction']=='0')?'selected':'' ?>>Low Risk</option>
-                                <option value="1" <?= (isset($_GET['filterPrediction']) && $_GET['filterPrediction']=='1')?'selected':'' ?>>High Risk</option>
+                                <option value="1" <?= (isset($_GET['filterPrediction']) && $_GET['filterPrediction']=='1')?'selected':'' ?>>Low Risk</option>
+                                <option value="0" <?= (isset($_GET['filterPrediction']) && $_GET['filterPrediction']=='0')?'selected':'' ?>>High Risk</option>
                             </select>
 
                             <input type="date" name="dateFrom" class="form-control" value="<?= htmlspecialchars($_GET['dateFrom'] ?? '') ?>">
@@ -138,7 +138,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <i class="fa-solid fa-briefcase" style="padding-right: 10px;"></i>Business Loans
                             </a>
                             <a href="home-history.php" class="btn btn-primary">
-                                <i class="fa-solid fa-briefcase" style="padding-right: 10px;"></i>Home Loans
+                                <i class="fa-solid fa-house" style="padding-right: 10px;"></i>Home Loans
                             </a>
                         </div>
                     </div>
@@ -174,11 +174,11 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <td>₱<?= number_format($row['loan_amount'], 2) ?></td>
                                         <td><?= htmlspecialchars($row['loan_term']) ?></td>
                                         
-                                        <td class="prediction <?= (($row['manual_risk_adjustment'] ?? $row['prediction']) == 0) ? 'low' : 'high' ?>">
+                                        <td class="prediction <?= (($row['manual_risk_adjustment'] ?? $row['prediction']) == 1) ? 'low' : 'high' ?>">
                                             <span class="risk-label">
                                                 <?= ($row['manual_risk_adjustment'] !== null) ? 
-                                                    (($row['manual_risk_adjustment'] == 0) ? 'Low Risk' : 'High Risk') : 
-                                                    (($row['prediction'] == 0) ? 'Low Risk' : 'High Risk') 
+                                                    (($row['manual_risk_adjustment'] == 1) ? 'Low Risk' : 'High Risk') : 
+                                                    (($row['prediction'] == 1) ? 'Low Risk' : 'High Risk') 
                                                 ?>
                                             </span>
                                             
@@ -192,7 +192,15 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         
                                         <td>
                                             <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?> 
-                                            <span class="badge align-items-center p-1 pe-2 ms-2 <?= $row['role'] === 'Manager' ? 'text-danger-emphasis bg-danger-subtle border border-danger-subtle' : 'text-primary-emphasis bg-primary-subtle border border-primary-subtle' ?> rounded-pill">
+                                            <span class="badge align-items-center p-1 pe-2 ms-2 
+                                            <?= $row['role'] === 'System Admin' 
+                                                ? 'text-purple-emphasis bg-purple-subtle border border-purple-subtle' 
+                                                : ($row['role'] === 'Manager'
+                                                    ? 'text-danger-emphasis bg-danger-subtle border border-danger-subtle'
+                                                    : 'text-primary-emphasis bg-primary-subtle border border-primary-subtle'
+                                                )
+                                            ?>
+                                            rounded-pill">
                                                 <img src="https://ui-avatars.com/api/?name=<?= urlencode($row['first_name'] . '+' . $row['last_name']) ?>&size=16" class="rounded-circle me-1" width="24" height="24" alt="profile">
                                                 <?= htmlspecialchars($row['role']) ?>
                                             </span>
@@ -236,8 +244,8 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="mb-3">
                         <label class="form-label fw-bold small text-uppercase text-muted">Risk Adjustment</label>
                         <select name="manual_risk_adjustment" class="form-select">
-                            <option value="0" <?= (($row['manual_risk_adjustment'] ?? $row['prediction']) == 0) ? 'selected' : '' ?>>Low Risk</option>
-                            <option value="1" <?= (($row['manual_risk_adjustment'] ?? $row['prediction']) == 1) ? 'selected' : '' ?>>High Risk</option>
+                            <option value="1" <?= (($row['manual_risk_adjustment'] ?? $row['prediction']) == 1) ? 'selected' : '' ?>>Low Risk</option>
+                            <option value="0" <?= (($row['manual_risk_adjustment'] ?? $row['prediction']) == 0) ? 'selected' : '' ?>>High Risk</option>
                         </select>
                     </div>
 

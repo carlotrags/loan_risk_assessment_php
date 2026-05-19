@@ -35,7 +35,7 @@ if (!empty($_GET['filterAssessmentBy'])) {
 }
 
 if (isset($_GET['filterPrediction']) && $_GET['filterPrediction'] !== '') {
-    $conditions[] = 'h.prediction = :prediction';
+    $conditions[] = 'COALESCE(lh.manual_risk_adjustment, h.prediction) = :prediction';
     $params[':prediction'] = $_GET['filterPrediction'];
 }
 
@@ -58,14 +58,29 @@ $sql = "SELECT
         h.email,
         h.loan_amount,
         h.loan_term,
-        h.prediction,
+        COALESCE(lh.manual_risk_adjustment, h.prediction) AS final_prediction,
         h.submitted_at,
         h.assessed_by,
+        lh.updated_at,
+        lh.history_id,
+        lh.manual_risk_adjustment,
+        lh.officer_notes,
         ba.first_name,
         ba.last_name,
         ba.role
     FROM home_loan_applications AS h
-    INNER JOIN user_accounts AS ba ON h.assessed_by = ba.user_id
+
+    LEFT JOIN loan_application_history AS lh 
+        ON h.home_application_id = lh.application_id
+        AND lh.loan_type = 'home'
+        AND lh.history_id = (
+            SELECT MAX(history_id)
+            FROM loan_application_history lh2
+            WHERE lh2.application_id = h.home_application_id
+        )
+
+    INNER JOIN user_accounts AS ba 
+        ON h.assessed_by = ba.user_id
     $where
     ORDER BY h.submitted_at DESC";
 
@@ -118,8 +133,8 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         <select name="filterPrediction" class="form-select">
                             <option value="">Prediction (All)</option>
-                            <option value="0" <?= (($_GET['filterPrediction'] ?? '') === '0') ? 'selected' : '' ?>>Low Risk</option>
-                            <option value="1" <?= (($_GET['filterPrediction'] ?? '') === '1') ? 'selected' : '' ?>>High Risk</option>
+                            <option value="0" <?= (($_GET['filterPrediction'] ?? '') === '1') ? 'selected' : '' ?>>Low Risk</option>
+                            <option value="1" <?= (($_GET['filterPrediction'] ?? '') === '0') ? 'selected' : '' ?>>High Risk</option>
                         </select>
 
                         <input type="date" name="dateFrom" class="form-control"
@@ -139,6 +154,9 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <!-- <a href="personal-history.php" class="btn btn-primary">
                             <i class="fa-solid fa-user" style="padding-right: 10px;"></i>Personal Loans
                         </a> -->
+                        <a href="history.php" class="btn btn-primary">
+                            <i class="fa-solid fa-clock-rotate-left" style="padding-right: 10px;"></i>General History
+                        </a>
                         <a href="business-history.php" class="btn btn-primary">
                             <i class="fa-solid fa-briefcase" style="padding-right: 10px;"></i>Business Loans
                         </a>
@@ -191,15 +209,32 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                     <td><?= htmlspecialchars($row['loan_term']) ?> Months</td>
 
-                                    <td class="prediction <?= ($row['prediction'] == 0) ? 'low' : 'high' ?>">
-                                        <?= ($row['prediction'] == 0) ? 'Low Risk' : 'High Risk' ?>
+                                    <td class="prediction <?= ($row['final_prediction'] == 1) ? 'low' : 'high' ?>">
+                                        <span class="risk-label">
+                                            <?= ($row['final_prediction'] == 1) ? 'Low Risk' : 'High Risk' ?>
+                                        </span>
+
+                                        <?php if (!empty($row['updated_at'])): ?>
+                                            <span class="edit-timer" data-timestamp="<?= strtotime($row['updated_at']) ?>"></span>
+                                        <?php endif; ?>
                                     </td>
-
                                     <td><?= htmlspecialchars($row['submitted_at']) ?></td>
-
                                     <td>
                                         <?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?>
-                                        <span class="badge ms-2">
+
+                                        <span class="badge align-items-center p-1 pe-2 ms-2 
+                                            <?= $row['role'] === 'System Admin' 
+                                                ? 'text-purple-emphasis bg-purple-subtle border border-purple-subtle' 
+                                                : ($row['role'] === 'Manager'
+                                                    ? 'text-danger-emphasis bg-danger-subtle border border-danger-subtle'
+                                                    : 'text-primary-emphasis bg-primary-subtle border border-primary-subtle'
+                                                )
+                                            ?>
+                                            rounded-pill">
+
+                                            <img src="https://ui-avatars.com/api/?name=<?= urlencode($row['first_name'] . '+' . $row['last_name']) ?>&size=16"
+                                                class="rounded-circle me-1" width="24" height="24" alt="profile">
+
                                             <?= htmlspecialchars($row['role']) ?>
                                         </span>
                                     </td>

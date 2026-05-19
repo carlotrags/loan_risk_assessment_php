@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $_SESSION['business_form'] = array_merge($_SESSION['business_form'] ?? [], $data, ['company_name' => $company_name, 'email' => $email]);
 
     // Call Flask API
-    $api_url = 'http://127.0.0.1:5000/predict/business';
+    $api_url = 'http://127.0.0.1:5001/predict/business';
     $ch = curl_init($api_url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
