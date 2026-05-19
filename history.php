@@ -210,12 +210,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <div class="d-flex gap-3">
                                                 <a href="view-details.php?id=<?= $row['application_id'] ?>&type=<?= strtolower($row['loan_type']) ?>" class="text-info" ><i class="fa-solid fa-eye" alt="View"></i></a>
                                                 <a href="#" class="text-primary edit-btn" data-bs-toggle="modal" data-bs-target="#editModal<?= $row['history_id'] ?>" title="Edit"><i class="fa-solid fa-pen-to-square" alt="Edit"></i></a>
-                                                <a href="actions/delete_loan.php?id=<?= $row['history_id'] ?>" 
-                                                class="text-danger" 
-                                                onclick="return confirm('Are you sure you want to delete this loan record?')" 
-                                                title="Delete">
-                                                <i class="fa-solid fa-trash"></i>
-                                                </a>
+                                                <a href="actions/delete_loan.php?id=<?= $row['history_id'] ?>" class="text-danger" onclick="return confirm('Are you sure you want to delete this loan record?')" title="Delete"><i class="fa-solid fa-trash"></i></a>
                                             </div>
                                         </td>
                                     </tr>

@@ -51,7 +51,7 @@ $where = ' WHERE ' . implode(' AND ', $conditions);
 $sql = "SELECT 
         la.history_id, 
         la.application_id,
-        la.name, 
+        la.name,
         la.email,
         la.loan_amount, 
         la.prediction, 
@@ -160,6 +160,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php foreach ($rows as $row): ?>
                                     <tr id="row-<?= $row['history_id'] ?>">
                                         <td><input type="checkbox" class="rowCheckbox" name="selected_ids[]" value="<?= $row['history_id'] ?>"></td>
+                                        <td><?= htmlspecialchars($row['name']) ?><br><p style="font-size: 12px; color: #838995;"><?= htmlspecialchars($row['email']) ?></p></td>
                                         <td><?= htmlspecialchars($row['name']) ?><br><p style="font-size: 12px; color: #838995;"><?= htmlspecialchars($row['email']) ?></p></td>
                                         <td>₱<?= number_format($row['loan_amount'], 2) ?></td>
                                         <td><?= htmlspecialchars($row['loan_term']) ?> Months</td>

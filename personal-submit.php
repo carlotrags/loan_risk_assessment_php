@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ];
 
     // 2. Point to the primary API endpoint used by your machine learning module
-    $api_url = 'http://127.0.0.1:5000/predict';
+    $api_url = 'http://127.0.0.1/predict/personal';
 
     $ch = curl_init($api_url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

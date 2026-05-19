@@ -1,19 +1,23 @@
 <?php
 session_start();
 
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: static/login.php");
     exit;
 }
 
+
 include 'static/config.php';
 
+
 $app_id = $_GET['id'] ?? null;
-$type = strtolower($_GET['type'] ?? '');
+$type = strtolower($_GET['type'] ?? ''); // Force lowercase for consistency
 
 if (!$app_id) {
     die("Application ID missing.");
 }
+
 
 if ($type === 'business') {
     $table = "business_loan_applications";
@@ -24,14 +28,13 @@ if ($type === 'business') {
     $table = "home_loan_applications";
     $id_column = "home_application_id";
     $is_business = false;
-    $db_loan_type = 'Home';
+    $db_loan_type = 'Home'; // Matching DB Enum casing
+} else {
+    $table = "personal_loan_applications";
+    $id_column = "application_id";
+    $is_business = false;
+    $db_loan_type = 'Personal'; // Matching DB Enum casing
 }
-// else {
-//     $table = "personal_loan_applications";
-//     $id_column = "application_id";
-//     $is_business = false;
-//     $db_loan_type = 'Personal';
-// }
 
 try {
     // Fetch data using the specific table and ID column identified above
@@ -39,21 +42,26 @@ try {
     $stmt->execute([':id' => $app_id]);
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
+
     if (!$data) {
         die("Record not found.");
     }
+
 
     $histStmt = $pdo->prepare("SELECT history_id, name, officer_notes, manual_risk_adjustment, prediction, submitted_at, updated_at FROM loan_application_history WHERE application_id = :id AND loan_type = :type");
     $histStmt->execute([':id' => $app_id, ':type' => $db_loan_type]);
     $history = $histStmt->fetch(PDO::FETCH_ASSOC);
 
+
     if (!$history) {
         die("History record not found.");
     }
 
+
 } catch (PDOException $e) {
     die("Database Error: " . $e->getMessage());
 }
+
 
 // --- FIELD GROUPINGS: Define which of the 23 variables to show ---
 if ($type === 'business') {
@@ -65,23 +73,23 @@ if ($type === 'business') {
     $collateral_info = [];
 } elseif ($type === 'home') {
     // These are your Home Loan variables
-    $profile_fields = ['tin_no', 'birthdate', 'address']; 
+    $profile_fields = ['tin_no', 'birthdate', 'address'];
     $financial_condition = ['age', 'sex', 'civil_status', 'dependents', 'years_of_stay', 'home_ownership', 'employment_type', 'monthly_income', 'years_employed'];
     $management_quality = [];
     $collateral_info = ['collateral_type', 'property_value', 'existing_loans', 'monthly_debt', 'dti_ratio', 'default_history'];
-} 
-// else {
-//     // Corrected to use the real columns found in your personal_loan_applications schema
-//     $profile_fields = ['email', 'contact_no', 'home_address', 'age'];
-//     $financial_condition = ['income', 'credit_score', 'dti_ratio'];
-//     $management_quality = [];
-//     $collateral_info = ['existing_loans', 'default_history', 'loan_intent'];
-// }
+} else {
+    // Corrected to use the real columns found in your personal_loan_applications schema
+    $profile_fields = ['email', 'contact_no', 'home_address', 'age'];
+    $financial_condition = ['income', 'credit_score', 'dti_ratio'];
+    $management_quality = [];
+    $collateral_info = ['existing_loans', 'default_history', 'loan_intent'];
+}
 
 function formatLabel($key) {
     return ucwords(str_replace('_', ' ', $key));
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -105,12 +113,14 @@ function formatLabel($key) {
 <div class="container report-wrapper" id="view-details-page">
     <div class="row g-4 justify-content-center w-100">
 
+
         <div class="col-12 col-lg-7">
             <div class="card p-4 h-100">
                 <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
                     <h4 class="mb-0 text-primary fw-bold">Loan Application Report</h4>
                     <span class="badge bg-secondary rounded-pill"><?= strtoupper($type) ?></span>
                 </div>
+
 
                 <div class="report-section">
                     <p class="text-uppercase small fw-bold text-primary mb-3"><?= $is_business ? 'Company Profile' : 'Client Profile' ?></p>
@@ -139,6 +149,7 @@ function formatLabel($key) {
                     </div>
                 </div>
 
+
                 <?php if ($is_business): ?>
                 <div class="report-section">
                     <p class="text-uppercase small fw-bold text-primary mb-3">Financial Condition</p>
@@ -147,9 +158,9 @@ function formatLabel($key) {
                         <div class="col-sm-6 col-md-4">
                             <div class="label-text"><?= formatLabel($f) ?></div>
                             <div class="value-text">
-                                <?php 
+                                <?php
                                     // Displays the raw numerical rating score clearly (e.g., Score: 4/5)
-                                    echo htmlspecialchars($data[$f]) . " / 5"; 
+                                    echo htmlspecialchars($data[$f]) . " / 5";
                                 ?>
                             </div>
                         </div>
@@ -157,6 +168,7 @@ function formatLabel($key) {
                     </div>
                 </div>
                 <?php endif; ?>
+
 
                 <?php if (!empty($collateral_info)): ?>
                 <div class="report-section">
@@ -166,10 +178,10 @@ function formatLabel($key) {
                         <div class="col-sm-6 col-md-4">
                             <div class="label-text"><?= ucwords(str_replace('_', ' ', $f)) ?></div>
                             <div class="value-text">
-                                <?php 
+                                <?php
                                     if ($f === 'property_value' || $f === 'monthly_debt') echo '₱' . number_format($data[$f], 2);
                                     elseif (in_array($data[$f], [0, 1]) && ($f === 'existing_loans' || $f === 'default_history')) echo ($data[$f] == 1 ? 'Yes' : 'No');
-                                    else echo htmlspecialchars($data[$f]); 
+                                    else echo htmlspecialchars($data[$f]);
                                 ?>
                             </div>
                         </div>
@@ -177,6 +189,7 @@ function formatLabel($key) {
                     </div>
                 </div>
                 <?php endif; ?>
+
 
                 <?php if (!empty($industry_market_analysis)): ?>
                 <div class="report-section">
@@ -192,6 +205,7 @@ function formatLabel($key) {
                 </div>
                 <?php endif; ?>
 
+
                 <?php if (!empty($management_quality)): ?>
                 <div class="report-section">
                     <p class="text-uppercase small fw-bold text-primary mb-3">Management Quality</p>
@@ -205,6 +219,7 @@ function formatLabel($key) {
                     </div>
                 </div>
                 <?php endif; ?>
+
 
                 <div class="report-section border-0">
                     <p class="text-uppercase small fw-bold text-primary mb-3">Loan Specifics</p>
@@ -226,17 +241,21 @@ function formatLabel($key) {
             </div>
         </div>
 
+
         <div class="col-12 col-lg-4">
             <div class="card p-4 h-100">
                 <h6 class="text-center text-muted mb-4">Risk Assessment Summary</h6>
 
-                <?php 
+
+                <?php
                 $finalRisk = ($history['manual_risk_adjustment'] !== null)
                     ? $history['manual_risk_adjustment']
                     : ($history['prediction'] ?? 0);
 
-                $isLow = ($finalRisk == 0); 
+
+                $isLow = ($finalRisk == 0);
                 ?>
+
 
                 <div class="risk-box <?= $isLow ? 'bg-success-subtle text-success border border-success' : 'bg-danger-subtle text-danger border border-danger' ?> mb-2">
                     <h3 class="fw-bold mb-0"><?= $isLow ? 'LOW RISK' : 'HIGH RISK' ?></h3>
@@ -245,11 +264,13 @@ function formatLabel($key) {
                     </p>
                 </div>
 
+
                 <div class="text-center mb-3">
                     <?php if (!empty($history['updated_at'])): ?>
                         <span class="edit-timer text-center" data-timestamp="<?= strtotime($history['updated_at']) ?>"></span>
                     <?php endif; ?>
                 </div>
+
 
                 <div class="d-grid mb-4 no-print">
                     <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#updateModal">
@@ -257,34 +278,18 @@ function formatLabel($key) {
                     </button>
                 </div>
 
+
                 <div class="mb-4">
                     <label class="label-text mb-1">Officer Decision Notes</label>
                     <div class="p-3 bg-light rounded small" style="min-height:100px;">
-                        <?= !empty($history['officer_notes']) 
-                            ? nl2br(htmlspecialchars($history['officer_notes'])) 
+                        <?= !empty($history['officer_notes'])
+                            ? nl2br(htmlspecialchars($history['officer_notes']))
                             : '<em>No additional remarks recorded.</em>' ?>
                     </div>
                 </div>
 
+
                 <div class="d-grid gap-2 mt-auto no-print">
-                    <?php
-                    $recipientEmail = $data['email'] ?? '';
-
-                    $subject = "Loan Assessment Result - " . ($history['name'] ?? '');
-
-                    $body = "Hi,\n\nPlease download the generated PDF from your system and attach it before sending.\n\nThank you.";
-
-                    $gmailLink = "https://mail.google.com/mail/?view=cm&fs=1"
-                        . "&to=" . urlencode($recipientEmail)
-                        . "&su=" . urlencode($subject)
-                        . "&body=" . urlencode($body);
-                    ?>
-
-                    <a href="<?= $gmailLink ?>"
-                    target="_blank"
-                    class="btn btn-success">
-                    Send Email
-                    </a>
                     <button onclick="window.print()" class="btn btn-outline-primary">
                         <i class="fa-solid fa-print me-2"></i>Print Report
                     </button>
@@ -295,8 +300,10 @@ function formatLabel($key) {
             </div>
         </div>
 
+
     </div>
 </div>
+
 
 <div class="modal fade" id="updateModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -308,7 +315,7 @@ function formatLabel($key) {
             </div>
             <div class="modal-body p-4">
                 <input type="hidden" name="history_id" value="<?= $history['history_id'] ?>">
-                
+               
                 <div class="mb-3">
                     <label class="form-label fw-bold small text-uppercase text-muted">Risk Level Adjustment</label>
                     <select name="manual_risk_adjustment" class="form-select">
@@ -316,6 +323,7 @@ function formatLabel($key) {
                         <option value="1" <?= ($finalRisk == 1) ? 'selected' : '' ?>>High Risk</option>
                     </select>
                 </div>
+
 
                 <div class="mb-0">
                     <label class="form-label fw-bold small text-uppercase text-muted">Remarks / Justification</label>
@@ -330,10 +338,12 @@ function formatLabel($key) {
     </div>
 </div>
 
+
 <?php include "static/footer.php" ?>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="static/history-actions.js?v=<?= time() ?>" defer></script>
+
 
 </body>
 </html>

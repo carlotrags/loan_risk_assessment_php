@@ -30,7 +30,7 @@ unset($_SESSION['login_error']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/loginstyle.css">
+    <link rel="stylesheet" href="css/loginstyle.css?v=<?= filemtime('css/loginstyle.css') ?>">
     <link rel="icon" type="image/x-icon" href="images/LRA_Favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <title>Login</title>
@@ -67,19 +67,6 @@ unset($_SESSION['login_error']);
         if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
             window.location.reload();
         }
-    });
-
-    // Toggle password visibility
-    const togglePassword = document.getElementById("togglePassword");
-    const password = document.getElementById("password");
-
-    togglePassword.addEventListener("click", function () {
-
-        const type = password.getAttribute("type") === "password" ? "text" : "password";
-        password.setAttribute("type", type);
-
-        this.classList.toggle("fa-eye");
-        this.classList.toggle("fa-eye-slash");
     });
 </script>
 </body>
