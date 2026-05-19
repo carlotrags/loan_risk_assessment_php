@@ -61,13 +61,6 @@ unset($_SESSION['login_error']);
             <button type="submit">Sign in</button>
         </form>
     </div>
-<script>
-    // Detect if page is loaded from back/forward cache
-    window.addEventListener("pageshow", function (event) {
-        if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
-            window.location.reload();
-        }
-    });
-</script>
+<script src="static/login.js?v=<?= time() ?>"></script>
 </body>
 </html>
