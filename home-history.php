@@ -93,6 +93,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="static/css/style.css?v=<?= time() ?>">
     <link rel="stylesheet" href="static/css/historystyle.css?v=<?= time() ?>">
@@ -174,7 +175,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <?php if (count($rows) > 0): ?>
                 <form method="POST" action="actions/bulk_delete.php" id="bulkForm">
-
+                    <div class="table-responsive">
                     <table>
                         <thead>
                             <tr>
@@ -251,7 +252,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </tbody>
 
                     </table>
-
+                    </div>
                 </form>
             <?php else: ?>
                 <p>No home loan applications found.</p>

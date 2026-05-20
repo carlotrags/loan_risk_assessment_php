@@ -111,6 +111,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="static/css/style.css?v=<?= time() ?>">
     <link rel="stylesheet" href="static/css/historystyle.css?v=<?= time() ?>">
@@ -176,6 +177,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <form method="POST" action="actions/bulk_delete.php" id="bulkForm">
                     <?php if (count($rows) > 0): ?>
+                        <div class="table-responsive">
                         <table>
                             <thead>
                                 <tr class="main-details">
@@ -287,6 +289,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
+                        </div>
                     <?php else: ?>
                         <p>No business loan applications found.</p>
                     <?php endif; ?>

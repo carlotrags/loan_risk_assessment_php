@@ -88,7 +88,7 @@ if ($result && $result->num_rows > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap CSS for utilities and icons and stuffs -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJq0Xgk0v3Q9GqQ4jKk0rQ5F5p1bQ6I6Qe5Q5Q5Q5Q5Q5Q" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons and stuff-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
@@ -168,6 +168,7 @@ if ($result && $result->num_rows > 0) {
 
         <div class="recent-assessments">
             <h3>Recent Assessments</h3>
+        <div class="table-responsive">
             <table>
                 <thead>
                     <tr>
@@ -207,6 +208,7 @@ if ($result && $result->num_rows > 0) {
                 <?php endforeach; ?>
                 </tbody>
             </table>
+            </div>
             <a href="history.php"><button class="btn btn-primary">See Full History</button></a>
         </div>
 

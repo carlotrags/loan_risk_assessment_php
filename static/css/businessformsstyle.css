@@ -6,6 +6,7 @@
     margin-top: 20px;
 }
 
+
 .next-button {
     display: flex;
     justify-content: center;
@@ -22,24 +23,30 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+
 .next-button:hover {
     background-color: #0b5ed7;
     transform: translateY(-2px);
 }
 
+
 .business-form-container{
     animation: fadeInUp 0.8s ease-out;
 }
 
+
 .business-form-container a{
     text-decoration: none;
 }
+
 
 .business-form-table input[type="radio"] {
     transform: scale(1.5);
     margin-right: 8px;
     cursor: pointer;
 }
+
+
 
 
 /* A. Basic Details */
@@ -49,9 +56,10 @@
     background-color: #fafafa;
     padding: 25px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
-    border: none; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: none;
 }
+
 
 .business-form-item {
     margin-bottom: 20px;
@@ -59,11 +67,13 @@
     flex-direction: column;
 }
 
+
 .business-form-item label {
     margin-bottom: 6px;
     font-weight: 500;
     color: #333;
 }
+
 
 .business-form-item input[type="text"], .business-form-item input[type="number"], .business-form-item input[type="email"] {
     padding: 10px 12px;
@@ -75,11 +85,13 @@
     background-color: rgba(247, 247, 247, 0.996);
 }
 
+
 .business-form-item input:focus {
     border-color: #0d6efd;
     box-shadow: 0 0 5px rgba(13,110,253,0.3);
     outline: none;
 }
+
 
 /* Steps 2 to 4 */
 .business-form-table {
@@ -93,6 +105,7 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
+
 .business-form-table th {
     background-color: #4a4a4a;
     color: white;
@@ -103,6 +116,7 @@
     font-size: 14px;
 }
 
+
 .business-form-table td {
     padding: 20px 8px;
     border-bottom: 1px solid #e0e0e0;
@@ -110,17 +124,21 @@
     vertical-align: middle;
 }
 
+
 .business-form-table tbody tr:nth-child(odd) {
     background-color: #f3f3f3;
 }
+
 
 .business-form-table tbody tr:nth-child(even) {
     background-color: #ffffff;
 }
 
+
 .company-name-placeholder{
     color: #333;
 }
+
 
 /* Submit button */
 .submit-btn {
@@ -136,9 +154,11 @@
     transition: background-color 0.3s ease;
 }
 
+
 .submit-btn:hover{
     background-color: rgb(0, 182, 0);
 }
+
 
 /* Step Container */
 .step-container {
@@ -150,9 +170,11 @@
     border-bottom: 2px solid #ccc;
 }
 
+
 .step-container a{
     text-decoration: none;
 }
+
 
 .step {
     display: flex;
@@ -167,17 +189,20 @@
     max-width: 200px;
 }
 
+
 .step.active {
     font-weight: bold;
     border-color: #0d6efd;
     color: #0d6efd;
 }
 
+
 /* Table Contents */
 .variable-details{
     font-size: 12px;
     color: gray;
 }
+
 
 /* Preview Style */
 .preview-container{
@@ -186,6 +211,7 @@
     margin: auto;
     animation: fadeInUp 0.8s ease-out;
 }
+
 
 .preview-table {
     width: 100%;
@@ -198,6 +224,7 @@
     overflow: hidden;
 }
 
+
 .preview-table .section-header {
     background: #0d6efd;
     color: #fff;
@@ -206,29 +233,36 @@
     font-size: 16px;
 }
 
+
 .preview-table td {
     padding: 10px 12px;
     border: 1px solid #eee;
     font-size: 14px;
 }
 
+
 .variable-row {
     background: #d8d8d8;
     font-weight: 600;
 }
 
+
 .answer-row td {
     background: #fff;
 }
+
 
 .preview-table td {
     word-wrap: break-word;
 }
 
+
 .d-flex {
     display: flex !important;
     justify-content: flex-end;
 }
+
+
 
 
 /* Animation */
@@ -242,3 +276,101 @@
     transform: translateY(0);
     }
 }
+
+
+@media (max-width: 992px) {
+    .business-form-table {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+
+    .preview-table td,
+    .preview-table th,
+    .business-form-table td,
+    .business-form-table th {
+        font-size: 12px;
+        padding: 8px 6px;
+        word-break: break-word;
+        white-space: normal;
+    }
+
+
+    .company-basic-details-form {
+        width: 100%;
+        padding: 18px;
+    }
+
+
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+
+
+    .next-button,
+    .submit-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+
+    .submit-btn {
+        width: 100%;
+    }
+
+
+    .step-container {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+
+    .step {
+        min-width: 45%;
+        max-width: 100%;
+        font-size: 13px;
+    }
+
+
+    .business-form-table{
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+
+    .business-form-table input[type="radio"] {
+        transform: scale(1.2);
+    }
+
+
+    .variable-row td{
+        font-size: 7px;
+    }
+}
+
+
+@media (max-width: 576px) {
+    .business-form-table {
+        display: block;
+    }
+
+
+    .business-form-table tr {
+        display: flex;
+        flex-direction: column;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 10px;
+    }
+
+
+    .business-form-table td {
+        width: 100%;
+    }
+}
+
+
+
+

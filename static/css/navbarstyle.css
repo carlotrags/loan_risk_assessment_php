@@ -15,9 +15,11 @@
     position: relative;
 }
 
+
 .nav-container h1{
     color: rgb(227, 220, 255);
 }
+
 
 .main-navbar{
     display: flex;
@@ -27,6 +29,7 @@
     list-style: none;
     margin-right: 265px;
 }
+
 
 .main-navbar li a{
     display: flex;
@@ -41,14 +44,17 @@
     transition: background-color 0.3s ease;
 }
 
+
 .main-navbar a:hover{
     background-color: rgb(0, 4, 125);
 }
+
 
 /* Assessment Dropdown */
 .assessment-dropdown {
     position: relative;
 }
+
 
 .assessment-dropdown-menu{
     display: none;
@@ -64,6 +70,7 @@
     z-index: 10;
 }
 
+
 .main-navbar li.assessment-dropdown .assessment-dropdown-menu a {
     display: block;
     padding: 10px 15px;
@@ -73,23 +80,28 @@
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+
 .main-navbar li.assessment-dropdown .assessment-dropdown-menu a:hover {
     background-color: #0700d4;
     color: white;
 }
 
+
 .assessment-dropdown:hover .assessment-dropdown-menu{
     display: flex;
 }
+
 
 .assessment-dropdown-menu a i {
     margin-right: 8px;
 }
 
+
 /* History Dropdown */
 .history-dropdown {
     position: relative;
 }
+
 
 .history-dropdown-menu{
     display: none;
@@ -105,6 +117,7 @@
     z-index: 10;
 }
 
+
 .main-navbar li.history-dropdown .history-dropdown-menu a {
     display: block;
     padding: 10px 15px;
@@ -114,18 +127,22 @@
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+
 .main-navbar li.history-dropdown .history-dropdown-menu a:hover {
     background-color: #0700d4;
     color: white;
 }
 
+
 .history-dropdown:hover .history-dropdown-menu{
     display: flex;
 }
 
+
 .history-dropdown-menu a i {
     margin-right: 8px;
 }
+
 
 /* Logo */
 .logo {
@@ -134,10 +151,12 @@
     font-weight: 700;
 }
 
+
 /* Navbar User Drop Down */
 .user-menu{
     position: relative;
 }
+
 
 .user-btn{
     display: flex;
@@ -154,9 +173,11 @@
     transition: background-color 0.3s ease;
 }
 
+
 .user-btn:hover{
     background-color: darkgreen;
 }
+
 
 .user-dropdown{
     display: none;
@@ -172,6 +193,7 @@
     flex-direction: column;
 }
 
+
 .user-dropdown a{
     color: #003c82;
     padding: 10px;
@@ -182,9 +204,11 @@
     font-weight: bold;
 }
 
+
 .user-dropdown.show{
     display: flex;
 }
+
 
 /* User account styling */
 .user-dropdown.show .user-account{
@@ -193,9 +217,11 @@
     transition: background-color 0.2s ease;
 }
 
+
 .user-dropdown.show .user-account:hover{
     background-color: #c0c0c0;
 }
+
 
 /* Logout button styling */
 .user-dropdown.show .logout{
@@ -204,16 +230,20 @@
     transition: background-color 0.2s ease;
 }
 
+
 .user-dropdown.show .logout:hover{
     background-color: rgb(153, 0, 0);
 }
 
+
 /* Responsiveness */
+
 
 /* --- Desktop Layout Enhancements --- */
 .nav-container {
     padding: 12px 40px ;
 }
+
 
 .burger-menu-toggle {
     display: none;
@@ -227,6 +257,7 @@
     transition: background-color 0.2s ease;
 }
 
+
 /* --- Premium Flexbox Mobile UI Alignment (Max 992px) --- */
 @media (max-width: 992px) {
     .nav-container {
@@ -239,6 +270,7 @@
         gap: 8px ;
     }
 
+
     /* Burger Button Layout */
     .burger-menu-toggle {
         display: block ;
@@ -247,17 +279,19 @@
         z-index: 10 ;
     }
 
+
     /* Logo Framework */
     .nav-container .logo {
         position: static ;
         transform: none ;
         order: 2 ;
-        font-size: 0.95rem ; 
+        font-size: 0.95rem ;
         white-space: nowrap ;
         text-align: center ;
         z-index: 5 ;
         flex: 1 1 auto ;
     }
+
 
     /* User Profile Menu Section */
     .user-menu {
@@ -267,6 +301,7 @@
         display: flex ;
         align-items: center ;
     }
+
 
     /* Pahabang Button Framework para sa Mobile Screen */
     .user-btn {
@@ -285,14 +320,17 @@
         height: auto ;
     }
 
+
     .user-btn i.fa-caret-down {
         display: inline-block ;
         font-size: 0.75rem ;
     }
 
+
     .user-btn i.fa-user {
         font-size: 0.85rem ;
     }
+
 
     /* Floating box adjustment ng dropdown menu sa mobile view */
     .user-dropdown {
@@ -306,6 +344,7 @@
         overflow: hidden ;
     }
 
+
     /* --- Extra Layout Safety Module (Max 480px) --- */
     /* PAUNAWA: Inayos ang nesting ng media query dito */
     @media (max-width: 480px) {
@@ -313,6 +352,7 @@
             font-size: 0.85rem ;
         }
     }
+
 
     /* --- Vertical Mobile Side Menu Drawer --- */
     .main-navbar {
@@ -331,13 +371,16 @@
         z-index: 9999 ;
     }
 
+
     .main-navbar.active {
         display: flex ;
     }
 
+
     .main-navbar li {
         width: 100% ;
     }
+
 
     .main-navbar li a {
         display: flex ;
@@ -348,6 +391,7 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.08) ;
     }
 
+
     .assessment-dropdown-menu,
     .history-dropdown-menu {
         position: static ;
@@ -357,9 +401,43 @@
         padding-left: 20px ;
         display: none ;
     }
+}
+
+
+@media (max-width: 992px) {
+
+
+    .assessment-dropdown-menu,
+    .history-dropdown-menu {
+        position: static !important;
+        display: flex !important;
+        flex-direction: column;
+
+
+        background-color: #3700ff;
+        box-shadow: none;
+        width: 100%;
+        padding-left: 25px;
+    }
+
 
     .assessment-dropdown:hover .assessment-dropdown-menu,
     .history-dropdown:hover .history-dropdown-menu {
-        display: flex ;
+        display: flex !important;
+    }
+
+
+    .assessment-dropdown-menu a,
+    .history-dropdown-menu a {
+        padding: 10px 24px;
+        color: #fff !important;
+        opacity: 0.9;
+    }
+
+
+    .assessment-dropdown-menu a:hover,
+    .history-dropdown-menu a:hover {
+        background: rgba(255,255,255,0.1);
     }
 }
+

@@ -63,8 +63,6 @@ $icon_bg_class = $status === 'active' ? 'bg-primary bg-opacity-10' : 'bg-danger 
     </section>
 
 
-
-
     <!-- Account content styles below keep changes local to this page -->
     <style>
         /*Overrides to avoid touching global CSS files so don't touch thisss*/
@@ -73,20 +71,29 @@ $icon_bg_class = $status === 'active' ? 'bg-primary bg-opacity-10' : 'bg-danger 
         .account-page .card .card-body { padding: 1rem; }
         .account-page .profile-avatar { font-size: 4rem; width: 96px; height: 96px; display:flex; align-items:center; justify-content:center; border-radius:50%; }
         .account-page .profile-role { font-size: .9rem; color: #6c757d; }
-        .account-page .detail-term { color: #6c757d; }
-
-        .account-page .form-control-plaintext { width: 100%; }
-
-        /* Allow the center flex column to shrink so it doesn't push the right-side buttons out
-           and enable truncation of long text like email/username when space is tight */
         .account-page .d-flex > .flex-grow-1 { min-width: 0; }
-        .account-page .profile-role { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .account-page .form-control-plaintext { width: 100%; }
+        .account-page .detail-term { color: #6c757d; }
+        .account-page .d-flex.align-items-center { align-items: center; }
 
-        @media (max-width: 767px) {
-            .account-page .profile-avatar { font-size:3rem; width:72px; height:72px; }
-            .account-page .profile-role { white-space: normal; }
+
+        @media (max-width: 768px) {
+            .account-page .d-flex.align-items-center { flex-direction: column; align-items: center !important; text-align: center; gap: 12px; }
+            .account-page .me-3 { margin-right: 0 !important; }
+            .account-page .text-end { text-align: center !important; width: 100%; margin-left: 0 !important; }
+            .account-page .text-end a { width: 100%; display: block; margin-bottom: 8px; }
+            .account-page .profile-avatar { font-size: 3rem; width: 72px; height: 72px; }
+            .account-page .profile-role { white-space: normal; text-align: center; }
+        }
+
+
+        @media (max-width: 576px) {
+            .account-page .container { margin: 1.5rem auto !important; }
+            .account-page .card-body { padding: 0.75rem !important; }
+            .account-page .profile-role { font-size: 0.85rem; }
         }
     </style>
+
 
     <main class="account-page">
         <div class="container account-container py-5">
@@ -112,15 +119,7 @@ $icon_bg_class = $status === 'active' ? 'bg-primary bg-opacity-10' : 'bg-danger 
                                 <a href="history.php" class="btn btn-outline-secondary btn-sm">History</a>
                             </div>
                         </div>
-
-
-
-
                         <hr class="my-3">
-
-
-
-
                         <div class="row g-3">
                             <div class="col-6 col-md-4">
                                 <div class="detail-term small">Role</div>
@@ -135,15 +134,7 @@ $icon_bg_class = $status === 'active' ? 'bg-primary bg-opacity-10' : 'bg-danger 
                                 <div><?= date('F j, Y', strtotime($user['creation_date'])) ?></div>
                             </div>
                         </div>
-
-
-
-
                         <hr class="my-3">
-
-
-
-
                         <div>
                             <h6 class="mb-2">Account Details</h6>
                             <div class="row">
@@ -168,8 +159,6 @@ $icon_bg_class = $status === 'active' ? 'bg-primary bg-opacity-10' : 'bg-danger 
                     </div>
                 </div>
             </div>
-
-
 
 
             <!-- Account Details -->
@@ -233,8 +222,6 @@ $icon_bg_class = $status === 'active' ? 'bg-primary bg-opacity-10' : 'bg-danger 
                 </div>
 
 
-
-
                 <!-- Account Activity -->
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white py-3">
@@ -255,7 +242,7 @@ $icon_bg_class = $status === 'active' ? 'bg-primary bg-opacity-10' : 'bg-danger 
                                 <p class="text-muted small mb-0">You have completed <?= htmlspecialchars($stats['total_assessments']) ?> loan risk assessments</p>
                             </div>
                         </div>
-                   
+               
                         <div class="d-flex align-items-center p-3 bg-light rounded">
                             <div class="<?= $icon_bg_class ?> p-2 rounded me-3">
                                 <i class="bi bi-shield-check <?= $icon_class ?>"></i>
@@ -270,11 +257,8 @@ $icon_bg_class = $status === 'active' ? 'bg-primary bg-opacity-10' : 'bg-danger 
             </div>
         </div>
     </div>
-
-
-
-
     <?php include "static/footer.php"?>
 </body>
 </html>
+
 
