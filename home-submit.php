@@ -149,6 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link rel="stylesheet" href="static/css/style.css?v=<?= time() ?>">
     <link rel="stylesheet" href="static/css/navbarstyle.css">
     <link rel="stylesheet" href="static/css/result.css?v=<?= time() ?>">
+    <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
     <title>Home Loan Assessment Result</title>
 </head>
 <body>
@@ -196,12 +197,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <?php endif; ?>
 
 
-            <div class="action-buttons d-flex gap-3">
+            <div class="action-buttons">
                 <a href="view-details.php?id=<?= $application_id ?>&type=home" class="btn btn-success">Edit / Print Assessment</a>
                 <a href="home-form.php" class="btn btn-primary">Submit New Assessment</a>
             </div>
         </div>
     </div>
+
     <?php include "static/footer.php"; ?>
 </body>
 </html>

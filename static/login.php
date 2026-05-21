@@ -1,11 +1,13 @@
 <?php
 session_start();
 
+
 // 1. Strict Cache Control
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 header("Expires: 0");
+
 
 // 2. Updated Logic: If logged in, tell the browser to "skip" this page in history
 if (isset($_SESSION['user_id'])) {
@@ -21,9 +23,11 @@ if (isset($_SESSION['user_id'])) {
     exit;
 }
 
+
 $error = $_SESSION['login_error'] ?? '';
 unset($_SESSION['login_error']);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -42,15 +46,18 @@ unset($_SESSION['login_error']);
         </div>
     </header>
 
+
     <div class="login-container">
         <h1>Login</h1>
         <?php if ($error): ?>
             <p class="error-msg"><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
 
+
         <form action="login_process.php" method="POST">
             <label>Username</label>
             <input type="text" id="username" name="username" placeholder="Input username">
+
 
             <label class="password-label">Password</label>
             <div class="password-container">
@@ -58,9 +65,29 @@ unset($_SESSION['login_error']);
                 <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
             </div>
 
+
             <button type="submit">Sign in</button>
         </form>
     </div>
 <script src="static/login.js?v=<?= time() ?>"></script>
+<script>
+    const togglePassword = document.getElementById("togglePassword");
+    const password = document.getElementById("password");
+
+
+    togglePassword.addEventListener("click", () => {
+        const type = password.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+
+
+        password.setAttribute("type", type);
+
+
+        // Change icon
+        togglePassword.classList.toggle("fa-eye");
+        togglePassword.classList.toggle("fa-eye-slash");
+    });
+</script>
 </body>
 </html>

@@ -9,6 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Include database connection configuration
 include 'static/config.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -158,7 +159,7 @@ include 'static/config.php';
                 </div>
                 <div class="col-md-4">
                     <label>Appraisal Property Value</label>
-                    <input type="number" name="property_value" class="form-control" placeholder="0.00">
+                    <input type="number" name="property_value" class="form-control" placeholder="0.00" min="100000" step="0.01"required>
                 </div>
                 <div class="col-md-4">
                     <label>Loan Amount</label>

@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
     incomeInput.addEventListener("input", calculateDTI);
     debtInput.addEventListener("input", calculateDTI);
 
-    // ✅ TIN AUTO FORMAT (WORKING 123-123-123)
+    // TIN AUTO FORMAT (WORKING 123-123-123)
     if (tinInput) {
         tinInput.addEventListener("input", function () {
             let value = this.value;

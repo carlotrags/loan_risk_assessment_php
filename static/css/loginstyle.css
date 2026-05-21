@@ -34,7 +34,7 @@ body {
     padding: 20px;
    
     background: linear-gradient(var(--color-bg-overlay), var(--color-bg-overlay)),
-                url("login-page-bg.jpg") center/cover no-repeat;
+                url("../images/login-page-bg.jpg") center/cover no-repeat;
 }
 
 
