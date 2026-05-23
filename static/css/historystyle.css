@@ -1,0 +1,249 @@
+/* History Search & Filter */
+.filter-bar{
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+}
+
+
+/* History Table */
+.history-container{
+    margin: 20px;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+
+.history-container h2{
+    color: #333;
+}
+
+
+.history-container table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+
+.history-container table th,
+.history-container table td{
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+
+.history-container th{
+    background-color: #263238;
+    color: #fff;
+}
+
+
+td.prediction.low{
+    background: #11ff00;
+    color: rgb(255, 255, 255);
+    font-weight: 600;
+}
+
+
+td.prediction.high{
+    background: #ff0015;
+    color: rgb(255, 255, 255);
+    font-weight: 600;
+}
+
+
+.btn-pdf-narrow {
+    display: inline-block !important;
+    width: 240px;
+}
+
+
+/* Business Loan History */
+/* More Details Button */
+.more-details{
+    width: 10px;
+    transition: background-color 0.3s ease;
+}
+
+
+.toggle-more-details{
+    display: flex;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+
+.more-details i{
+    width: 50px;
+}
+
+
+.more-details:hover{
+    background-color: #ccc;
+}
+
+
+.hidden-variables-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+
+.hidden-item{
+    flex: 1;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid rgb(156, 156, 156);
+    border-radius: 10px;
+    min-width: 250px;
+}
+
+
+.hidden-item p{
+    font-size: 15px;
+}
+
+
+.hidden-item h4{
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 15px;
+}
+
+
+.hidden-details {
+    display: none;
+}
+
+
+.hidden-details.show-details {
+    display: table-row;
+}
+
+
+.hidden-details td {
+    display: table-cell;
+    padding: 20px 10px;
+}
+
+
+.d-flex {
+    display: flex !important;
+    justify-content: center;
+}
+
+
+.edit-timer {
+    display: block;
+    font-size: 10px;
+    color: #8e8e8e;
+    margin-top: 2px;
+    font-weight: normal;
+}
+
+
+td.prediction {
+    line-height: 1.2;
+    vertical-align: middle !important;
+}
+
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+
+@media (max-width: 992px) {
+
+
+    .history-container{
+        margin: 10px;
+        padding: 0 10px;
+    }
+
+
+    .filter-grid{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+
+    .history-container table{
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+
+    .hidden-variables-container{
+        flex-direction: column;
+    }
+
+
+    .hidden-item{
+        width: 100%;
+        margin: 10px 0;
+    }
+}
+
+
+@media (max-width: 576px){
+
+
+    .filter-grid{
+        grid-template-columns: 1fr;
+    }
+
+
+    .history-container h2{
+        font-size: 20px;
+        text-align: center;
+    }
+
+
+    .history-container table th,
+    .history-container table td{
+        padding: 10px;
+        font-size: 13px;
+    }
+
+
+    .btn-pdf-narrow{
+        width: 100%;
+    }
+
+
+    .hidden-item h4{
+        font-size: 18px;
+    }
+
+
+    .hidden-item p{
+        font-size: 14px;
+    }
+}
+
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

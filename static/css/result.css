@@ -1,0 +1,280 @@
+/* General Reset and Typography */
+:root {
+    --color-primary: #004c99; /* Deep Bank Blue */
+    --color-secondary-bg: #f0f4f7; /* Light Gray Background */
+    --color-success: #1e8449; /* Deep Green */
+    --color-danger: #c0392b; /* Deep Red */
+    --color-text: #333;
+    --color-light-text: #777;
+    --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: rgb(0 77 153 / 37%);
+    background-image: url(images/lobby.jpg);
+    background-blend-mode: multiply;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+    color: var(--color-text);
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Layout and Header */
+.result-container {
+    width: 100%;
+    max-width: 700px;
+    margin: 30px auto;
+    animation: fadeIn 0.8s ease-in-out;
+    
+}
+
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+/* Main Card */
+.result-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    padding: 30px;
+    text-align: left;
+}
+
+.card-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.result-card h2 {
+    color: var(--color-primary);
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.8em;
+}
+
+.applicant-info {
+    font-size: 1em;
+    color: var(--color-text);
+    margin-top: 5px;
+}
+
+/* Status */
+.assessment-status {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-radius: 6px;
+    margin-bottom: 25px;
+    transition: all 0.3s;
+}
+
+.assessment-status .icon {
+    font-size: 3.5em;
+    font-weight: bold;
+    margin-right: 20px;
+    line-height: 1;
+}
+
+.status-message h3 {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+.low {
+    background-color: #e6f7ee;
+    color: var(--color-success);
+    border-left: 5px solid var(--color-success);
+}
+
+.high {
+    background-color: #fcebeb;
+    color: var(--color-danger);
+    border-left: 5px solid var(--color-danger);
+}
+
+.error {
+    background-color: #fff4e5;
+    color: #cc8400;
+    border-left: 5px solid #ffc107;
+}
+
+/* Data Sections */
+.section {
+    padding: 15px 0;
+    border-top: 1px solid #eee;
+}
+
+.section h4 {
+    color: var(--color-primary);
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    font-weight: 700;
+}
+
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.data-grid > div {
+    background-color: #f7f9fb; /* Very subtle background */
+    padding: 10px 15px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+
+.data-grid .label {
+    display: block;
+    font-size: 0.85em;
+    color: var(--color-light-text);
+    margin-bottom: 3px;
+}
+
+.data-grid .value {
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+/* Denial Reasons List */
+.reason-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.reason-list li {
+    margin-bottom: 10px;
+    padding-left: 10px;
+    color: var(--color-text);
+    display: flex;
+    align-items: flex-start;
+    font-size: 0.95em;
+    border-bottom: 1px dashed #f0f0f0;
+    padding-bottom: 5px;
+}
+
+.icon-reason {
+    color: var(--color-danger);
+    font-size: 0.8em;
+    margin-right: 8px;
+    line-height: 1.6;
+}
+
+/* Buttons */
+.action-buttons {
+    text-align: right; /* Align button to the right */
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    font-weight: 600;
+    
+    /* Bank Colors */
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 76, 153, 0.2);
+}
+
+.btn-primary:hover {
+    background-color: #003a7a;
+    box-shadow: 0 4px 8px rgba(0, 76, 153, 0.3);
+}
+
+/* Footer */
+.footer-result {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px dashed #eee;
+    text-align: center;
+    font-size: 0.8em;
+    color: var(--color-light-text);
+}
+
+.system-header .bank-logo {
+    max-height: 50px; 
+    width: auto;    
+    vertical-align: middle; 
+}
+
+.system-header .logo {
+    padding-left: 10px; 
+}
+
+/*business*/
+
+/* Business Loan Result Card */
+.result-container.business {
+    width: auto;
+    max-width: none;           /* remove width limit */
+    margin: 30px auto;
+    display: flex;
+    justify-content: center;
+}
+
+.result-card.business {
+    width: auto;
+    min-width: 900px;          /* ensure wide tables fit */
+    padding: 30px;
+    text-align: left;
+    overflow-x: visible;       /* prevent horizontal scroll inside card */
+}
+
+/* Preview Table for Business Loan */
+.preview-container.business .preview-table {
+    width: auto;               /* let table grow with content */
+    min-width: 100%;
+    table-layout: auto;        /* dynamic column widths */
+    border-collapse: collapse;
+}
+
+.preview-table .section-header {
+    background-color: var(--color-primary);
+    color: white;
+    font-weight: 700;
+    padding: 10px;
+}
+
+.preview-table td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9em;
+}
+
+.preview-table .variable-row {
+    background-color: #f0f4f7;
+    font-weight: 600;
+}
+
+.preview-table .answer-row {
+    background-color: #ffffff;
+}
+
+/* Adjust text so it wraps if needed */
+.preview-table td, .preview-table th {
+    padding: 6px 8px;
+    text-align: center;
+    font-size: 0.85em;
+    white-space: normal;      /* allow wrapping if necessary */
+    overflow: visible;
+    text-overflow: clip;
+}

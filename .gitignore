@@ -1,0 +1,16 @@
+# Scraps local notes
+.scraps/
+Directory containing Composer dependencies
+
+/vendor/
+
+General ignores for PHP development
+
+Composer lock file (optional, but standard practice)
+
+composer.lock
+
+Log and cache files
+
+*.log
+/cache/

@@ -1,0 +1,192 @@
+/* EXTRACTED FROM style.css: Navbar & Footer */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #eef1f5, #f7f9fb);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header-navbar,
+footer {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+footer {
+  background: #222222;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  margin-top: auto; /* Push footer to bottom */
+}
+
+
+/* =========================================
+   HOME PREVIEW PAGE ONLY
+   ========================================= */
+
+.preview-page {
+    background: linear-gradient(135deg, #eef2f7, #f8fafc);
+    min-height: 100vh;
+    padding: 50px 40px;
+}
+
+/* Main Card */
+.preview-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 20px 35px 35px 35px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border: none;
+    animation: fadeInUp 0.4s ease;
+}
+
+/* Title */
+.preview-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0d3b66;
+    margin-bottom: 35px;
+    text-align: center;
+}
+
+/* Table Wrapper */
+.preview-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 30px;
+    border-radius: 12px;
+}
+
+/* Table */
+.preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+    background: #fff;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+/* Section Header */
+.preview-table .section-header td {
+    background: linear-gradient(90deg, #003366, #00509d);
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 14px;
+    border: none;
+}
+
+/* Variable Labels */
+.preview-table .variable-row td {
+    background: #f1f5f9;
+    font-weight: 600;
+    color: #475569;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.92rem;
+}
+
+/* Values */
+.preview-table .answer-row td {
+    padding: 14px 12px;
+    border: 1px solid #e2e8f0;
+    color: #1e293b;
+    background: #ffffff;
+    font-size: 0.95rem;
+}
+
+/* Buttons */
+.preview-actions {
+    border-top: 1px solid #e5e7eb;
+    padding-top: 25px;
+    margin-top: 20px;
+}
+
+.preview-actions .btn {
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.preview-actions .btn-primary {
+    background: #0056d2;
+    border: none;
+}
+
+.preview-actions .btn-primary:hover {
+    transform: translateY(-1px);
+}
+
+.preview-actions .btn-secondary {
+    border: none;
+}
+
+/* Checkbox */
+.confirm-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 18px;
+    border-radius: 12px;
+}
+
+#confirmAssessmentBtn {
+    color: #fff !important;
+}
+
+#confirmAssessmentBtn i {
+    color: #fff !important;
+}
+
+#confirmAssessmentBtn:disabled {
+    color: #fff !important;
+    opacity: 0.65;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+    .preview-page {
+        padding: 20px 12px;
+    }
+
+    .preview-card {
+        padding: 20px;
+        border-radius: 14px;
+    }
+
+    .preview-title {
+        font-size: 1.5rem;
+    }
+
+    .preview-table {
+        min-width: 650px;
+    }
+
+    .preview-actions {
+        flex-direction: column;
+    }
+
+    .preview-actions .btn {
+        width: 100%;
+    }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

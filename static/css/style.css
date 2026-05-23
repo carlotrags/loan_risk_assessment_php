@@ -1,0 +1,437 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #eef1f5, #f7f9fb);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-y: scroll;
+}
+
+
+.header-navbar,
+footer {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+
+.container {
+  flex: 1;
+  margin: 35px auto;
+  padding: 0 15px;
+  max-width: 95%;
+}
+
+
+.form-control-plaintext {
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+
+/* For assessment.php */
+.assessment-type-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+
+.assessment-type-container h1{
+  font-size: 25px;
+}
+
+
+.assessment-type-container a{
+  text-decoration: none;
+}
+
+
+.assessment-type{
+  width: 550px;
+  max-width: 100%;
+  background: #fff;
+  margin-top: 18px;
+  box-shadow: 0 8px 20px rgba(16,24,40,0.06);
+  border-radius: 10px;
+  padding: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.assessment-type:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(16,24,40,0.12);
+}
+
+
+/* Loan Risk Assessment Forms */
+.form-wrapper {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+
+/* Card */
+.card {
+  background: white;
+  padding: 40px;
+  width: 100%;
+  max-width: 460px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+
+.form-card {
+  background-color: #f9efc8;
+  box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.15);
+  padding: 11px 45px;
+  max-width: 480px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+.card h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #1e3d58;
+}
+
+
+.subtitle {
+  color: #6c7a89;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+
+/* Form */
+.form-group {
+  margin-bottom: 20px;
+}
+
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+
+input[type="text"], input[type="number"], select {
+  width: 90%;
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1px solid #d1d9e6;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+}
+
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #2a6cff;
+  box-shadow: 0 0 0 3px rgba(42, 108, 255, 0.1);
+}
+
+
+/* Preview */
+.preview-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+
+.preview-card {
+  background-color: #f9efc8;
+  box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.15);
+  padding: 11px 45px;
+  max-width: 480px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+.preview-card li{
+  list-style: none;
+}
+
+
+/* Button */
+.submitAssessmentBtn {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(to right, #2a6cff, #005bea);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+
+.submitAssessmentBtn:hover {
+  background: linear-gradient(to right, #1f4acc, #0043b5);
+}
+
+
+.input-error {
+  border-color: #e53935 !important;
+  box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.2);
+}
+
+
+#confirmAssessmentBtn{
+  display: inline-flex;
+  align-items: center;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  background: gray;
+  color: white;
+  cursor: not-allowed;
+  opacity: 0.9;
+  transition: background 0.4s ease, opacity 0.3s ease;
+}
+
+
+#confirmAssessmentBtn.active{
+  background: linear-gradient(to right, #2a6cff, #005bea);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+
+#confirmAssessmentBtn.active:hover{
+  background: linear-gradient(to right, #1f4acc, #0043b5);
+}
+
+
+#backBtn{
+  align-items: center;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(to right, #2a6cff, #005bea);
+  color: white;
+  cursor: not-allowed;
+  opacity: 0.9;
+  transition: background 0.4s ease, opacity 0.3s ease;
+}
+
+
+#backBtn:hover{
+  background: linear-gradient(to right, #1f4acc, #0043b5);
+}
+
+
+/* History CSS */
+.history-container{
+  margin: 20px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+
+.history-container h2{
+  color: #333;
+}
+
+
+.history-container table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 40px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+
+.history-container th, td{
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+
+.history-container th{
+  background-color: #263238;
+  color: #fff;
+}
+
+
+td.prediction.low{
+  background: #11ff00;
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+}
+
+
+td.prediction.high{
+  background: #ff0015;
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+}
+
+
+/* System Admin pill color */
+.text-purple-emphasis {
+    color: #6f42c1 !important;
+}
+
+
+.bg-purple-subtle {
+    background-color: rgba(111, 66, 193, 0.15) !important;
+}
+
+
+.border-purple-subtle {
+    border-color: rgba(111, 66, 193, 0.35) !important;
+}
+
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* Footer */
+footer{
+  background: #222222;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+}
+
+
+/* Responsive */
+@media (max-width: 480px) {
+  .card {
+    padding: 30px 20px;
+  }
+
+
+  .card h1 {
+    font-size: 24px;
+  }
+
+
+  .assessment-type {
+    padding: 14px;
+    border-radius: 8px;
+  }
+
+
+  .assessment-type-container h1 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+
+    .assessment-type-container h1{
+    text-align: center;
+  }
+}
+
+
+@media (max-width: 992px) {
+  .assessment-type {
+    width: 100%;
+    max-width: 100%;
+    margin: 12px 0;
+    padding: 16px;
+  }
+
+
+  .assessment-type-container {
+    padding: 0 12px;
+  }
+
+
+  .assessment-type-container h1{
+    text-align: center;
+  }
+}
+
+
+/* @media (prefers-color-scheme: dark) {
+  body,
+  .form-container {
+    background-color: #121212;
+  }
+
+
+  .form-card, .header-navbar, .preview-card {
+    background-color: #1e1e1e;
+    color: #f5f5f5;
+    box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.6);
+  }
+
+
+  h1, .header-navbar a {
+    color: #ffffff;
+  }
+
+
+.card h1, .header-navbar h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #4e9de1;
+}
+  form label {
+    color: #dddddd;
+  }
+
+
+  form input[type="text"] {
+    background-color: #2a2a2a;
+    color: #f1f1f1;
+    border: 1px solid #555;
+  }
+
+
+  form input[type="text"]:focus {
+    border-color: #90caf9;
+  }
+
+
+  form input[type="submit"] {
+    background-color: #90caf9;
+    color: #000;
+  }
+
+
+  form input[type="submit"]:hover {
+    background-color: #64b5f6;
+  }
+
+
+  .input-error {
+    border-color: #ef5350 !important;
+    box-shadow: 0 0 0 2px rgba(239, 83, 80, 0.3);
+  }
+} */
