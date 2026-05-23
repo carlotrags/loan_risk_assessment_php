@@ -37,14 +37,15 @@ $default_history = htmlspecialchars($_POST['default_history'] ?? '');
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Preview Home Loan Application</title>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS for utilities and icons and stuffs -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJq0Xgk0v3Q9GqQ4jKk0rQ5F5p1bQ6I6Qe5Q5Q5Q5Q5Q5Q" crossorigin="anonymous">
     <link rel="stylesheet" href="static/css/home-preview-style.css?v=<?= time() ?>">
     <link rel="stylesheet" href="static/css/navbarstyle.css?v=<?= time() ?>">
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
     <style>
         .preview-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9rem; }
         .section-header { background-color: #003366; color: white; font-weight: bold; padding: 10px; }
@@ -53,6 +54,7 @@ $default_history = htmlspecialchars($_POST['default_history'] ?? '');
         .container { margin-top: 30px; margin-bottom: 50px; }
     </style>
 </head>
+    <title>Preview Home Loan Application</title>
 <body>
     <section class="header-navbar">
         <?php include "static/navbar.php" ?>

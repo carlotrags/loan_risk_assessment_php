@@ -110,8 +110,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $prediction = (int)$result['prediction']; // make sure it's int
     $explanation = $result['explanation'] ?? [];
-    $message = $prediction === 1 ? "Loan Approved" : "Loan Denied";
-    $statusClass = $prediction === 1 ? "approved" : "denied";
+    $message = $prediction === 1 ? "Low Risk" : "High Risk";
+    $statusClass = $prediction === 1 ? "low" : "high";
 
     // Save to MySQL
     $conn = new mysqli("127.0.0.1", "root", "", "loan_system", 3307);

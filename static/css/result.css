@@ -90,13 +90,13 @@ body {
     font-weight: 700;
 }
 
-.approved {
+.low {
     background-color: #e6f7ee;
     color: var(--color-success);
     border-left: 5px solid var(--color-success);
 }
 
-.denied {
+.high {
     background-color: #fcebeb;
     color: var(--color-danger);
     border-left: 5px solid var(--color-danger);

@@ -62,8 +62,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($result['prediction'])) {
         $prediction = (int)$result['prediction'];
         $explanation = $result['explanation'] ?? [];
-        $message = $prediction == 1 ? "Loan Approved" : "Loan Denied";
-        $statusClass = $prediction == 1 ? "approved" : "denied";
+        $message = $prediction == 1 ? "Low Risk" : "High Risk";
+        $statusClass = $prediction == 1 ? "low" : "high";
 
 
         // A. Insert into home_loan_applications (Detailed Table)
@@ -145,11 +145,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="static/css/style.css?v=<?= time() ?>">
     <link rel="stylesheet" href="static/css/navbarstyle.css">
     <link rel="stylesheet" href="static/css/result.css?v=<?= time() ?>">
     <link rel="icon" type="image/x-icon" href="static/images/LRA_Favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <title>Home Loan Assessment Result</title>
 </head>
 <body>
