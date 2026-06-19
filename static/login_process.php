@@ -5,7 +5,6 @@ include 'config.php';
 $username = $_POST['username'] ?? '';
 $password = $_POST['password'] ?? '';
 
-
 if (empty($username) || empty($password)) {
     $_SESSION['login_error'] = "Please enter both username and password.";
     header("Location: login.php");
@@ -17,7 +16,11 @@ $stmt->execute([$username]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($user) {
-    if ($password === $user['password']) {
+    // Accept BOTH hashed and plain-text passwords
+    if (
+        password_verify($password, $user['password']) ||
+        $password === $user['password']
+    ) {
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['first_name'] = $user['first_name'];
@@ -31,9 +34,11 @@ if ($user) {
         header("Location: login.php");
         exit;
     }
-    } else {
-        $_SESSION['login_error'] = "Username not found.";
-        header("Location: login.php");
-        exit;
-    }
+} else {
+
+    $_SESSION['login_error'] = "Username not found.";
+    header("Location: login.php");
+    exit;
+
+}
 ?>

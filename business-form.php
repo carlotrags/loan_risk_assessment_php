@@ -28,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $currentStep = isset($_GET['step']) ? (int)$_GET['step'] : 1;
 }
 
-
 if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
 ?>
 
@@ -90,7 +89,7 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
 
                         <div class="business-form-item">
                             <label for="loan_term">Loan Term (Months):</label>
-                            <input type="number" id="loan_term" name="loan_term" value="12" required value="<?= $_SESSION['business_form']['loan_term'] ?? '' ?>">
+                            <input type="number" id="loan_term" name="loan_term" required value="<?= $_SESSION['business_form']['loan_term'] ?? '' ?>">
                         </div>
                         <br>
                         <div class="button-container">
@@ -421,14 +420,15 @@ if ($currentStep < 1 || $currentStep > 5) $currentStep = 1;
                             </div>
                         <?php endif; ?>
 
-
+                        <!--FIXED THIS CAUSING NOT REFLECTING THE COMPANY NAME-->
                     <?php if ($currentStep == 5): ?>
                     <?php include "business-form-preview.php"?>
-                    <div class="button-container">
-                        <a href="business-form.php?step=4" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</a>
-                        <br><br>
-                        <button type="submit" id="submitAssessmentBtn" class="submit-btn">Submit Application</button>
-                    </div>
+                        <input type="hidden" name="company_name" value="<?= htmlspecialchars($form['company_name'] ?? '') ?>">
+                            <div class="button-container">
+                                <a href="business-form.php?step=4" class="next-button"><i class="fa-solid fa-caret-left"></i> Back</a>
+                                    <br><br>
+                                <button type="submit" id="submitAssessmentBtn" class="submit-btn">Submit Application</button>
+                        </div>
                     <?php endif; ?>
             </form>
         </div>

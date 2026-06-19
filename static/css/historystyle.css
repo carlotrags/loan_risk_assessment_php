@@ -121,6 +121,14 @@ td.prediction.high{
     padding: 20px 10px;
 }
 
+.d-flex {
+    display: flex !important;
+    justify-content: center;
+}
+
+.edit-timer { display: block; font-size: 10px; color: #8e8e8e; margin-top: 2px; font-weight: normal; }
+td.prediction { line-height: 1.2; vertical-align: middle !important; }
+
 /* Animation */
 @keyframes fadeInUp {
     from {

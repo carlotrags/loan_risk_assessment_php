@@ -16,8 +16,23 @@ $form = $_SESSION['business_form'] ?? [];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Collect POST data
-    $company_name = $_POST['company_name'] ?? '';
+    // FIXED THIS CAUSING NOT REFLECTING THE COMPANY NAME Check POST first, then fallback to the Session 'business_form' data
+    $company_name = $_POST['company_name'] ?? ($_SESSION['business_form']['company_name'] ?? 'Unknown Company');
     $loan_type = 'business';
+
+// Define all expected keys for the API call
+    $expected_keys = [
+        'company_name', 'loan_amount', 'loan_term',
+        'capital_to_risk_assets_ratio', 'debt_to_equity_ratio', 'npl_ratio',
+        'npa_ratio', 'npa_coverage_ratio', 'roae', 'roaa',
+        'cost_to_income_ratio', 'liquid_assets_to_borrowed_funds', 'debt_service_cover',
+        'threat_of_entry', 'intensity_of_rivalry', 'substitution_of_threat',
+        'buyer_bargaining_power', 'supplier_bargaining_power', 'overall_industry_outlook',
+        'market_position', 'character_of_management', 'quality_and_experience_of_management',
+        'bank_relationship', 'labor_relations', 'existence',
+        'nfis_cmap_checkings', 'management_cntrl_business_planning', 'management_structure_succession_strategy',
+        'long_term_management_strategy'
+    ];
 
     // Cast numeric fields
     $data = [
@@ -51,7 +66,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         'management_structure_succession_strategy' => (int)($_POST['management_structure_succession_strategy'] ?? 0),
         'long_term_management_strategy' => (int)($_POST['long_term_management_strategy'] ?? 0)
     ];
-
+    foreach ($expected_keys as $key) {
+        // Handle the two float fields
+        if ($key === 'loan_amount' || $key === 'loan_term') {
+            $data[$key] = (float)($form[$key] ?? 0);
+        }
+        // Handle all other integer (enum) fields
+        else {
+            $data[$key] = (int)($form[$key] ?? 0);
+        }
+    }
     // Save to session for preview
     $_SESSION['business_form'] = array_merge($form, $data, ['company_name' => $company_name]);
 
